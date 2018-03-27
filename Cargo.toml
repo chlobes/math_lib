@@ -1,6 +1,8 @@
 [package]
+authors = ["pypypypypypypypypyp <1michand1@gmail.com>"]
 name = "math_lib"
 version = "0.1.0"
-authors = ["pypypypypypypypypyp <1michand1@gmail.com>"]
 
 [dependencies]
+serde = "1.0.27"
+serde_derive = "1.0.27"
