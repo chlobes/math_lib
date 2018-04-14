@@ -35,6 +35,26 @@ impl<T> Vec3<T> {
 	{
 		Self::default()
 	}
+	
+	pub fn max(self, other: Self) -> Self
+		where T: PartialOrd
+	{
+		vec3(
+			if self.x < other.x { other.x } else { self.x },
+			if self.y < other.y { other.y } else { self.y },
+			if self.z < other.z { other.z } else { self.z },
+		)
+	}
+	
+	pub fn min(self, other: Self) -> Self
+		where T: PartialOrd
+	{
+		vec3(
+			if self.x > other.x { other.x } else { self.x },
+			if self.y > other.y { other.y } else { self.y },
+			if self.z > other.z { other.z } else { self.z },
+		)
+	}
 }
 
 impl Vec3<f64> {

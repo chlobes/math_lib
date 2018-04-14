@@ -38,6 +38,10 @@ impl<T> Vec4<T> {
 	{
 		Self { x: v.x, y: v.y, z: v.z, w: T::one() }
 	}
+	
+	pub fn into_array(self) -> [T; 4] {
+		[self.x, self.y, self.z, self.w]
+	}
 }
 
 pub fn vec4<T>(x: T, y: T, z: T, w: T) -> Vec4<T>
