@@ -6,6 +6,7 @@ use traits::numbers::{Half, One, Two};
 use mat3::*;
 use vec3::*;
 
+#[repr(C)]
 #[derive(Debug, Copy, Clone, PartialEq, PartialOrd, Eq, Ord, Hash, Serialize, Deserialize)]
 pub struct Quaternion<T> {
 	pub r: T,

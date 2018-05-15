@@ -4,6 +4,7 @@ use std::convert::Into;
 
 use traits::Sqrt;
 
+#[repr(C)]
 #[derive(Debug, Copy, Clone, PartialEq, PartialOrd, Eq, Ord, Hash, Serialize, Deserialize)]
 pub struct Vec2<T> {
 	pub x: T,
@@ -250,4 +251,10 @@ impl<T> IndexMut<usize> for Vec2<T> {
 			_ => panic!("index out of bounds, index is {} but the len is 2",index),
 		}
 	}
+}
+
+use std::ops::Neg;
+impl<T: Neg> Neg for Vec2<T> {
+	type Output = Vec2<<T as Neg>::Output>;
+	fn neg(self) -> Vec2<<T as Neg>::Output> { vec2(-self.x,-self.y) }
 }

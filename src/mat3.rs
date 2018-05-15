@@ -2,9 +2,12 @@ use std::ops::{Mul, Add, Sub};
 use std::marker::Copy;
 use std::convert::Into;
 
+use array_tuple::ArrayTuple;
+
 use traits::numbers::One;
 use vec3::*;
 
+#[repr(C)]
 #[derive(Debug, Copy, Clone, PartialEq, PartialOrd, Eq, Ord, Hash, Serialize, Deserialize)]
 pub struct Mat3<T> {
 	pub x: Vec3<T>,
@@ -69,5 +72,42 @@ impl<T> Default for Mat3<T>
 {
 	fn default() -> Self {
 		Mat3::ident()
+	}
+}
+
+impl<T> ArrayTuple for Mat3<T> {
+	type Array = [[T; 3]; 3];
+	type Tuple = ([T; 3], [T; 3], [T; 3]);
+	fn into_array(self) -> Self::Array { [[self.x.x, self.x.y, self.x.z], [self.y.x, self.y.y, self.y.z], [self.z.x, self.z.y, self.z.z]] }
+	fn into_tuple(self) -> Self::Tuple { ([self.x.x, self.x.y, self.x.z], [self.y.x, self.y.y, self.y.z], [self.z.x, self.z.y, self.z.z]) }
+}
+
+use std::ops::*;
+
+impl<T> Mul<Mat3<T>> for Mat3<T>
+	where T: Mul<Output=T>
+{
+	type Output = Self;
+	
+	fn mul(self, other: Self) -> Self {
+		mat3(self.x * other.x, self.y * other.y, self.z * other.z)
+	}
+}
+
+impl<T> MulAssign<Mat3<T>> for Mat3<T>
+	where T: Copy + Mul<Output=T>
+{
+	fn mul_assign(&mut self, other: Self) {
+		*self = *self * other;
+	}
+}
+
+impl<T> Mul<Vec3<T>> for Mat3<T>
+	where T: Copy + Mul<Output=T> + Add<Output=T>
+{
+	type Output = Vec3<T>;
+	
+	fn mul(self, v: Vec3<T>) -> Vec3<T> {
+		self.apply_to(v)
 	}
 }

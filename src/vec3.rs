@@ -23,7 +23,7 @@ impl<T> Vec3<T> {
 	{
 		vec3(self.x / self.magnitude(), self.y / self.magnitude(), self.z / self.magnitude())
 	}
-	
+
 	pub fn into_workaround<U>(self) -> Vec3<U>
 		where T: Into<U>
 	{
@@ -73,11 +73,19 @@ impl Vec3<f64> {
 	pub fn ceil(self) -> Self {
 		vec3(self.x.ceil(), self.y.ceil(), self.z.ceil())
 	}
+
+	pub fn is_nan(self) -> bool {
+		self.x.is_nan() || self.y.is_nan() || self.z.is_nan()
+	}
 }
 
 impl Vec3<f32> {
 	pub fn ceil(self) -> Self {
 		vec3(self.x.ceil(), self.y.ceil(), self.z.ceil())
+	}
+	
+	pub fn is_nan(self) -> bool {
+		self.x.is_nan() || self.y.is_nan() || self.z.is_nan()
 	}
 }
 
@@ -287,4 +295,13 @@ impl<T> IndexMut<usize> for Vec3<T> {
 			_ => panic!("index out of bounds, index is {} but the len is 3",index),
 		}
 	}
+}
+
+use array_tuple::ArrayTuple;
+
+impl<T> ArrayTuple for Vec3<T> {
+	type Array = [T; 3];
+	type Tuple = (T, T, T);
+	fn into_array(self) -> [T; 3] {	let Vec3{x,y,z} = self; [x,y,z] }
+	fn into_tuple(self) -> (T, T, T) { self.into_array().into_tuple() }
 }

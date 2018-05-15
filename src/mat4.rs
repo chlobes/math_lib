@@ -5,6 +5,7 @@ use std::convert::Into;
 use traits::numbers::One;
 use vec4::*;
 
+#[repr(C)]
 #[derive(Debug, Copy, Clone, PartialEq, PartialOrd, Eq, Ord, Hash, Serialize, Deserialize)]
 pub struct Mat4<T> {
 	pub x: Vec4<T>,

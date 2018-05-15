@@ -42,6 +42,12 @@ impl<T> Vec4<T> {
 	pub fn into_array(self) -> [T; 4] {
 		[self.x, self.y, self.z, self.w]
 	}
+
+	pub fn zero() -> Self
+		where T: Default
+	{
+		vec4(T::default(), T::default(), T::default(), T::default())
+	}
 }
 
 pub fn vec4<T>(x: T, y: T, z: T, w: T) -> Vec4<T>
@@ -53,6 +59,18 @@ pub fn dotvec4<T>(v: Vec4<T>, u: Vec4<T>) -> T
 	where T: Copy + Mul<Output=T> + Add<Output=T>
 {
 	v.x * u.x + v.y * u.y + v.z * u.z + v.w * u.w
+}
+
+impl Vec4<u16> {
+	pub fn into_workaround(self) -> Vec4<f64> {
+		vec4(self.x as f64, self.y as f64, self.z as f64, self.w as f64)
+	}
+}
+
+impl Vec4<f64> {
+	pub fn into_workaround(self) -> Vec4<u16> {
+		vec4(self.x as u16, self.y as u16, self.z as u16, self.w as u16)
+	}
 }
 
 impl<T> Div<T> for Vec4<T>
@@ -213,4 +231,13 @@ impl<T> Default for Vec4<T>
 	fn default() -> Self {
 		vec4(T::default(), T::default(), T::default(), T::one())
 	}
+}
+
+use array_tuple::ArrayTuple;
+
+impl<T> ArrayTuple for Vec4<T> {
+	type Array = [T; 4];
+	type Tuple = (T, T, T, T);
+	fn into_array(self) -> [T; 4] {	let Vec4{x,y,z,w} = self; [x,y,z,w] }
+	fn into_tuple(self) -> (T, T, T, T) { self.into_array().into_tuple() }
 }
