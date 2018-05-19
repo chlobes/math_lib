@@ -62,6 +62,14 @@ impl<T> Mat3<T> {
 			bottom.extend(corner),
 		)
 	}
+
+	pub fn transpose(self) -> Self {
+		mat3(
+			vec3(self.x.x, self.y.x, self.z.x),
+			vec3(self.x.y, self.y.y, self.z.y),
+			vec3(self.x.z, self.y.z, self.z.z),
+		)
+	}
 }
 
 pub fn mat3<T>(x: Vec3<T>, y: Vec3<T>, z: Vec3<T>) -> Mat3<T>

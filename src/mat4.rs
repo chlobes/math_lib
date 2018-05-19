@@ -82,6 +82,15 @@ impl<T> Mat4<T> {
 	pub fn into_array(self) -> [[T; 4]; 4] {
 		[self.x.into_array(), self.y.into_array(), self.z.into_array(), self.w.into_array()]
 	}
+
+	pub fn transpose(self) -> Self {
+		mat4(
+			vec4(self.x.x, self.y.x, self.z.x, self.w.x),
+			vec4(self.x.y, self.y.y, self.z.y, self.w.y),
+			vec4(self.x.z, self.y.z, self.z.z, self.w.z),
+			vec4(self.x.w, self.y.w, self.z.w, self.w.w),
+		)
+	}
 }
 
 pub fn mat4<T>(x: Vec4<T>, y: Vec4<T>, z: Vec4<T>, w: Vec4<T>) -> Mat4<T>
