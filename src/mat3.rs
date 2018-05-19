@@ -6,6 +6,7 @@ use array_tuple::ArrayTuple;
 
 use traits::numbers::One;
 use vec3::*;
+use mat4::*;
 
 #[repr(C)]
 #[derive(Debug, Copy, Clone, PartialEq, PartialOrd, Eq, Ord, Hash, Serialize, Deserialize)]
@@ -50,6 +51,15 @@ impl<T> Mat3<T> {
 			self.x.x * v.x + self.x.y * v.y + self.x.z * v.z,
 			self.y.x * v.x + self.y.y * v.y + self.y.z * v.z,
 			self.z.x * v.x + self.z.y * v.y + self.z.z * v.z,
+		)
+	}
+
+	pub fn extend(self, right: Vec3<T>, bottom: Vec3<T>, corner: T) -> Mat4<T> {
+		mat4(
+			self.x.extend(right.x),
+			self.y.extend(right.y),
+			self.z.extend(right.z),
+			bottom.extend(corner),
 		)
 	}
 }

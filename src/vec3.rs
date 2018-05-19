@@ -4,6 +4,8 @@ use std::convert::Into;
 
 use traits::Sqrt;
 
+use vec4::*;
+
 #[derive(Debug, Copy, Clone, PartialEq, PartialOrd, Eq, Ord, Hash, Serialize, Deserialize)]
 pub struct Vec3<T> {
 	pub x: T,
@@ -54,6 +56,10 @@ impl<T> Vec3<T> {
 			if self.y > other.y { other.y } else { self.y },
 			if self.z > other.z { other.z } else { self.z },
 		)
+	}
+
+	pub fn extend(self, w: T) -> Vec4<T> {
+		vec4(self.x, self.y, self.z, w)
 	}
 }
 
