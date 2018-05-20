@@ -71,11 +71,12 @@ impl<T> Mat4<T> {
 	pub fn apply_to(self, v: Vec4<T>) -> Vec4<T>
 		where T: Copy + Mul<Output=T> + Add<Output=T>
 	{
+		use self::dotvec4 as dot;
 		vec4(
-			self.x.x * v.x + self.x.y * v.y + self.x.z * v.z + self.x.w * v.w,
-			self.y.x * v.x + self.y.y * v.y + self.y.z * v.z + self.y.w * v.w,
-			self.z.x * v.x + self.z.y * v.y + self.z.z * v.z + self.z.w * v.w,
-			self.w.x * v.x + self.w.y * v.y + self.w.z * v.z + self.w.w * v.w,
+			dot(self.x, v),
+			dot(self.y, v),
+			dot(self.z, v),
+			dot(self.w, v),
 		)
 	}
 	
@@ -93,8 +94,7 @@ impl<T> Mat4<T> {
 	}
 }
 
-pub fn mat4<T>(x: Vec4<T>, y: Vec4<T>, z: Vec4<T>, w: Vec4<T>) -> Mat4<T>
-{
+pub fn mat4<T>(x: Vec4<T>, y: Vec4<T>, z: Vec4<T>, w: Vec4<T>) -> Mat4<T> {
 	Mat4 { x: x, y: y, z: z, w: w }
 }
 

@@ -48,9 +48,9 @@ impl<T> Mat3<T> {
 		where T: Copy + Mul<Output=T> + Add<Output=T>
 	{
 		vec3(
-			self.x.x * v.x + self.x.y * v.y + self.x.z * v.z,
-			self.y.x * v.x + self.y.y * v.y + self.y.z * v.z,
-			self.z.x * v.x + self.z.y * v.y + self.z.z * v.z,
+			dot(self.x, v),
+			dot(self.y, v),
+			dot(self.z, v),
 		)
 	}
 
@@ -72,8 +72,7 @@ impl<T> Mat3<T> {
 	}
 }
 
-pub fn mat3<T>(x: Vec3<T>, y: Vec3<T>, z: Vec3<T>) -> Mat3<T>
-{
+pub fn mat3<T>(x: Vec3<T>, y: Vec3<T>, z: Vec3<T>) -> Mat3<T> {
 	Mat3 { x: x, y: y, z: z }
 }
 
