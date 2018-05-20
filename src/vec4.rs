@@ -241,3 +241,15 @@ impl<T> ArrayTuple for Vec4<T> {
 	fn into_array(self) -> [T; 4] {	let Vec4{x,y,z,w} = self; [x,y,z,w] }
 	fn into_tuple(self) -> (T, T, T, T) { self.into_array().into_tuple() }
 }
+
+use mat4::*;
+
+impl<T> Mul<Mat4<T>> for Vec4<T>
+	where T: Copy + Mul<Output=T> + Add<Output=T>
+{
+	type Output = Self;
+	
+	fn mul(self, m: Mat4<T>) -> Vec4<T> {
+		m.apply_to(self)
+	}
+}

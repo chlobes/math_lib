@@ -103,29 +103,24 @@ impl<T> ArrayTuple for Mat3<T> {
 use std::ops::*;
 
 impl<T> Mul<Mat3<T>> for Mat3<T>
-	where T: Mul<Output=T>
+	where T: Copy + Mul<Output=T> + Add<Output=T>
 {
 	type Output = Self;
 	
 	fn mul(self, other: Self) -> Self {
-		mat3(self.x * other.x, self.y * other.y, self.z * other.z)
+		let t = other.transpose();
+		mat3(
+			vec3(dot(self.x,t.x), dot(self.x,t.y), dot(self.x,t.z)),
+			vec3(dot(self.y,t.x), dot(self.y,t.y), dot(self.y,t.z)),
+			vec3(dot(self.z,t.x), dot(self.z,t.y), dot(self.z,t.z)),
+		)
 	}
 }
 
 impl<T> MulAssign<Mat3<T>> for Mat3<T>
-	where T: Copy + Mul<Output=T>
+	where T: Copy + Mul<Output=T> + Add<Output=T>
 {
 	fn mul_assign(&mut self, other: Self) {
 		*self = *self * other;
-	}
-}
-
-impl<T> Mul<Vec3<T>> for Mat3<T>
-	where T: Copy + Mul<Output=T> + Add<Output=T>
-{
-	type Output = Vec3<T>;
-	
-	fn mul(self, v: Vec3<T>) -> Vec3<T> {
-		self.apply_to(v)
 	}
 }

@@ -1,4 +1,4 @@
-use std::ops::{Mul, Add, Sub};
+use std::ops::{Mul, Add, Sub,MulAssign};
 use std::marker::Copy;
 use std::convert::Into;
 
@@ -111,5 +111,31 @@ impl<T> Default for Mat4<T>
 {
 	fn default() -> Self {
 		Mat4::ident()
+	}
+}
+
+impl<T> Mul<Mat4<T>> for Mat4<T>
+	where T: Copy + Mul<Output=T> + Add<Output=T>
+{
+	type Output = Self;
+	
+	fn mul(self, other: Self) -> Self {
+		use self::dotvec4 as dot;
+		let s = self;
+		let t = other.transpose();
+		mat4(
+			vec4(dot(s.x,t.x), dot(s.x,t.y), dot(s.x,t.z), dot(s.x,t.w)),
+			vec4(dot(s.y,t.x), dot(s.y,t.y), dot(s.y,t.z), dot(s.y,t.w)),
+			vec4(dot(s.z,t.x), dot(s.z,t.y), dot(s.z,t.z), dot(s.z,t.w)),
+			vec4(dot(s.w,t.x), dot(s.w,t.y), dot(s.w,t.z), dot(s.w,t.w)),
+		)
+	}
+}
+
+impl<T> MulAssign<Mat4<T>> for Mat4<T>
+	where T: Copy + Mul<Output=T> + Add<Output=T>
+{
+	fn mul_assign(&mut self, other: Self) {
+		*self = *self * other;
 	}
 }
