@@ -311,15 +311,3 @@ impl<T> ArrayTuple for Vec3<T> {
 	fn into_array(self) -> [T; 3] {	let Vec3{x,y,z} = self; [x,y,z] }
 	fn into_tuple(self) -> (T, T, T) { self.into_array().into_tuple() }
 }
-
-use mat3::*;
-
-impl<T> Mul<Mat3<T>> for Vec3<T>
-	where T: Copy + Mul<Output=T> + Add<Output=T>
-{
-	type Output = Self;
-	
-	fn mul(self, m: Mat3<T>) -> Vec3<T> {
-		m.apply_to(self)
-	}
-}

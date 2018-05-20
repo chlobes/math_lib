@@ -124,3 +124,13 @@ impl<T> MulAssign<Mat3<T>> for Mat3<T>
 		*self = *self * other;
 	}
 }
+
+impl<T> Mul<Vec3<T>> for Mat3<T>
+	where T: Copy + Mul<Output=T> + Add<Output=T>
+{
+	type Output = Vec3<T>;
+	
+	fn mul(self, v: Vec3<T>) -> Vec3<T> {
+		self.apply_to(v)
+	}
+}
