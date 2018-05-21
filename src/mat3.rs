@@ -72,6 +72,58 @@ impl<T> Mat3<T> {
 	}
 }
 
+impl Mat3<f32> {
+	pub fn rotate_x(angle: f32) -> Self {
+		mat3(
+			vec3(1.0, 0.0, 0.0),
+			vec3(0.0, angle.cos(), -angle.sin()),
+			vec3(0.0, angle.sin(), angle.cos()),
+		)
+	}
+
+	pub fn rotate_y(angle: f32) -> Self {
+		mat3(
+			vec3(angle.cos(), 0.0, angle.sin()),
+			vec3(0.0, 1.0, 0.0),
+			vec3(-angle.sin(), 0.0, angle.cos()),
+		)
+	}
+
+	pub fn rotate_z(angle: f32) -> Self {
+		mat3(
+			vec3(angle.cos(), -angle.sin(), 0.0),
+			vec3(angle.sin(), angle.cos(), 0.0),
+			vec3(0.0, 0.0, 1.0),
+		)
+	}
+}
+
+impl Mat3<f64> {
+	pub fn rotate_x(angle: f64) -> Self {
+		mat3(
+			vec3(1.0, 0.0, 0.0),
+			vec3(0.0, angle.cos(), -angle.sin()),
+			vec3(0.0, angle.sin(), angle.cos()),
+		)
+	}
+
+	pub fn rotate_y(angle: f64) -> Self {
+		mat3(
+			vec3(angle.cos(), 0.0, angle.sin()),
+			vec3(0.0, 1.0, 0.0),
+			vec3(-angle.sin(), 0.0, angle.cos()),
+		)
+	}
+
+	pub fn rotate_z(angle: f64) -> Self {
+		mat3(
+			vec3(angle.cos(), -angle.sin(), 0.0),
+			vec3(angle.sin(), angle.cos(), 0.0),
+			vec3(0.0, 0.0, 1.0),
+		)
+	}
+}
+
 pub fn mat3<T>(x: Vec3<T>, y: Vec3<T>, z: Vec3<T>) -> Mat3<T> {
 	Mat3 { x: x, y: y, z: z }
 }
