@@ -67,6 +67,10 @@ impl Vec3<f64> {
 	pub fn convert(self) -> Vec3<i16> {
 		vec3(self.x as i16, self.y as i16, self.z as i16)
 	}
+	
+	pub fn float_convert(self) -> Vec3<f32> {
+		vec3(self.x as f32, self.y as f32, self.z as f32)
+	}
 }
 
 impl Vec3<i16> {
@@ -92,6 +96,10 @@ impl Vec3<f32> {
 	
 	pub fn is_nan(self) -> bool {
 		self.x.is_nan() || self.y.is_nan() || self.z.is_nan()
+	}
+	
+	pub fn float_convert(self) -> Vec3<f64> {
+		vec3(self.x as f64, self.y as f64, self.z as f64)
 	}
 }
 
