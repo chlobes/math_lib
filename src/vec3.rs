@@ -63,16 +63,6 @@ impl<T> Vec3<T> {
 	}
 }
 
-impl Vec3<f64> {
-	pub fn convert(self) -> Vec3<i16> {
-		vec3(self.x as i16, self.y as i16, self.z as i16)
-	}
-	
-	pub fn float_convert(self) -> Vec3<f32> {
-		vec3(self.x as f32, self.y as f32, self.z as f32)
-	}
-}
-
 impl Vec3<i16> {
 	pub fn convert(self) -> Vec3<f64> {
 		vec3(self.x as f64, self.y as f64, self.z as f64)
