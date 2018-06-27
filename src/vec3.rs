@@ -63,12 +63,6 @@ impl<T> Vec3<T> {
 	}
 }
 
-impl Vec3<i16> {
-	pub fn convert(self) -> Vec3<f64> {
-		vec3(self.x as f64, self.y as f64, self.z as f64)
-	}
-}
-
 impl Vec3<f64> {
 	pub fn ceil(self) -> Self {
 		vec3(self.x.ceil(), self.y.ceil(), self.z.ceil())
@@ -76,10 +70,6 @@ impl Vec3<f64> {
 
 	pub fn is_nan(self) -> bool {
 		self.x.is_nan() || self.y.is_nan() || self.z.is_nan()
-	}
-	
-	pub fn float_convert(self) -> Vec3<f32> {
-		vec3(self.x as f32, self.y as f32, self.z as f32)
 	}
 }
 
@@ -90,10 +80,6 @@ impl Vec3<f32> {
 	
 	pub fn is_nan(self) -> bool {
 		self.x.is_nan() || self.y.is_nan() || self.z.is_nan()
-	}
-	
-	pub fn float_convert(self) -> Vec3<f64> {
-		vec3(self.x as f64, self.y as f64, self.z as f64)
 	}
 }
 
@@ -313,3 +299,26 @@ impl<T> ArrayTuple for Vec3<T> {
 	fn into_array(self) -> [T; 3] {	let Vec3{x,y,z} = self; [x,y,z] }
 	fn into_tuple(self) -> (T, T, T) { self.into_array().into_tuple() }
 }
+
+macro_rules! convert {
+    ($T: ty, $($U: ident),+) => {$(
+        impl Vec3<$T> {
+            pub fn $U(self) -> Vec3<$U> {
+                vec3(self.x as $U, self.y as $U, self.z as $U)
+            }
+        }
+    )+}
+}
+
+convert!(u8, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(u16, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(u32, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(u64, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(usize, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(i8, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(i16, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(i32, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(i64, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(isize, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(f32, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(f64, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);

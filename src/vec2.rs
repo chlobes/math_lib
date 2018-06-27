@@ -258,3 +258,26 @@ impl<T: Neg> Neg for Vec2<T> {
 	type Output = Vec2<<T as Neg>::Output>;
 	fn neg(self) -> Vec2<<T as Neg>::Output> { vec2(-self.x,-self.y) }
 }
+
+macro_rules! convert {
+    ($T: ty, $($U: ident),+) => {$(
+        impl Vec2<$T> {
+            pub fn $U(self) -> Vec2<$U> {
+                vec2(self.x as $U, self.y as $U)
+            }
+        }
+    )+}
+}
+
+convert!(u8, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(u16, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(u32, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(u64, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(usize, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(i8, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(i16, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(i32, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(i64, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(isize, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(f32, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(f64, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);

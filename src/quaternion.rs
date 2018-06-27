@@ -78,14 +78,10 @@ impl<T> Mul<Quaternion<T>> for Quaternion<T>
 	}
 }
 
-impl Default for Quaternion<f32> {
+impl<T> Default for Quaternion<T>
+	where T: Default + One
+{
 	fn default() -> Self {
-		Self { r: 1.0, i: 0.0, j: 0.0, k: 0.0 }
-	}
-}
-
-impl Default for Quaternion<f64> {
-	fn default() -> Self {
-		Self { r: 1.0, i: 0.0, j: 0.0, k: 0.0 }
+		Self { r: T::one(), i: T::default(), j: T::default(), k: T::default() }
 	}
 }

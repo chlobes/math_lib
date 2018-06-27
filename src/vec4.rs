@@ -226,10 +226,10 @@ impl<T> SubAssign<Vec4<T>> for Vec4<T>
 }*/
 
 impl<T> Default for Vec4<T>
-	where T: Default + One
+	where T: Default
 {
 	fn default() -> Self {
-		vec4(T::default(), T::default(), T::default(), T::one())
+		vec4(T::default(), T::default(), T::default(), T::default())
 	}
 }
 
@@ -241,3 +241,26 @@ impl<T> ArrayTuple for Vec4<T> {
 	fn into_array(self) -> [T; 4] {	let Vec4{x,y,z,w} = self; [x,y,z,w] }
 	fn into_tuple(self) -> (T, T, T, T) { self.into_array().into_tuple() }
 }
+
+macro_rules! convert {
+    ($T: ty, $($U: ident),+) => {$(
+        impl Vec4<$T> {
+            pub fn $U(self) -> Vec4<$U> {
+                vec4(self.x as $U, self.y as $U, self.z as $U, self.w as $U)
+            }
+        }
+    )+}
+}
+
+convert!(u8, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(u16, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(u32, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(u64, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(usize, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(i8, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(i16, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(i32, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(i64, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(isize, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(f32, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(f64, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
