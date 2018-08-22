@@ -279,7 +279,6 @@ impl<T> Index<usize> for Vec3<T> {
 	}
 }
 
-
 impl<T> IndexMut<usize> for Vec3<T> {
 	fn index_mut(&mut self, index: usize) -> &mut T {
 		match index {
@@ -289,6 +288,12 @@ impl<T> IndexMut<usize> for Vec3<T> {
 			_ => panic!("index out of bounds, index is {} but the len is 3",index),
 		}
 	}
+}
+
+use std::ops::Neg;
+impl<T: Neg> Neg for Vec3<T> {
+	type Output = Vec3<<T as Neg>::Output>;
+	fn neg(self) -> Vec3<<T as Neg>::Output> { vec3(-self.x,-self.y,-self.z) }
 }
 
 use array_tuple::ArrayTuple;

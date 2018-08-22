@@ -1,4 +1,4 @@
-use std::ops::{Div, DivAssign, Mul, MulAssign, Add, AddAssign, Sub, SubAssign};
+use std::ops::{Index, IndexMut, Div, DivAssign, Mul, MulAssign, Add, AddAssign, Sub, SubAssign};
 use std::marker::Copy;
 use std::convert::Into;
 
@@ -231,6 +231,39 @@ impl<T> Default for Vec4<T>
 	fn default() -> Self {
 		vec4(T::default(), T::default(), T::default(), T::default())
 	}
+}
+
+impl<T> Index<usize> for Vec4<T> {
+	type Output = T;
+	
+	fn index(&self, index: usize) -> &T {
+		match index {
+			0 => &self.x,
+			1 => &self.y,
+			2 => &self.z,
+			3 => &self.w,
+			_ => panic!("index out of bounds, index is {} but the len is 4",index),
+		}
+	}
+}
+
+
+impl<T> IndexMut<usize> for Vec4<T> {
+	fn index_mut(&mut self, index: usize) -> &mut T {
+		match index {
+			0 => &mut self.x,
+			1 => &mut self.y,
+			2 => &mut self.z,
+			3 => &mut self.w,
+			_ => panic!("index out of bounds, index is {} but the len is 4",index),
+		}
+	}
+}
+
+use std::ops::Neg;
+impl<T: Neg> Neg for Vec4<T> {
+	type Output = Vec4<<T as Neg>::Output>;
+	fn neg(self) -> Vec4<<T as Neg>::Output> { vec4(-self.x,-self.y,-self.z,-self.w) }
 }
 
 use array_tuple::ArrayTuple;

@@ -237,7 +237,7 @@ impl<T> Index<usize> for Vec2<T> {
 		match index {
 			0 => &self.x,
 			1 => &self.y,
-			_ => panic!("index out of bounds, index is {} but the len is 3",index),
+			_ => panic!("index out of bounds, index is {} but the len is 2",index),
 		}
 	}
 }
