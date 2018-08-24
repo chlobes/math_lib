@@ -53,7 +53,21 @@ impl<T> Vec3<T> {
 			if self.z > other.z { other.z } else { self.z },
 		)
 	}
-
+	
+	pub fn max_elem(self) -> T
+		where T: PartialOrd
+	{
+		let Vec3{x,y,z} = self;
+		if x > y { if x > z { x } else { z } } else if y > z { y } else { z }
+	}
+	
+	pub fn min_elem(self) -> T
+		where T: PartialOrd
+	{
+		let Vec3{x,y,z} = self;
+		if x < y { if x < z { x } else { z } } else if y < z { y } else { z }
+	}
+	
 	pub fn extend(self, w: T) -> Vec4<T> {
 		vec4(self.x, self.y, self.z, w)
 	}

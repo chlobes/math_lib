@@ -64,4 +64,3 @@ impl Trig for f64 {
     fn acosh(self) -> Self { self.acosh() }
     fn atanh(self) -> Self { self.atanh() }
 }
-

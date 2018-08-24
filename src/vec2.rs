@@ -26,6 +26,38 @@ impl<T> Vec2<T> {
 		vec2(self.x.into(), self.y.into())
 	}
 	
+	pub fn max(self, other: Self) -> Self
+		where T: PartialOrd
+	{
+		vec2(
+			if self.x < other.x { other.x } else { self.x },
+			if self.y < other.y { other.y } else { self.y },
+		)
+	}
+	
+	pub fn min(self, other: Self) -> Self
+		where T: PartialOrd
+	{
+		vec2(
+			if self.x > other.x { other.x } else { self.x },
+			if self.y > other.y { other.y } else { self.y },
+		)
+	}
+	
+	pub fn max_elem(self) -> T
+		where T: PartialOrd
+	{
+		let Vec2{x,y} = self;
+		if x > y { x } else { y }
+	}
+	
+	pub fn min_elem(self) -> T
+		where T: PartialOrd
+	{
+		let Vec2{x,y} = self;
+		if x < y { x } else { y }
+	}
+	
 	pub fn zero() -> Self
 		where T: Default
 	{

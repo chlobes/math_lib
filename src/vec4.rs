@@ -35,6 +35,45 @@ impl<T> Vec4<T> {
 		Self { x: v.x, y: v.y, z: v.z, w: T::one() }
 	}
 	
+	pub fn max(self, other: Self) -> Self
+		where T: PartialOrd
+	{
+		vec4(
+			if self.x < other.x { other.x } else { self.x },
+			if self.y < other.y { other.y } else { self.y },
+			if self.z < other.z { other.z } else { self.z },
+			if self.w < other.w { other.w } else { self.w },
+		)
+	}
+	
+	pub fn min(self, other: Self) -> Self
+		where T: PartialOrd
+	{
+		vec4(
+			if self.x > other.x { other.x } else { self.x },
+			if self.y > other.y { other.y } else { self.y },
+			if self.z > other.z { other.z } else { self.z },
+			if self.w > other.w { other.w } else { self.w },
+		)
+	}
+	
+	pub fn max_elem(self) -> T
+		where T: PartialOrd
+	{
+		let Vec4{x,y,z,w} = self;
+		let (a,b) = (if x > y { x } else { y }, if z > w { z } else { w });
+		if a > b { a } else { b }
+	}
+	
+	pub fn min_elem(self) -> T
+		where T: PartialOrd
+	{
+		let Vec4{x,y,z,w} = self;
+		let (a,b) = (if x < y { x } else { y }, if z < w { z } else { w });
+		if a < b { a } else { b }
+	}
+	
+	
 	pub fn zero() -> Self
 		where T: Default
 	{
