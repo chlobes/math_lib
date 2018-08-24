@@ -1,8 +1,4 @@
-use std::ops::{Index, IndexMut, Div, DivAssign, Mul, MulAssign, Add, AddAssign, Sub, SubAssign};
-use std::marker::Copy;
-use std::convert::Into;
-
-use traits::Sqrt;
+use prelude::*;
 
 use vec4::*;
 
@@ -63,25 +59,50 @@ impl<T> Vec3<T> {
 	}
 }
 
-impl Vec3<f64> {
-	pub fn ceil(self) -> Self {
-		vec3(self.x.ceil(), self.y.ceil(), self.z.ceil())
-	}
-
-	pub fn is_nan(self) -> bool {
-		self.x.is_nan() || self.y.is_nan() || self.z.is_nan()
-	}
-}
-
-impl Vec3<f32> {
-	pub fn ceil(self) -> Self {
-		vec3(self.x.ceil(), self.y.ceil(), self.z.ceil())
+impl Vec3<bool> {
+	pub fn and(self) -> bool {
+		self.x && self.y && self.z
 	}
 	
-	pub fn is_nan(self) -> bool {
-		self.x.is_nan() || self.y.is_nan() || self.z.is_nan()
+	pub fn or(self) -> bool {
+		self.x || self.y || self.z
 	}
 }
+
+macro_rules! impl_floats1 {
+	($($U: ident),+) => {$(
+		impl Vec3<f64> {
+			pub fn $U(self) -> Self {
+				vec3(self.x.$U(), self.y.$U(), self.z.$U())
+			}
+		}
+		impl Vec3<f32> {
+			pub fn $U(self) -> Self {
+				vec3(self.x.$U(), self.y.$U(), self.z.$U())
+			}
+		}
+	)+}
+}
+
+macro_rules! impl_floats2 {
+	($($U: ident),+) => {$(
+		impl Vec3<f64> {
+			pub fn $U(self) -> Vec3<bool> {
+				vec3(self.x.$U(), self.y.$U(), self.z.$U())
+			}
+		}
+		impl Vec3<f32> {
+			pub fn $U(self) -> Vec3<bool> {
+				vec3(self.x.$U(), self.y.$U(), self.z.$U())
+			}
+		}
+	)+}
+}
+
+//component-wise functions
+//certain conversion and trig functions not implemented to avoid confusion
+impl_floats1!(floor,ceil,round,trunc,fract,abs,signum,sqrt,exp,exp2,ln,log2,log10,cbrt,exp_m1,ln_1p);
+impl_floats2!(is_nan,is_infinite,is_finite,is_normal,is_sign_positive,is_sign_negative);
 
 pub fn vec3<T>(x: T, y: T, z: T) -> Vec3<T>
 {
@@ -290,13 +311,10 @@ impl<T> IndexMut<usize> for Vec3<T> {
 	}
 }
 
-use std::ops::Neg;
 impl<T: Neg> Neg for Vec3<T> {
 	type Output = Vec3<<T as Neg>::Output>;
 	fn neg(self) -> Vec3<<T as Neg>::Output> { vec3(-self.x,-self.y,-self.z) }
 }
-
-use array_tuple::ArrayTuple;
 
 impl<T> ArrayTuple for Vec3<T> {
 	type Array = [T; 3];

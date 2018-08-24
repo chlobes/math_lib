@@ -1,9 +1,5 @@
-use std::ops::{Index, IndexMut, Div, DivAssign, Mul, MulAssign, Add, AddAssign, Sub, SubAssign};
-use std::marker::Copy;
-use std::convert::Into;
+use prelude::*;
 
-use traits::{Sqrt};
-use traits::numbers::One;
 use vec3::*;
 
 #[derive(Debug, Copy, Clone, PartialEq, PartialOrd, Eq, Ord, Hash, Serialize, Deserialize)]
@@ -39,10 +35,6 @@ impl<T> Vec4<T> {
 		Self { x: v.x, y: v.y, z: v.z, w: T::one() }
 	}
 	
-	pub fn into_array(self) -> [T; 4] {
-		[self.x, self.y, self.z, self.w]
-	}
-
 	pub fn zero() -> Self
 		where T: Default
 	{
@@ -54,6 +46,51 @@ pub fn vec4<T>(x: T, y: T, z: T, w: T) -> Vec4<T>
 {
 	Vec4 { x: x, y: y, z: z, w: w }
 }
+
+impl Vec4<bool> {
+	pub fn and(self) -> bool {
+		self.x && self.y && self.z && self.w
+	}
+	
+	pub fn or(self) -> bool {
+		self.x || self.y || self.z || self.w
+	}
+}
+
+macro_rules! impl_floats1 {
+	($($U: ident),+) => {$(
+		impl Vec4<f64> {
+			pub fn $U(self) -> Self {
+				vec4(self.x.$U(), self.y.$U(), self.z.$U(), self.w.$U())
+			}
+		}
+		impl Vec4<f32> {
+			pub fn $U(self) -> Self {
+				vec4(self.x.$U(), self.y.$U(), self.z.$U(), self.w.$U())
+			}
+		}
+	)+}
+}
+
+macro_rules! impl_floats2 {
+	($($U: ident),+) => {$(
+		impl Vec4<f64> {
+			pub fn $U(self) -> Vec4<bool> {
+				vec4(self.x.$U(), self.y.$U(), self.z.$U(), self.w.$U())
+			}
+		}
+		impl Vec4<f32> {
+			pub fn $U(self) -> Vec4<bool> {
+				vec4(self.x.$U(), self.y.$U(), self.z.$U(), self.w.$U())
+			}
+		}
+	)+}
+}
+
+//component-wise functions
+//certain conversion and trig functions not implemented to avoid confusion
+impl_floats1!(floor,ceil,round,trunc,fract,abs,signum,sqrt,exp,exp2,ln,log2,log10,cbrt,exp_m1,ln_1p);
+impl_floats2!(is_nan,is_infinite,is_finite,is_normal,is_sign_positive,is_sign_negative);
 
 pub fn dotvec4<T>(v: Vec4<T>, u: Vec4<T>) -> T
 	where T: Copy + Mul<Output=T> + Add<Output=T>
@@ -260,13 +297,10 @@ impl<T> IndexMut<usize> for Vec4<T> {
 	}
 }
 
-use std::ops::Neg;
 impl<T: Neg> Neg for Vec4<T> {
 	type Output = Vec4<<T as Neg>::Output>;
 	fn neg(self) -> Vec4<<T as Neg>::Output> { vec4(-self.x,-self.y,-self.z,-self.w) }
 }
-
-use array_tuple::ArrayTuple;
 
 impl<T> ArrayTuple for Vec4<T> {
 	type Array = [T; 4];

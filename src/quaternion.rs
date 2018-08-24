@@ -1,8 +1,5 @@
-use std::ops::{Div, Mul, Add, Sub, Neg};
-use std::convert::Into;
+use prelude::*;
 
-use traits::{Sqrt, Trig};
-use traits::numbers::{Half, One, Two};
 use mat3::*;
 use vec3::*;
 
@@ -76,6 +73,13 @@ impl<T> Mul<Quaternion<T>> for Quaternion<T>
 			k: self.r * other.k + self.i * other.j - self.j * other.i + self.k * other.r,
 		}
 	}
+}
+
+impl<T> ArrayTuple for Quaternion<T> {
+	type Array = [T; 4];
+	type Tuple = (T,T,T,T);
+	fn into_array(self) -> [T; 4] { let Quaternion{r,i,j,k}=self; [r,i,j,k] }
+	fn into_tuple(self) -> (T,T,T,T) { let Quaternion{r,i,j,k}=self; (r,i,j,k) }
 }
 
 impl<T> Default for Quaternion<T>

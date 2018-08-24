@@ -1,10 +1,5 @@
-use std::ops::{Mul, Add, Sub};
-use std::marker::Copy;
-use std::convert::Into;
+use prelude::*;
 
-use array_tuple::ArrayTuple;
-
-use traits::numbers::One;
 use vec3::*;
 use mat4::*;
 
@@ -70,6 +65,9 @@ impl<T> Mat3<T> {
 			vec3(self.x.z, self.y.z, self.z.z),
 		)
 	}
+	
+	pub fn into_array(self) -> [[T; 3]; 3] {	let Mat3{x,y,z} = self; [x.into_array(),y.into_array(),z.into_array()] }
+	pub fn into_tuple(self) -> ((T,T,T),(T,T,T),(T,T,T)) { let Mat3{x,y,z} = self; (x.into_tuple(),y.into_tuple(),z.into_tuple()) }
 }
 
 impl Mat3<f32> {
@@ -144,15 +142,6 @@ impl<T> Default for Mat3<T>
 	}
 }
 
-impl<T> ArrayTuple for Mat3<T> {
-	type Array = [[T; 3]; 3];
-	type Tuple = ([T; 3], [T; 3], [T; 3]);
-	fn into_array(self) -> Self::Array { [[self.x.x, self.x.y, self.x.z], [self.y.x, self.y.y, self.y.z], [self.z.x, self.z.y, self.z.z]] }
-	fn into_tuple(self) -> Self::Tuple { ([self.x.x, self.x.y, self.x.z], [self.y.x, self.y.y, self.y.z], [self.z.x, self.z.y, self.z.z]) }
-}
-
-use std::ops::*;
-
 impl<T> Mul<Mat3<T>> for Mat3<T>
 	where T: Copy + Mul<Output=T> + Add<Output=T>
 {
@@ -165,14 +154,6 @@ impl<T> Mul<Mat3<T>> for Mat3<T>
 			vec3(dot(self.y,t.x), dot(self.y,t.y), dot(self.y,t.z)),
 			vec3(dot(self.z,t.x), dot(self.z,t.y), dot(self.z,t.z)),
 		)
-	}
-}
-
-impl<T> MulAssign<Mat3<T>> for Mat3<T>
-	where T: Copy + Mul<Output=T> + Add<Output=T>
-{
-	fn mul_assign(&mut self, other: Self) {
-		*self = *self * other;
 	}
 }
 

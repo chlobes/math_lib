@@ -1,8 +1,4 @@
-use std::ops::{Index, IndexMut, Div, DivAssign, Mul, MulAssign, Add, AddAssign, Sub, SubAssign};
-use std::marker::Copy;
-use std::convert::Into;
-
-use traits::Sqrt;
+use prelude::*;
 
 #[repr(C)]
 #[derive(Debug, Copy, Clone, PartialEq, PartialOrd, Eq, Ord, Hash, Serialize, Deserialize)]
@@ -35,28 +31,47 @@ impl<T> Vec2<T> {
 	{
 		Self::default()
 	}
-	
-	pub fn into_array(self) -> [T; 2] {
-		[self.x, self.y]
-	}
-}
-
-impl Vec2<f64> {
-	pub fn ceil(self) -> Self {
-		vec2(self.x.ceil(), self.y.ceil())
-	}
-}
-
-impl Vec2<f32> {
-	pub fn ceil(self) -> Self {
-		vec2(self.x.ceil(), self.y.ceil())
-	}
 }
 
 pub fn vec2<T>(x: T, y: T) -> Vec2<T>
 {
 	Vec2 { x: x, y: y }
 }
+
+macro_rules! impl_floats1 {
+	($($U: ident),+) => {$(
+		impl Vec2<f64> {
+			pub fn $U(self) -> Self {
+				vec2(self.x.$U(), self.y.$U())
+			}
+		}
+		impl Vec2<f32> {
+			pub fn $U(self) -> Self {
+				vec2(self.x.$U(), self.y.$U())
+			}
+		}
+	)+}
+}
+
+macro_rules! impl_floats2 {
+	($($U: ident),+) => {$(
+		impl Vec2<f64> {
+			pub fn $U(self) -> Vec2<bool> {
+				vec2(self.x.$U(), self.y.$U())
+			}
+		}
+		impl Vec2<f32> {
+			pub fn $U(self) -> Vec2<bool> {
+				vec2(self.x.$U(), self.y.$U())
+			}
+		}
+	)+}
+}
+
+//component-wise functions
+//certain conversion and trig functions not implemented to avoid confusion
+impl_floats1!(floor,ceil,round,trunc,fract,abs,signum,sqrt,exp,exp2,ln,log2,log10,cbrt,exp_m1,ln_1p);
+impl_floats2!(is_nan,is_infinite,is_finite,is_normal,is_sign_positive,is_sign_negative);
 
 pub fn dot<T>(v: Vec2<T>, u: Vec2<T>) -> T
 	where T: Copy + Mul<Output=T> + Add<Output=T>
@@ -253,20 +268,26 @@ impl<T> IndexMut<usize> for Vec2<T> {
 	}
 }
 
-use std::ops::Neg;
 impl<T: Neg> Neg for Vec2<T> {
 	type Output = Vec2<<T as Neg>::Output>;
 	fn neg(self) -> Vec2<<T as Neg>::Output> { vec2(-self.x,-self.y) }
 }
 
+impl<T> ArrayTuple for Vec2<T> {
+	type Array = [T; 2];
+	type Tuple = (T, T);
+	fn into_array(self) -> [T; 2] {	let Vec2{x,y} = self; [x,y] }
+	fn into_tuple(self) -> (T, T) { self.into_array().into_tuple() }
+}
+
 macro_rules! convert {
-    ($T: ty, $($U: ident),+) => {$(
-        impl Vec2<$T> {
-            pub fn $U(self) -> Vec2<$U> {
-                vec2(self.x as $U, self.y as $U)
-            }
-        }
-    )+}
+	($T: ty, $($U: ident),+) => {$(
+		impl Vec2<$T> {
+			pub fn $U(self) -> Vec2<$U> {
+				vec2(self.x as $U, self.y as $U)
+			}
+		}
+	)+}
 }
 
 convert!(u8, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);

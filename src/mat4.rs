@@ -1,9 +1,7 @@
-use std::ops::{Mul, Add, Sub,MulAssign};
-use std::marker::Copy;
-use std::convert::Into;
+use prelude::*;
 
-use traits::numbers::One;
 use vec4::*;
+use self::dotvec4 as dot;
 
 #[repr(C)]
 #[derive(Debug, Copy, Clone, PartialEq, PartialOrd, Eq, Ord, Hash, Serialize, Deserialize)]
@@ -71,7 +69,6 @@ impl<T> Mat4<T> {
 	pub fn apply_to(self, v: Vec4<T>) -> Vec4<T>
 		where T: Copy + Mul<Output=T> + Add<Output=T>
 	{
-		use self::dotvec4 as dot;
 		vec4(
 			dot(self.x, v),
 			dot(self.y, v),
@@ -80,10 +77,6 @@ impl<T> Mat4<T> {
 		)
 	}
 	
-	pub fn into_array(self) -> [[T; 4]; 4] {
-		[self.x.into_array(), self.y.into_array(), self.z.into_array(), self.w.into_array()]
-	}
-
 	pub fn transpose(self) -> Self {
 		mat4(
 			vec4(self.x.x, self.y.x, self.z.x, self.w.x),
@@ -92,6 +85,9 @@ impl<T> Mat4<T> {
 			vec4(self.x.w, self.y.w, self.z.w, self.w.w),
 		)
 	}
+	
+	pub fn into_array(self) -> [[T; 4]; 4] {	let Mat4{x,y,z,w} = self; [x.into_array(),y.into_array(),z.into_array(),w.into_array()] }
+	pub fn into_tuple(self) -> ((T,T,T,T),(T,T,T,T),(T,T,T,T),(T,T,T,T)) { let Mat4{x,y,z,w} = self; (x.into_tuple(),y.into_tuple(),z.into_tuple(),w.into_tuple()) }
 }
 
 pub fn mat4<T>(x: Vec4<T>, y: Vec4<T>, z: Vec4<T>, w: Vec4<T>) -> Mat4<T> {
@@ -120,7 +116,6 @@ impl<T> Mul<Mat4<T>> for Mat4<T>
 	type Output = Self;
 	
 	fn mul(self, other: Self) -> Self {
-		use self::dotvec4 as dot;
 		let s = self;
 		let t = other.transpose();
 		mat4(
@@ -129,14 +124,6 @@ impl<T> Mul<Mat4<T>> for Mat4<T>
 			vec4(dot(s.z,t.x), dot(s.z,t.y), dot(s.z,t.z), dot(s.z,t.w)),
 			vec4(dot(s.w,t.x), dot(s.w,t.y), dot(s.w,t.z), dot(s.w,t.w)),
 		)
-	}
-}
-
-impl<T> MulAssign<Mat4<T>> for Mat4<T>
-	where T: Copy + Mul<Output=T> + Add<Output=T>
-{
-	fn mul_assign(&mut self, other: Self) {
-		*self = *self * other;
 	}
 }
 
