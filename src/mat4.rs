@@ -137,14 +137,21 @@ impl<T> Mul<Vec4<T>> for Mat4<T>
 	}
 }
 
+impl<T> ArrayTuple for Mat4<T> {
+	type Array = [[T; 4]; 4];
+	type Tuple = ((T,T,T,T),(T,T,T,T),(T,T,T,T),(T,T,T,T));
+	fn into_array(self) -> Self::Array {	let Mat4{x,y,z,w} = self; [x.into_array(),y.into_array(),z.into_array(),w.into_array()] }
+	fn into_tuple(self) -> Self::Tuple { let Mat4{x,y,z,w} = self; (x.into_tuple(),y.into_tuple(),z.into_tuple(),w.into_tuple()) }
+}
+
 macro_rules! convert {
-    ($T: ty, $($U: ident),+) => {$(
-        impl Mat4<$T> {
-            pub fn $U(self) -> Mat4<$U> {
-                mat4(self.x.$U(), self.y.$U(), self.z.$U(), self.w.$U())
-            }
-        }
-    )+}
+	($T: ty, $($U: ident),+) => {$(
+		impl Mat4<$T> {
+			pub fn $U(self) -> Mat4<$U> {
+				mat4(self.x.$U(), self.y.$U(), self.z.$U(), self.w.$U())
+			}
+		}
+	)+}
 }
 
 convert!(u8, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);

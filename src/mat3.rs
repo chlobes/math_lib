@@ -65,9 +65,6 @@ impl<T> Mat3<T> {
 			vec3(self.x.z, self.y.z, self.z.z),
 		)
 	}
-	
-	pub fn into_array(self) -> [[T; 3]; 3] {	let Mat3{x,y,z} = self; [x.into_array(),y.into_array(),z.into_array()] }
-	pub fn into_tuple(self) -> ((T,T,T),(T,T,T),(T,T,T)) { let Mat3{x,y,z} = self; (x.into_tuple(),y.into_tuple(),z.into_tuple()) }
 }
 
 impl Mat3<f32> {
@@ -167,14 +164,21 @@ impl<T> Mul<Vec3<T>> for Mat3<T>
 	}
 }
 
+impl<T> ArrayTuple for Mat3<T> {
+	type Array = [[T; 3]; 3];
+	type Tuple = ((T,T,T),(T,T,T),(T,T,T));
+	fn into_array(self) -> Self::Array {	let Mat3{x,y,z} = self; [x.into_array(),y.into_array(),z.into_array()] }
+	fn into_tuple(self) -> Self::Tuple { let Mat3{x,y,z} = self; (x.into_tuple(),y.into_tuple(),z.into_tuple()) }
+}
+
 macro_rules! convert {
-    ($T: ty, $($U: ident),+) => {$(
-        impl Mat3<$T> {
-            pub fn $U(self) -> Mat3<$U> {
-                mat3(self.x.$U(), self.y.$U(), self.z.$U())
-            }
-        }
-    )+}
+	($T: ty, $($U: ident),+) => {$(
+		impl Mat3<$T> {
+			pub fn $U(self) -> Mat3<$U> {
+				mat3(self.x.$U(), self.y.$U(), self.z.$U())
+			}
+		}
+	)+}
 }
 
 convert!(u8, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);

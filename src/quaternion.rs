@@ -60,6 +60,10 @@ impl<T> Quaternion<T>
 	}
 }
 
+pub fn quaternion<T>(r: T, i: T, j: T, k: T) -> Quaternion<T> {
+	Quaternion { r, i, j, k }
+}
+
 impl<T> Mul<Quaternion<T>> for Quaternion<T>
 	where T: Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Copy
 {
@@ -89,3 +93,26 @@ impl<T> Default for Quaternion<T>
 		Self { r: T::one(), i: T::default(), j: T::default(), k: T::default() }
 	}
 }
+
+macro_rules! convert {
+	($T: ty, $($U: ident),+) => {$(
+		impl Quaternion<$T> {
+			pub fn $U(self) -> Quaternion<$U> {
+				quaternion(self.r as $U, self.i as $U, self.j as $U, self.k as $U)
+			}
+		}
+	)+}
+}
+
+convert!(u8, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(u16, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(u32, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(u64, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(usize, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(i8, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(i16, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(i32, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(i64, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(isize, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(f32, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(f64, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
