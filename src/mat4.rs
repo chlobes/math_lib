@@ -25,34 +25,40 @@ impl<T> Mat4<T> {
 			self.x.x * self.y.y * self.z.z * self.w.w
 		+ 	self.x.x * self.y.z * self.z.w * self.w.y
 		+ 	self.x.x * self.y.w * self.z.y * self.w.z
-
+		
 		+ 	self.x.y * self.y.x * self.z.w * self.w.z
 		+ 	self.x.y * self.y.z * self.z.x * self.w.w
 		+ 	self.x.y * self.y.w * self.z.z * self.w.x
-
+		
 		+ 	self.x.z * self.y.x * self.z.y * self.w.w
 		+ 	self.x.z * self.y.y * self.z.w * self.w.x
 		+ 	self.x.z * self.y.w * self.z.x * self.w.y
-
+		
 		+ 	self.x.w * self.y.x * self.z.z * self.w.y
 		+ 	self.x.w * self.y.y * self.z.x * self.w.z
 		+ 	self.x.w * self.y.z * self.z.y * self.w.x
-
+		
 		- 	self.x.x * self.y.y * self.z.w * self.w.z
 		- 	self.x.x * self.y.z * self.z.y * self.w.w
 		-	self.x.x * self.y.w * self.z.z * self.w.y
-
+		
 		- 	self.x.y * self.y.x * self.z.z * self.w.w
 		- 	self.x.y * self.y.z * self.z.w * self.w.x
 		- 	self.x.y * self.y.w * self.z.x * self.w.z
-
+		
 		- 	self.x.z * self.y.x * self.z.w * self.w.y
 		- 	self.x.z * self.y.y * self.z.x * self.w.w
 		- 	self.x.z * self.y.w * self.z.y * self.w.x
-
+		
 		- 	self.x.w * self.y.x * self.z.y * self.w.z
 		- 	self.x.w * self.y.y * self.z.z * self.w.x
 		- 	self.x.w * self.y.z * self.z.x * self.w.y
+	}
+	
+	pub fn inv(self) -> Self
+		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Div<Output=T>
+	{
+		unimplemented!()
 	}
 	
 	pub fn ident() -> Self

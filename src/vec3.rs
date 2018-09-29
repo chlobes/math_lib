@@ -285,14 +285,6 @@ impl<T> SubAssign<Vec3<T>> for Vec3<T>
 	}
 }
 
-/*impl<T, U> Into<Vec3<U>> for Vec3<T>
-	where T: Into<U>
-{
-	fn from(v: Vec3<T>) -> Vec3<U> {
-		vec3(v.x.into(), v.y.into(), v.z.into())
-	}
-}*/
-
 impl<T> Default for Vec3<T>
 	where T: Default
 {

@@ -1,7 +1,9 @@
 use prelude::*;
 
+use vec2::vec2;
 use vec3::*;
 use mat4::*;
+use mat2::*;
 
 #[repr(C)]
 #[derive(Debug, Copy, Clone, PartialEq, PartialOrd, Eq, Ord, Hash, Serialize, Deserialize)]
@@ -12,21 +14,36 @@ pub struct Mat3<T> {
 }
 
 impl<T> Mat3<T> {
-	pub fn convert<U>(self) -> Mat3<U>
-		where T: Into<U>
-	{
-		mat3(self.x.into_workaround(), self.y.into_workaround(), self.z.into_workaround())
-	}
-	
 	pub fn det(self) -> T
 		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T>
 	{
-		  self.x.x * self.y.y * self.z.z
-		+ self.x.y * self.y.z * self.z.x
-		+ self.x.z * self.y.x * self.z.y
-		- self.x.x * self.y.z * self.z.y
-		- self.x.y * self.y.x * self.z.z
-		- self.x.z * self.y.y * self.z.x
+		let Self{ x,y,z } = self;
+		  x.x * y.y * z.z
+		+ x.y * y.z * z.x
+		+ x.z * y.x * z.y
+		- x.x * y.z * z.y
+		- x.y * y.x * z.z
+		- x.z * y.y * z.x
+	}
+	
+	pub fn inv(self) -> Self
+	where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Div<Output=T>
+	{
+		let Mat3{ x,y,z } = self;
+		mat3(
+			vec3(
+				mat2(vec2(y.y, y.z), vec2(z.y, z.z)).det(),
+				mat2(vec2(x.z, x.y), vec2(z.z, z.y)).det(),
+				mat2(vec2(x.y, x.z), vec2(y.y, y.z)).det()) / self.det(),
+			vec3(
+				mat2(vec2(y.z, y.x), vec2(z.z, z.x)).det(),
+				mat2(vec2(x.x, x.z), vec2(z.x, z.z)).det(),
+				mat2(vec2(x.z, x.x), vec2(y.y, y.z)).det()) / self.det(),
+			vec3(
+				mat2(vec2(y.y, y.z), vec2(z.y, z.z)).det(),
+				mat2(vec2(x.z, x.y), vec2(z.z, z.y)).det(),
+				mat2(vec2(x.y, x.z), vec2(y.y, y.z)).det()) / self.det(),
+		)
 	}
 	
 	pub fn ident() -> Self
@@ -122,14 +139,6 @@ impl Mat3<f64> {
 pub fn mat3<T>(x: Vec3<T>, y: Vec3<T>, z: Vec3<T>) -> Mat3<T> {
 	Mat3 { x: x, y: y, z: z }
 }
-
-/*impl<T, U> Into<Vec3<U>> for Vec3<T>
-	where T: Into<U>
-{
-	fn from(v: Vec3<T>) -> Vec3<U> {
-		vec3(v.x.into(), v.y.into(), v.z.into())
-	}
-}*/
 
 impl<T> Default for Mat3<T>
 	where T: One + Default
