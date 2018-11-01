@@ -312,6 +312,18 @@ impl<T> ArrayTuple for Vec2<T> {
 	fn into_tuple(self) -> (T, T) { self.into_array().into_tuple() }
 }
 
+impl<T> From<(T, T)> for Vec2<T> {
+	fn from(t: (T, T)) -> Self {
+		let (a,b) = t;
+		vec2(a,b)
+	}
+}
+impl<T> From<[T; 2]> for Vec2<T> {
+	fn from(t: [T; 2]) -> Self {
+		t.into_tuple().into()
+	}
+}
+
 macro_rules! convert {
 	($T: ty, $($U: ident),+) => {$(
 		impl Vec2<$T> {
