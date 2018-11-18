@@ -360,6 +360,12 @@ impl<T> From<[T; 4]> for Vec4<T> {
 	}
 }
 
+impl<T: fmt::Display> fmt::Display for Vec4<T> {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		write!(f, "({}, {}, {}, {})", self.x, self.y, self.z, self.w)
+	}
+}
+
 macro_rules! convert {
     ($T: ty, $($U: ident),+) => {$(
         impl Vec4<$T> {

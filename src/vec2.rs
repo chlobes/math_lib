@@ -324,6 +324,12 @@ impl<T> From<[T; 2]> for Vec2<T> {
 	}
 }
 
+impl<T: fmt::Display> fmt::Display for Vec2<T> {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		write!(f, "({}, {})", self.x, self.y)
+	}
+}
+
 macro_rules! convert {
 	($T: ty, $($U: ident),+) => {$(
 		impl Vec2<$T> {
