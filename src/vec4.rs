@@ -370,6 +370,16 @@ impl<T: fmt::Display> fmt::Display for Vec4<T> {
 	}
 }
 
+impl<T: fmt::LowerExp> fmt::LowerExp for Vec4<T> {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		if let Some(p) = f.precision() {
+			write!(f, "({4:.*e}, {5:.*e}, {6:.*e}, {7:.*e})", p, p, p, p, self.x, self.y, self.z, self.w)
+		} else {
+			write!(f, "({:e}, {:e}, {:e}, {:e})", self.x, self.y, self.z, self.w)
+		}
+	}
+}
+
 macro_rules! convert {
     ($T: ty, $($U: ident),+) => {$(
         impl Vec4<$T> {

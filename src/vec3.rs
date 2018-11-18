@@ -344,10 +344,19 @@ impl<T> From<[T; 3]> for Vec3<T> {
 impl<T: fmt::Display> fmt::Display for Vec3<T> {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		if let Some(p) = f.precision() {
-			println!("formatting with precision: {}",p);
 			write!(f, "({3:.*}, {4:.*}, {5:.*})", p, p, p, self.x, self.y, self.z)
 		} else {
 			write!(f, "({}, {}, {})", self.x, self.y, self.z)
+		}
+	}
+}
+
+impl<T: fmt::LowerExp> fmt::LowerExp for Vec3<T> {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		if let Some(p) = f.precision() {
+			write!(f, "({3:.*e}, {4:.*e}, {5:.*e})", p, p, p, self.x, self.y, self.z)
+		} else {
+			write!(f, "({:e}, {:e}, {:e})", self.x, self.y, self.z)
 		}
 	}
 }
