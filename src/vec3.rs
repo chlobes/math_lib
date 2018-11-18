@@ -343,18 +343,22 @@ impl<T> From<[T; 3]> for Vec3<T> {
 
 impl<T: fmt::Display> fmt::Display for Vec3<T> {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		write!(f, "({}, {}, {})", self.x, self.y, self.z)
+		if let Some(p) = f.precision() {
+			write!(f, "({3:.*}, {4:.*}, {5:.*})", p, p, p, self.x, self.y, self.z)
+		} else {
+			write!(f, "({}, {}, {})", self.x, self.y, self.z)
+		}
 	}
 }
 
 macro_rules! convert {
-    ($T: ty, $($U: ident),+) => {$(
-        impl Vec3<$T> {
-            pub fn $U(self) -> Vec3<$U> {
-                vec3(self.x as $U, self.y as $U, self.z as $U)
-            }
-        }
-    )+}
+	($T: ty, $($U: ident),+) => {$(
+		impl Vec3<$T> {
+			pub fn $U(self) -> Vec3<$U> {
+				vec3(self.x as $U, self.y as $U, self.z as $U)
+			}
+		}
+	)+}
 }
 
 convert!(u8, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);

@@ -326,7 +326,11 @@ impl<T> From<[T; 2]> for Vec2<T> {
 
 impl<T: fmt::Display> fmt::Display for Vec2<T> {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		write!(f, "({}, {})", self.x, self.y)
+		if let Some(p) = f.precision() {
+			write!(f, "({2:.*}, {3:.*})", p, p, self.x, self.y)
+		} else {
+			write!(f, "({}, {})", self.x, self.y)
+		}
 	}
 }
 

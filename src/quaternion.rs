@@ -96,7 +96,11 @@ impl<T> Default for Quaternion<T>
 
 impl<T: fmt::Display> fmt::Display for Quaternion<T> {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		write!(f, "{} + {}i + {}j + {}k)", self.r, self.i, self.j, self.k)
+		if let Some(p) = f.precision() {
+			write!(f, "{4:.*} + {5:.*}i + {6:.*}j + {7:.*}k", p, p, p, p, self.r, self.i, self.j, self.k)
+		} else {
+			write!(f, "{} + {}i + {}j + {}k", self.r, self.i, self.j, self.k)
+		}
 	}
 }
 
