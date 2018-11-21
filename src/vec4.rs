@@ -29,12 +29,6 @@ impl<T> Vec4<T> {
 		vec4(self.x.into(), self.y.into(), self.z.into(), self.w.into())
 	}
 	
-	pub fn from_vec3(v: Vec3<T>) -> Self
-		where T: One,
-	{
-		Self { x: v.x, y: v.y, z: v.z, w: T::one() }
-	}
-	
 	pub fn max(self, other: Self) -> Self
 		where T: PartialOrd
 	{
@@ -102,6 +96,12 @@ impl<T> Vec4<T> {
 		where T: Default
 	{
 		vec4(T::default(), T::default(), T::default(), T::default())
+	}
+}
+
+impl<T: One> From<Vec3<T>> for Vec4<T> {
+	fn from(v: Vec3<T>) -> Self {
+		vec4(v.x,v.y,v.z,T::one())
 	}
 }
 
