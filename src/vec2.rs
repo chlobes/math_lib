@@ -44,6 +44,30 @@ impl<T> Vec2<T> {
 		)
 	}
 	
+	pub fn clamp(self, min: Self, max: Self) -> Self
+		where T: PartialOrd
+	{
+		self.min(max).max(min)
+	}
+	
+	pub fn elem_max(self, m: T) -> Self
+		where T: PartialOrd + Copy
+	{
+		self.max(vec2(m,m))
+	}
+	
+	pub fn elem_min(self, m: T) -> Self
+		where T: PartialOrd + Copy
+	{
+		self.min(vec2(m,m,))
+	}
+	
+	pub fn elem_clamp(self, min: T, max: T) -> Self
+		where T: PartialOrd + Copy
+	{
+		self.min(vec2(max,max)).max(vec2(min,min))
+	}
+	
 	pub fn max_elem(self) -> T
 		where T: PartialOrd
 	{

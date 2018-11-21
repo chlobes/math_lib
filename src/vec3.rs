@@ -54,6 +54,30 @@ impl<T> Vec3<T> {
 		)
 	}
 	
+	pub fn clamp(self, min: Self, max: Self) -> Self
+		where T: PartialOrd
+	{
+		self.min(max).max(min)
+	}
+	
+	pub fn elem_max(self, m: T) -> Self
+		where T: PartialOrd + Copy
+	{
+		self.max(vec3(m,m,m))
+	}
+	
+	pub fn elem_min(self, m: T) -> Self
+		where T: PartialOrd + Copy
+	{
+		self.min(vec3(m,m,m))
+	}
+	
+	pub fn elem_clamp(self, min: T, max: T) -> Self
+		where T: PartialOrd + Copy
+	{
+		self.min(vec3(max,max,max)).max(vec3(min,min,min))
+	}
+	
 	pub fn max_elem(self) -> T
 		where T: PartialOrd
 	{
