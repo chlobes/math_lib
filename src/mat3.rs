@@ -26,24 +26,31 @@ impl<T> Mat3<T> {
 		- x.z * y.y * z.x
 	}
 	
-	pub fn inv(self) -> Self
-	where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Div<Output=T>
+	pub fn adj(self) -> Self
+		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Div<Output=T>
 	{
 		let Mat3{ x,y,z } = self;
 		mat3(
 			vec3(
-				mat2(vec2(y.y, y.z), vec2(z.y, z.z)).det(),
-				mat2(vec2(x.z, x.y), vec2(z.z, z.y)).det(),
-				mat2(vec2(x.y, x.z), vec2(y.y, y.z)).det()) / self.det(),
+				mat2(vec2(y.y,y.z),vec2(z.y,z.z)).det(),
+				mat2(vec2(y.x,y.z),vec2(z.x,z.z)).det(),
+				mat2(vec2(y.x,y.y),vec2(z.x,z.y)).det()),
 			vec3(
-				mat2(vec2(y.z, y.x), vec2(z.z, z.x)).det(),
-				mat2(vec2(x.x, x.z), vec2(z.x, z.z)).det(),
-				mat2(vec2(x.z, x.x), vec2(y.y, y.z)).det()) / self.det(),
+				mat2(vec2(x.y,x.z),vec2(z.y,z.z)).det(),
+				mat2(vec2(x.x,x.z),vec2(z.x,z.z)).det(),
+				mat2(vec2(x.x,x.y),vec2(z.x,z.y)).det()),
 			vec3(
-				mat2(vec2(y.y, y.z), vec2(z.y, z.z)).det(),
-				mat2(vec2(x.z, x.y), vec2(z.z, z.y)).det(),
-				mat2(vec2(x.y, x.z), vec2(y.y, y.z)).det()) / self.det(),
+				mat2(vec2(x.y,x.z),vec2(y.y,y.z)).det(),
+				mat2(vec2(x.x,x.z),vec2(y.x,y.z)).det(),
+				mat2(vec2(x.x,x.y),vec2(y.x,y.y)).det()),
 		)
+	}
+	
+	pub fn inv(self) -> Self
+		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Div<Output=T>
+	{
+		let Mat3{ x,y,z } = self.adj();
+		mat3(x/self.det(),y/self.det(),z/self.det())
 	}
 	
 	pub fn ident() -> Self
