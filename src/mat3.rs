@@ -26,7 +26,7 @@ impl<T> Mat3<T> {
 		- x.z * y.y * z.x
 	}
 	
-	pub fn adj(self) -> Self
+	pub fn cofactor(self) -> Self
 		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Div<Output=T>
 	{
 		let Mat3{ x,y,z } = self;
@@ -46,10 +46,16 @@ impl<T> Mat3<T> {
 		)
 	}
 	
+	pub fn adjoint(self) -> Self
+		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Div<Output=T>
+	{
+		self.cofactor().transpose()
+	}
+	
 	pub fn inv(self) -> Self
 		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Div<Output=T>
 	{
-		let Mat3{ x,y,z } = self.adj();
+		let Mat3{ x,y,z } = self.adjoint();
 		mat3(x/self.det(),y/self.det(),z/self.det())
 	}
 	
