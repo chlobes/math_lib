@@ -2,7 +2,8 @@ use prelude::*;
 
 use vec4::*;
 
-#[derive(Debug, Copy, Clone, PartialEq, PartialOrd, Eq, Ord, Hash, Serialize, Deserialize)]
+#[repr(C)]
+#[derive(Debug,Copy,Clone,PartialEq,PartialOrd,Eq,Ord,Hash,Serialize,Deserialize)]
 pub struct Vec3<T> {
 	pub x: T,
 	pub y: T,

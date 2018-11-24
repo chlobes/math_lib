@@ -1,7 +1,7 @@
 use prelude::*;
 
 #[repr(C)]
-#[derive(Debug, Copy, Clone, PartialEq, PartialOrd, Eq, Ord, Hash, Serialize, Deserialize)]
+#[derive(Debug,Copy,Clone,PartialEq,PartialOrd,Eq,Ord,Hash,Serialize, Deserialize)]
 pub struct Vec2<T> {
 	pub x: T,
 	pub y: T,
