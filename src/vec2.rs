@@ -82,6 +82,13 @@ impl<T> Vec2<T> {
 		if x < y { x } else { y }
 	}
 	
+	pub fn sum_elem(self) -> T
+		where T: Add<Output=T>
+	{
+		let Vec2{x,y} = self;
+		x+y
+	}
+	
 	pub fn zero() -> Self
 		where T: Default
 	{

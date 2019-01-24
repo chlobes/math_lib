@@ -92,6 +92,12 @@ impl<T> Vec4<T> {
 		if a < b { a } else { b }
 	}
 	
+	pub fn sum_elem(self) -> T
+		where T: Add<Output=T>
+	{
+		let Vec4{x,y,z,w} = self;
+		x+y+z+w
+	}
 	
 	pub fn zero() -> Self
 		where T: Default
