@@ -155,10 +155,13 @@ pub fn vec3<T>(x: T, y: T, z: T) -> Vec3<T>
 	Vec3 { x: x, y: y, z: z }
 }
 
-pub fn dot<T>(v: Vec3<T>, u: Vec3<T>) -> T
-	where T: Copy + Mul<Output=T> + Add<Output=T>
-{
-	v.x * u.x + v.y * u.y + v.z * u.z
+pub use traits::dot;
+impl<T: Add<Output=T> + Mul<Output=T>> Dot for Vec3<T> {
+	type Output = T;
+	
+	fn dot(self, other: Self) -> T {
+		(self*other).sum_elem()
+	}
 }
 
 pub fn cross<T>(v: Vec3<T>, u: Vec3<T>) -> Vec3<T>

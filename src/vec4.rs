@@ -162,10 +162,13 @@ macro_rules! impl_floats2 {
 impl_floats1!(floor,ceil,round,trunc,fract,abs,signum,sqrt,exp,exp2,ln,log2,log10,cbrt,exp_m1,ln_1p);
 impl_floats2!(is_nan,is_infinite,is_finite,is_normal,is_sign_positive,is_sign_negative);
 
-pub fn dotvec4<T>(v: Vec4<T>, u: Vec4<T>) -> T
-	where T: Copy + Mul<Output=T> + Add<Output=T>
-{
-	v.x * u.x + v.y * u.y + v.z * u.z + v.w * u.w
+pub use traits::dot;
+impl<T: Add<Output=T> + Mul<Output=T>> Dot for Vec4<T> {
+	type Output = T;
+	
+	fn dot(self, other: Self) -> T {
+		(self*other).sum_elem()
+	}
 }
 
 impl Vec4<u16> {

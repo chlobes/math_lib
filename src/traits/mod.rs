@@ -14,6 +14,15 @@ impl Sqrt<f64> for f64 {
 	fn sqrt(self) -> f64 { self.sqrt() }
 }
 
+pub fn dot<T: Dot<Output=O>, O>(a: T, b: T) -> O {
+	a.dot(b)
+}
+
+pub trait Dot {
+	type Output;
+	fn dot(self, other: Self) -> Self::Output;
+}
+
 pub trait Trig: Sized {
 	fn sin(self) -> Self;
 	fn cos(self) -> Self;

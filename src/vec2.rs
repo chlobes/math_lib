@@ -136,10 +136,13 @@ macro_rules! impl_floats2 {
 impl_floats1!(floor,ceil,round,trunc,fract,abs,signum,sqrt,exp,exp2,ln,log2,log10,cbrt,exp_m1,ln_1p);
 impl_floats2!(is_nan,is_infinite,is_finite,is_normal,is_sign_positive,is_sign_negative);
 
-pub fn dot<T>(v: Vec2<T>, u: Vec2<T>) -> T
-	where T: Copy + Mul<Output=T> + Add<Output=T>
-{
-	v.x * u.x + v.y * u.y
+pub use traits::dot;
+impl<T: Add<Output=T> + Mul<Output=T>> Dot for Vec2<T> {
+	type Output = T;
+	
+	fn dot(self, other: Self) -> T {
+		(self*other).sum_elem()
+	}
 }
 
 pub fn distance<T>(v: Vec2<T>, u: Vec2<T>) -> T

@@ -1,7 +1,6 @@
 use prelude::*;
 
 use vec4::*;
-use self::dotvec4 as dot;
 
 #[repr(C)]
 #[derive(Debug, Copy, Clone, PartialEq, PartialOrd, Eq, Ord, Hash, Serialize, Deserialize)]
