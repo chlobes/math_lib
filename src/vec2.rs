@@ -96,6 +96,16 @@ impl<T> Vec2<T> {
 	}
 }
 
+impl Vec2<bool> {
+	pub fn and(self) -> bool {
+		self.x && self.y
+	}
+	
+	pub fn or(self) -> bool {
+		self.x || self.y
+	}
+}
+
 pub fn vec2<T>(x: T, y: T) -> Vec2<T>
 {
 	Vec2 { x: x, y: y }
