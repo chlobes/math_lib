@@ -1,7 +1,7 @@
-use prelude::*;
+use crate::prelude::*;
 
 #[repr(C)]
-#[derive(Debug,Copy,Clone,PartialEq,PartialOrd,Eq,Ord,Hash,Serialize, Deserialize)]
+#[derive(Debug,Copy,Clone,PartialEq,PartialOrd,Eq,Ord,Hash,Serialize,Deserialize)]
 pub struct Vec2<T> {
 	pub x: T,
 	pub y: T,
@@ -146,7 +146,7 @@ macro_rules! impl_floats2 {
 impl_floats1!(floor,ceil,round,trunc,fract,abs,signum,sqrt,exp,exp2,ln,log2,log10,cbrt,exp_m1,ln_1p);
 impl_floats2!(is_nan,is_infinite,is_finite,is_normal,is_sign_positive,is_sign_negative);
 
-pub use traits::dot;
+pub use crate::traits::dot;
 impl<T: Add<Output=T> + Mul<Output=T>> Dot for Vec2<T> {
 	type Output = T;
 	

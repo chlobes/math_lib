@@ -1,9 +1,9 @@
-use prelude::*;
+use crate::prelude::*;
 
-use vec2::vec2;
-use vec3::*;
-use mat4::*;
-use mat2::*;
+use crate::vec2::vec2;
+use crate::vec3::*;
+use crate::mat4::*;
+use crate::mat2::*;
 
 #[repr(C)]
 #[derive(Debug,Copy,Clone,PartialEq,PartialOrd,Eq,Ord,Hash,Serialize,Deserialize)]

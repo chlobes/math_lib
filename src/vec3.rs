@@ -1,6 +1,6 @@
-use prelude::*;
+use crate::prelude::*;
 
-use vec4::*;
+use crate::vec4::*;
 
 #[repr(C)]
 #[derive(Debug,Copy,Clone,PartialEq,PartialOrd,Eq,Ord,Hash,Serialize,Deserialize)]
@@ -155,7 +155,7 @@ pub fn vec3<T>(x: T, y: T, z: T) -> Vec3<T>
 	Vec3 { x: x, y: y, z: z }
 }
 
-pub use traits::dot;
+pub use crate::traits::dot;
 impl<T: Add<Output=T> + Mul<Output=T>> Dot for Vec3<T> {
 	type Output = T;
 	

@@ -1,6 +1,7 @@
-pub use array_tuple::*;
+pub use array_tuple::ArrayTuple;
 pub use std::ops::*;
 pub use std::marker::Copy;
-pub use traits::numbers::*;
-pub use traits::*;
+pub use crate::traits::numbers::*;
+pub use crate::traits::*;
 pub use std::fmt;
+pub use serde::{Serialize,Deserialize};

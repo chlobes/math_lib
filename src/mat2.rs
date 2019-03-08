@@ -1,9 +1,9 @@
-use prelude::*;
+use crate::prelude::*;
 
-use vec2::*;
+use crate::vec2::*;
 
 #[repr(C)]
-#[derive(Debug, Copy, Clone, PartialEq, PartialOrd, Eq, Ord, Hash, Serialize, Deserialize)]
+#[derive(Debug,Copy,Clone,PartialEq,PartialOrd,Eq,Ord,Hash,Serialize,Deserialize)]
 pub struct Mat2<T> {
 	pub x: Vec2<T>,
 	pub y: Vec2<T>,
