@@ -27,7 +27,7 @@ impl<T> Quaternion<T>
 		Self { r: -self.r, i: self.i, j: self.j, k: self.k }
 	}
 	
-	pub fn from_axis_angle(v: Vec3<T>) -> Self
+	pub fn from_euler_angles(v: Vec3<T>) -> Self
 		where T: Copy + Sqrt<T> + Trig + Half + Add<Output=T> + Mul<Output=T>
 	{
 		let magnitude = v.magnitude();
