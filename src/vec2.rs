@@ -111,6 +111,66 @@ pub fn vec2<T>(x: T, y: T) -> Vec2<T>
 	Vec2 { x: x, y: y }
 }
 
+macro_rules! impl_ints1 {
+	($($U: ident),+) => {$(
+		impl Vec2<isize> {
+			pub fn $U(self) -> Self {
+				vec2(self.x.$U(), self.y.$U())
+			}
+		}
+		impl Vec2<i64> {
+			pub fn $U(self) -> Self {
+				vec2(self.x.$U(), self.y.$U())
+			}
+		}
+		impl Vec2<i32> {
+			pub fn $U(self) -> Self {
+				vec2(self.x.$U(), self.y.$U())
+			}
+		}
+		impl Vec2<i16> {
+			pub fn $U(self) -> Self {
+				vec2(self.x.$U(), self.y.$U())
+			}
+		}
+		impl Vec2<i8> {
+			pub fn $U(self) -> Self {
+				vec2(self.x.$U(), self.y.$U())
+			}
+		}
+	)+}
+}
+
+macro_rules! impl_ints2 {
+	($($U: ident),+) => {$(
+		impl Vec2<isize> {
+			pub fn $U(self) -> Vec2<bool> {
+				vec2(self.x.$U(), self.y.$U())
+			}
+		}
+		impl Vec2<i64> {
+			pub fn $U(self) -> Vec2<bool> {
+				vec2(self.x.$U(), self.y.$U())
+			}
+		}
+		impl Vec2<i32> {
+			pub fn $U(self) -> Vec2<bool> {
+				vec2(self.x.$U(), self.y.$U())
+			}
+		}
+		impl Vec2<i16> {
+			pub fn $U(self) -> Vec2<bool> {
+				vec2(self.x.$U(), self.y.$U())
+			}
+		}
+		impl Vec2<i8> {
+			pub fn $U(self) -> Vec2<bool> {
+				vec2(self.x.$U(), self.y.$U())
+			}
+		}
+	)+}
+}
+
 macro_rules! impl_floats1 {
 	($($U: ident),+) => {$(
 		impl Vec2<f64> {
@@ -143,6 +203,8 @@ macro_rules! impl_floats2 {
 
 //component-wise functions
 //certain conversion and trig functions not implemented to avoid confusion
+impl_ints1!(abs,signum,swap_bytes/*,reverse_bits*/,to_be,to_le,wrapping_neg,wrapping_abs);
+impl_ints2!(is_positive,is_negative);
 impl_floats1!(floor,ceil,round,trunc,fract,abs,signum,sqrt,exp,exp2,ln,log2,log10,cbrt,exp_m1,ln_1p);
 impl_floats2!(is_nan,is_infinite,is_finite,is_normal,is_sign_positive,is_sign_negative);
 

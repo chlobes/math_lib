@@ -127,6 +127,66 @@ impl Vec4<bool> {
 	}
 }
 
+macro_rules! impl_ints1 {
+	($($U: ident),+) => {$(
+		impl Vec4<isize> {
+			pub fn $U(self) -> Self {
+				vec4(self.x.$U(), self.y.$U(), self.z.$U(), self.w.$U())
+			}
+		}
+		impl Vec4<i64> {
+			pub fn $U(self) -> Self {
+				vec4(self.x.$U(), self.y.$U(), self.z.$U(), self.w.$U())
+			}
+		}
+		impl Vec4<i32> {
+			pub fn $U(self) -> Self {
+				vec4(self.x.$U(), self.y.$U(), self.z.$U(), self.w.$U())
+			}
+		}
+		impl Vec4<i16> {
+			pub fn $U(self) -> Self {
+				vec4(self.x.$U(), self.y.$U(), self.z.$U(), self.w.$U())
+			}
+		}
+		impl Vec4<i8> {
+			pub fn $U(self) -> Self {
+				vec4(self.x.$U(), self.y.$U(), self.z.$U(), self.w.$U())
+			}
+		}
+	)+}
+}
+
+macro_rules! impl_ints2 {
+	($($U: ident),+) => {$(
+		impl Vec4<isize> {
+			pub fn $U(self) -> Vec4<bool> {
+				vec4(self.x.$U(), self.y.$U(), self.z.$U(), self.w.$U())
+			}
+		}
+		impl Vec4<i64> {
+			pub fn $U(self) -> Vec4<bool> {
+				vec4(self.x.$U(), self.y.$U(), self.z.$U(), self.w.$U())
+			}
+		}
+		impl Vec4<i32> {
+			pub fn $U(self) -> Vec4<bool> {
+				vec4(self.x.$U(), self.y.$U(), self.z.$U(), self.w.$U())
+			}
+		}
+		impl Vec4<i16> {
+			pub fn $U(self) -> Vec4<bool> {
+				vec4(self.x.$U(), self.y.$U(), self.z.$U(), self.w.$U())
+			}
+		}
+		impl Vec4<i8> {
+			pub fn $U(self) -> Vec4<bool> {
+				vec4(self.x.$U(), self.y.$U(), self.z.$U(), self.w.$U())
+			}
+		}
+	)+}
+}
+
 macro_rules! impl_floats1 {
 	($($U: ident),+) => {$(
 		impl Vec4<f64> {
@@ -159,6 +219,8 @@ macro_rules! impl_floats2 {
 
 //component-wise functions
 //certain conversion and trig functions not implemented to avoid confusion
+impl_ints1!(abs,signum,swap_bytes/*,reverse_bits*/,to_be,to_le,wrapping_neg,wrapping_abs);
+impl_ints2!(is_positive,is_negative);
 impl_floats1!(floor,ceil,round,trunc,fract,abs,signum,sqrt,exp,exp2,ln,log2,log10,cbrt,exp_m1,ln_1p);
 impl_floats2!(is_nan,is_infinite,is_finite,is_normal,is_sign_positive,is_sign_negative);
 
