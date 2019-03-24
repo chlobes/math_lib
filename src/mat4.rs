@@ -61,13 +61,13 @@ impl<T> Mat4<T> {
 	}
 	
 	pub fn ident() -> Self
-		where T: One + Default
+		where T: Zero + One
 	{
 		mat4(
-			vec4(T::one(), T::default(), T::default(), T::default()),
-			vec4(T::default(), T::one(), T::default(), T::default()),
-			vec4(T::default(), T::default(), T::one(), T::default()),
-			vec4(T::default(), T::default(), T::default(), T::one()),
+			vec4(T::one(), T::zero(), T::zero(), T::zero()),
+			vec4(T::zero(), T::one(), T::zero(), T::zero()),
+			vec4(T::zero(), T::zero(), T::one(), T::zero()),
+			vec4(T::zero(), T::zero(), T::zero(), T::one()),
 		)
 	}
 	
@@ -108,7 +108,7 @@ pub fn mat4<T>(x: Vec4<T>, y: Vec4<T>, z: Vec4<T>, w: Vec4<T>) -> Mat4<T> {
 }*/
 
 impl<T> Default for Mat4<T>
-	where T: One + Default
+	where T: Zero + One
 {
 	fn default() -> Self {
 		Mat4::ident()

@@ -28,11 +28,11 @@ impl<T> Mat2<T> {
 	}
 	
 	pub fn ident() -> Self
-		where T: One + Default
+		where T: Zero + One
 	{
 		mat2(
-			vec2(T::one(), T::default()),
-			vec2(T::default(), T::one()),
+			vec2(T::one(), T::zero()),
+			vec2(T::zero(), T::one()),
 		)
 	}
 	
@@ -76,7 +76,7 @@ pub fn mat2<T>(x: Vec2<T>, y: Vec2<T>) -> Mat2<T> {
 }
 
 impl<T> Default for Mat2<T>
-	where T: One + Default
+	where T: Zero + One
 {
 	fn default() -> Self {
 		Mat2::ident()

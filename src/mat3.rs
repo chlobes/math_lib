@@ -60,12 +60,12 @@ impl<T> Mat3<T> {
 	}
 	
 	pub fn ident() -> Self
-		where T: One + Default
+		where T: Zero + One
 	{
 		mat3(
-			vec3(T::one(), T::default(), T::default()),
-			vec3(T::default(), T::one(), T::default()),
-			vec3(T::default(), T::default(), T::one()),
+			vec3(T::one(), T::zero(), T::zero()),
+			vec3(T::zero(), T::one(), T::zero()),
+			vec3(T::zero(), T::zero(), T::one()),
 		)
 	}
 	
@@ -154,7 +154,7 @@ pub fn mat3<T>(x: Vec3<T>, y: Vec3<T>, z: Vec3<T>) -> Mat3<T> {
 }
 
 impl<T> Default for Mat3<T>
-	where T: One + Default
+	where T: Zero + One
 {
 	fn default() -> Self {
 		Mat3::ident()
