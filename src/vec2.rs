@@ -483,15 +483,16 @@ macro_rules! convert {
 	)+}
 }
 
-convert!(u8, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
-convert!(u16, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
-convert!(u32, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
-convert!(u64, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
-convert!(usize, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
-convert!(i8, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
-convert!(i16, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
-convert!(i32, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
-convert!(i64, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
-convert!(isize, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
-convert!(f32, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
-convert!(f64, u8, u16, u32, u64, usize, i8, i16, i32, i64, isize, f32, f64);
+convert!(u8,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);
+convert!(u16,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);
+convert!(u32,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);
+convert!(u64,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);
+convert!(usize,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);
+convert!(i8,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);
+convert!(i16,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);
+convert!(i32,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);
+convert!(i64,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);
+convert!(isize,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);
+convert!(f32,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);
+convert!(f64,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);
+convert!(bool,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize);
