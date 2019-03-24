@@ -36,10 +36,16 @@ impl<T> Quaternion<T>
 		Self { r: r, i: i, j: j, k: k }
 	}
 	
-	pub fn into<U>(self) -> Quaternion<U>
+	pub fn convert<U>(self) -> Quaternion<U>
 		where T: Into<U>
 	{
 		Quaternion { r: self.r.into(), i: self.i.into(), j: self.j.into(), k: self.k.into() }
+	}
+	
+	pub fn ident() -> Self
+		where T: Zero + One
+	{
+		Self::default()
 	}
 	
 	pub fn rot_mat(self) -> Mat3<T>
@@ -51,12 +57,6 @@ impl<T> Quaternion<T>
 			vec3(T::two() * (i * j + r * k), T::one() - T::two() * (i * i + k * k), T::two() * (j * k - r * i)),
 			vec3(T::two() * (i * k - r * j), T::two() * (j * k + r * i), T::one() - T::two() * (i * i + j * j)),
 		)
-	}
-	
-	pub fn convert<U>(self) -> Quaternion<U>
-		where T: Into<U>
-	{
-		Quaternion { r: self.r.into(), i: self.i.into(), j: self.j.into(), k: self.k.into() }
 	}
 }
 
@@ -87,10 +87,10 @@ impl<T> ArrayTuple for Quaternion<T> {
 }
 
 impl<T> Default for Quaternion<T>
-	where T: Default + One
+	where T: Zero + One
 {
 	fn default() -> Self {
-		Self { r: T::one(), i: T::default(), j: T::default(), k: T::default() }
+		Self { r: T::one(), i: T::zero(), j: T::zero(), k: T::zero() }
 	}
 }
 

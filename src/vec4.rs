@@ -30,6 +30,18 @@ impl<T> Vec4<T> {
 		vec4(self.x.into(), self.y.into(), self.z.into(), self.w.into())
 	}
 	
+	pub fn zero() -> Self
+		where T: Zero
+	{
+		vec4(T::zero(), T::zero(), T::zero(), T::zero())
+	}
+	
+	pub fn one() -> Self
+		where T: One
+	{
+		vec4(T::one(), T::one(), T::one(), T::one())
+	}
+	
 	pub fn max(self, other: Self) -> Self
 		where T: PartialOrd
 	{
@@ -97,12 +109,6 @@ impl<T> Vec4<T> {
 	{
 		let Vec4{x,y,z,w} = self;
 		x+y+z+w
-	}
-	
-	pub fn zero() -> Self
-		where T: Default
-	{
-		vec4(T::default(), T::default(), T::default(), T::default())
 	}
 }
 

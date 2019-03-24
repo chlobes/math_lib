@@ -23,16 +23,22 @@ impl<T> Vec3<T> {
 		vec3(self.x / self.magnitude(), self.y / self.magnitude(), self.z / self.magnitude())
 	}
 
-	pub fn into_workaround<U>(self) -> Vec3<U>
+	pub fn convert<U>(self) -> Vec3<U>
 		where T: Into<U>
 	{
 		vec3(self.x.into(), self.y.into(), self.z.into())
 	}
 	
 	pub fn zero() -> Self
-		where T: Default
+		where T: Zero
 	{
-		Self::default()
+		vec3(T::zero(), T::zero(), T::zero())
+	}
+	
+	pub fn one() -> Self
+		where T: One
+	{
+		vec3(T::one(), T::one(), T::one())
 	}
 	
 	pub fn max(self, other: Self) -> Self

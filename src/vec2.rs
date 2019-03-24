@@ -20,10 +20,22 @@ impl<T> Vec2<T> {
 		vec2(self.x / self.magnitude(), self.y / self.magnitude())
 	}
 	
-	pub fn into_workaround<U>(self) -> Vec2<U>
+	pub fn convert<U>(self) -> Vec2<U>
 		where T: Into<U>
 	{
 		vec2(self.x.into(), self.y.into())
+	}
+	
+	pub fn zero() -> Self
+		where T: Zero
+	{
+		vec2(T::zero(), T::zero())
+	}
+	
+	pub fn one() -> Self
+		where T: One
+	{
+		vec2(T::one(), T::one())
 	}
 	
 	pub fn max(self, other: Self) -> Self
@@ -87,12 +99,6 @@ impl<T> Vec2<T> {
 	{
 		let Vec2{x,y} = self;
 		x+y
-	}
-	
-	pub fn zero() -> Self
-		where T: Default
-	{
-		Self::default()
 	}
 }
 
