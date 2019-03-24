@@ -373,6 +373,24 @@ impl<T> SubAssign<Vec2<T>> for Vec2<T>
 	}
 }
 
+impl<T> Rem<T> for Vec2<T>
+	where T: Copy + Rem<Output=T>
+{
+	type Output = Vec2<T>;
+	
+	fn rem(self, scalar: T) -> Vec2<T> {
+		vec2(self.x % scalar, self.y % scalar)
+	}
+}
+
+impl<T> RemAssign<T> for Vec2<T>
+	where T: Copy + Rem<Output=T>
+{
+	fn rem_assign(&mut self, scalar: T) {
+		*self = *self % scalar;
+	}
+}
+
 /*impl<T, U> Into<Vec2<U>> for Vec2<T>
 	where T: Into<U>
 {
