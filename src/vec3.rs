@@ -106,6 +106,13 @@ impl<T> Vec3<T> {
 		x+y+z
 	}
 	
+	pub fn mul_elem(self) -> T
+		where T: Mul<Output=T>
+	{
+		let Vec3{x,y,z} = self;
+		x*y*z
+	}
+	
 	pub fn extend(self, w: T) -> Vec4<T> {
 		vec4(self.x, self.y, self.z, w)
 	}

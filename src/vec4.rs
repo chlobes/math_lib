@@ -110,6 +110,13 @@ impl<T> Vec4<T> {
 		let Vec4{x,y,z,w} = self;
 		x+y+z+w
 	}
+	
+	pub fn mul_elem(self) -> T
+		where T: Mul<Output=T>
+	{
+		let Vec4{x,y,z,w} = self;
+		x*y*z*w
+	}
 }
 
 impl<T: One> From<Vec3<T>> for Vec4<T> {

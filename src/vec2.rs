@@ -100,6 +100,13 @@ impl<T> Vec2<T> {
 		let Vec2{x,y} = self;
 		x+y
 	}
+	
+	pub fn mul_elem(self) -> T
+		where T: Mul<Output=T>
+	{
+		let Vec2{x,y} = self;
+		x*y
+	}
 }
 
 impl Vec2<bool> {
