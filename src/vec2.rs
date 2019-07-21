@@ -1,5 +1,7 @@
 use crate::prelude::*;
 
+use crate::vec3::*;
+
 #[repr(C)]
 #[derive(Debug,Copy,Clone,PartialEq,PartialOrd,Eq,Ord,Hash,Serialize,Deserialize)]
 pub struct Vec2<T> {
@@ -106,6 +108,10 @@ impl<T> Vec2<T> {
 	{
 		let Vec2{x,y} = self;
 		x*y
+	}
+	
+	pub fn extend(self, z: T) -> Vec3<T> {
+		vec3(self.x, self.y, z)
 	}
 }
 
