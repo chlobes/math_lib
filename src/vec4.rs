@@ -497,6 +497,12 @@ impl<T: fmt::Display> fmt::Display for Vec4<T> {
 	}
 }
 
+impl<T: NiceFmt> NiceFmt for Vec4<T> {
+	fn nice_fmt(&self) -> String {
+		format!("({}, {}, {}, {})", self.x.nice_fmt(), self.y.nice_fmt(), self.z.nice_fmt(), self.w.nice_fmt())
+	}
+}
+
 impl<T: fmt::LowerExp> fmt::LowerExp for Vec4<T> {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		if let Some(p) = f.precision() {

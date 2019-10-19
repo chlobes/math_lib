@@ -5,3 +5,4 @@ pub use crate::traits::numbers::*;
 pub use crate::traits::*;
 pub use std::fmt;
 pub use serde::{Serialize,Deserialize};
+pub use crate::traits::NiceFmt;

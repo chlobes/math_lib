@@ -73,3 +73,55 @@ impl Trig for f64 {
 	fn acosh(self) -> Self { self.acosh() }
 	fn atanh(self) -> Self { self.atanh() }
 }
+
+const NICE_FMT_LIMIT: usize = 8;
+
+pub trait NiceFmt {
+	fn nice_fmt(&self) -> String;
+}
+
+impl NiceFmt for f32 {
+	fn nice_fmt(&self) -> String {
+		if format!("{}",self).len() <= NICE_FMT_LIMIT {
+			format!("{}",self)
+		} else if (self.abs() as usize + self.is_sign_negative() as usize) < NICE_FMT_LIMIT.pow(10) {
+			//TODO: rounding
+			let mut result = format!("{}",self);
+			while result.len() > NICE_FMT_LIMIT {
+				result.pop().unwrap();
+			}
+			let c = result.pop().unwrap();
+			if c == '.' {
+				result.push(' ');
+			} else {
+				result.push(c);
+			}
+			result
+		} else {
+			format!("{:.*e}",NICE_FMT_LIMIT-2,self)
+		}
+	}
+}
+
+impl NiceFmt for f64 {
+	fn nice_fmt(&self) -> String {
+		if format!("{}",self).len() <= NICE_FMT_LIMIT {
+			format!("{}",self)
+		} else if (self.abs() as usize + self.is_sign_negative() as usize) < NICE_FMT_LIMIT.pow(10) {
+			//TODO: rounding
+			let mut result = format!("{}",self);
+			while result.len() > NICE_FMT_LIMIT {
+				result.pop().unwrap();
+			}
+			let c = result.pop().unwrap();
+			if c == '.' {
+				result.push(' ');
+			} else {
+				result.push(c);
+			}
+			result
+		} else {
+			format!("{:.*e}",NICE_FMT_LIMIT-2,self)
+		}
+	}
+}
