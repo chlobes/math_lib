@@ -104,6 +104,13 @@ impl<T: fmt::Display> fmt::Display for Quaternion<T> {
 	}
 }
 
+impl<T: NiceFmt> NiceFmt for Quaternion<T> {
+	fn nice_fmt(&self, limit: usize) -> String {
+		format!("({} + {}i + {}j + {}k)", self.r.nice_fmt(limit), self.i.nice_fmt(limit), self.j.nice_fmt(limit), self.k.nice_fmt(limit))
+	}
+}
+
+
 impl<T: fmt::LowerExp> fmt::LowerExp for Quaternion<T> {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		if let Some(p) = f.precision() {

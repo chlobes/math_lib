@@ -74,24 +74,23 @@ impl Trig for f64 {
 	fn atanh(self) -> Self { self.atanh() }
 }
 
-const NICE_FMT_LIMIT: usize = 8;
-
 pub trait NiceFmt {
-	fn nice_fmt(&self) -> String;
+	fn nice_fmt(&self, limit: usize) -> String;
 }
 
 impl NiceFmt for f32 {
-	fn nice_fmt(&self) -> String {
-		if format!("{}",self).len() <= NICE_FMT_LIMIT {
+	fn nice_fmt(&self, limit: usize) -> String {
+		let limit = limit.max(1);
+		if format!("{}",self).len() <= limit {
 			let mut result = format!("{}",self);
-			while result.len() < NICE_FMT_LIMIT {
+			while result.len() < limit {
 				result.push(' ');
 			}
 			result
-		} else if (self.abs() as usize + self.is_sign_negative() as usize) < NICE_FMT_LIMIT.pow(10) {
+		} else if (self.abs() as usize + self.is_sign_negative() as usize) < limit.pow(10) {
 			//TODO: rounding
 			let mut result = format!("{}",self);
-			while result.len() > NICE_FMT_LIMIT {
+			while result.len() > limit {
 				result.pop().unwrap();
 			}
 			let c = result.pop().unwrap();
@@ -102,23 +101,24 @@ impl NiceFmt for f32 {
 			}
 			result
 		} else {
-			format!("{:.*e}",NICE_FMT_LIMIT-2,self)
+			format!("{:.*e}",limit-2,self)
 		}
 	}
 }
 
 impl NiceFmt for f64 {
-	fn nice_fmt(&self) -> String {
-		if format!("{}",self).len() <= NICE_FMT_LIMIT {
+	fn nice_fmt(&self, limit: usize) -> String {
+		let limit = limit.max(1);
+		if format!("{}",self).len() <= limit {
 			let mut result = format!("{}",self);
-			while result.len() < NICE_FMT_LIMIT {
+			while result.len() < limit {
 				result.push(' ');
 			}
 			result
-		} else if (self.abs() as usize + self.is_sign_negative() as usize) < NICE_FMT_LIMIT.pow(10) {
+		} else if (self.abs() as usize + self.is_sign_negative() as usize) < limit.pow(10) {
 			//TODO: rounding
 			let mut result = format!("{}",self);
-			while result.len() > NICE_FMT_LIMIT {
+			while result.len() > limit {
 				result.pop().unwrap();
 			}
 			let c = result.pop().unwrap();
@@ -129,7 +129,7 @@ impl NiceFmt for f64 {
 			}
 			result
 		} else {
-			format!("{:.*e}",NICE_FMT_LIMIT-2,self)
+			format!("{:.*e}",limit-2,self)
 		}
 	}
 }
