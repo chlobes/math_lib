@@ -83,7 +83,11 @@ pub trait NiceFmt {
 impl NiceFmt for f32 {
 	fn nice_fmt(&self) -> String {
 		if format!("{}",self).len() <= NICE_FMT_LIMIT {
-			format!("{}",self)
+			let mut result = format!("{}",self);
+			while result.len() < NICE_FMT_LIMIT {
+				result.push(' ');
+			}
+			result
 		} else if (self.abs() as usize + self.is_sign_negative() as usize) < NICE_FMT_LIMIT.pow(10) {
 			//TODO: rounding
 			let mut result = format!("{}",self);
@@ -106,7 +110,11 @@ impl NiceFmt for f32 {
 impl NiceFmt for f64 {
 	fn nice_fmt(&self) -> String {
 		if format!("{}",self).len() <= NICE_FMT_LIMIT {
-			format!("{}",self)
+			let mut result = format!("{}",self);
+			while result.len() < NICE_FMT_LIMIT {
+				result.push(' ');
+			}
+			result
 		} else if (self.abs() as usize + self.is_sign_negative() as usize) < NICE_FMT_LIMIT.pow(10) {
 			//TODO: rounding
 			let mut result = format!("{}",self);
