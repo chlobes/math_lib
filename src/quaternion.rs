@@ -45,7 +45,7 @@ impl<T> Quaternion<T>
 	pub fn ident() -> Self
 		where T: Zero + One
 	{
-		Self::default()
+		Self { r: T::one(), i: T::zero(), j: T::zero(), k: T::zero() }
 	}
 	
 	pub fn rot_mat(self) -> Mat3<T>
@@ -57,6 +57,12 @@ impl<T> Quaternion<T>
 			vec3(T::two() * (i * j + r * k), T::one() - T::two() * (i * i + k * k), T::two() * (j * k - r * i)),
 			vec3(T::two() * (i * k - r * j), T::two() * (j * k + r * i), T::one() - T::two() * (i * i + j * j)),
 		)
+	}
+}
+
+impl<T: Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Copy + Zero + One> Product<Quaternion<T>> for Quaternion<T> {
+	fn product<I: Iterator<Item=Self>>(iter: I) -> Self {
+		iter.fold(Self::ident(), |a, b| a * b)
 	}
 }
 
@@ -90,7 +96,7 @@ impl<T> Default for Quaternion<T>
 	where T: Zero + One
 {
 	fn default() -> Self {
-		Self { r: T::one(), i: T::zero(), j: T::zero(), k: T::zero() }
+		Self::ident()
 	}
 }
 

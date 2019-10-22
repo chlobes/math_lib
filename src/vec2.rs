@@ -115,6 +115,18 @@ impl<T> Vec2<T> {
 	}
 }
 
+impl<T: Mul<Output=T> + One> Product<Vec2<T>> for Vec2<T> {
+	fn product<I: Iterator<Item=Self>>(iter: I) -> Self {
+		iter.fold(Self::one(), |a, b| a * b)
+	}
+}
+
+impl<T: Add<Output=T> + Zero> Sum<Vec2<T>> for Vec2<T> {
+	fn sum<I: Iterator<Item=Self>>(iter: I) -> Self {
+		iter.fold(Self::zero(), |a, b| a + b)
+	}
+}
+
 impl Vec2<bool> {
 	pub fn and(self) -> bool {
 		self.x && self.y

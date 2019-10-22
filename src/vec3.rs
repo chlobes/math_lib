@@ -118,6 +118,18 @@ impl<T> Vec3<T> {
 	}
 }
 
+impl<T: Mul<Output=T> + One> Product<Vec3<T>> for Vec3<T> {
+	fn product<I: Iterator<Item=Self>>(iter: I) -> Self {
+		iter.fold(Self::one(), |a, b| a * b)
+	}
+}
+
+impl<T: Add<Output=T> + Zero> Sum<Vec3<T>> for Vec3<T> {
+	fn sum<I: Iterator<Item=Self>>(iter: I) -> Self {
+		iter.fold(Self::zero(), |a, b| a + b)
+	}
+}
+
 impl Vec3<bool> {
 	pub fn and(self) -> bool {
 		self.x && self.y && self.z
