@@ -111,8 +111,8 @@ impl<T: fmt::Display> fmt::Display for Quaternion<T> {
 }
 
 impl<T: NiceFmt> NiceFmt for Quaternion<T> {
-	fn nice_fmt(&self, limit: usize) -> String {
-		format!("({} + {}i + {}j + {}k)", self.r.nice_fmt(limit), self.i.nice_fmt(limit), self.j.nice_fmt(limit), self.k.nice_fmt(limit))
+	fn nice_fmt(&self, limit: usize, pad: bool) -> String {
+		format!("({} + {}i + {}j + {}k)", self.r.nice_fmt(limit, pad), self.i.nice_fmt(limit, pad), self.j.nice_fmt(limit, pad), self.k.nice_fmt(limit, pad))
 	}
 }
 

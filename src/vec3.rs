@@ -492,8 +492,8 @@ impl<T: fmt::Display> fmt::Display for Vec3<T> {
 }
 
 impl<T: NiceFmt> NiceFmt for Vec3<T> {
-	fn nice_fmt(&self, limit: usize) -> String {
-		format!("({}, {}, {})", self.x.nice_fmt(limit), self.y.nice_fmt(limit), self.z.nice_fmt(limit))
+	fn nice_fmt(&self, limit: usize, pad: bool) -> String {
+		format!("({}, {}, {})", self.x.nice_fmt(limit, pad), self.y.nice_fmt(limit, pad), self.z.nice_fmt(limit, pad))
 	}
 }
 

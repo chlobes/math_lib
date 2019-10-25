@@ -75,16 +75,18 @@ impl Trig for f64 {
 }
 
 pub trait NiceFmt {
-	fn nice_fmt(&self, limit: usize) -> String;
+	fn nice_fmt(&self, limit: usize, pad: bool) -> String;
 }
 
 impl NiceFmt for f32 {
-	fn nice_fmt(&self, limit: usize) -> String {
+	fn nice_fmt(&self, limit: usize, pad: bool) -> String {
 		let limit = limit.max(1);
 		if format!("{}",self).len() <= limit {
 			let mut result = format!("{}",self);
-			while result.len() < limit {
-				result.push(' ');
+			if pad {
+				while result.len() < limit {
+					result.push(' ');
+				}
 			}
 			result
 		} else if (self.abs() as usize + self.is_sign_negative() as usize) < limit.pow(10) {
@@ -95,24 +97,34 @@ impl NiceFmt for f32 {
 			}
 			let c = result.pop().unwrap();
 			if c == '.' {
-				result.push(' ');
+				if pad {
+					result.push(' ');
+				}
 			} else {
 				result.push(c);
 			}
 			result
 		} else {
-			format!("{:.*e}",limit-2,self)
+			let mut result = format!("{:.*e}",limit-2,self);
+			if pad {
+				while result.len() < limit {
+					result.push(' ');
+				}
+			}
+			result
 		}
 	}
 }
 
 impl NiceFmt for f64 {
-	fn nice_fmt(&self, limit: usize) -> String {
+	fn nice_fmt(&self, limit: usize, pad: bool) -> String {
 		let limit = limit.max(1);
 		if format!("{}",self).len() <= limit {
 			let mut result = format!("{}",self);
-			while result.len() < limit {
-				result.push(' ');
+			if pad {
+				while result.len() < limit {
+					result.push(' ');
+				}
 			}
 			result
 		} else if (self.abs() as usize + self.is_sign_negative() as usize) < limit.pow(10) {
@@ -123,13 +135,21 @@ impl NiceFmt for f64 {
 			}
 			let c = result.pop().unwrap();
 			if c == '.' {
-				result.push(' ');
+				if pad {
+					result.push(' ');
+				}
 			} else {
 				result.push(c);
 			}
 			result
 		} else {
-			format!("{:.*e}",limit-2,self)
+			let mut result = format!("{:.*e}",limit-2,self);
+			if pad {
+				while result.len() < limit {
+					result.push(' ');
+				}
+			}
+			result
 		}
 	}
 }
