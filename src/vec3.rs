@@ -237,6 +237,18 @@ impl_ints2!(is_positive,is_negative);
 impl_floats1!(floor,ceil,round,trunc,fract,abs,signum,sqrt,exp,exp2,ln,log2,log10,cbrt,exp_m1,ln_1p);
 impl_floats2!(is_nan,is_infinite,is_finite,is_normal,is_sign_positive,is_sign_negative);
 
+impl Vec3<f64> {
+	pub fn to_bits(self) -> Vec3<u64> {
+		vec3(self.x.to_bits(), self.y.to_bits(), self.z.to_bits())
+	}
+}
+
+impl Vec3<f32> {
+	pub fn to_bits(self) -> Vec3<u32> {
+		vec3(self.x.to_bits(), self.y.to_bits(), self.z.to_bits())
+	}
+}
+
 pub fn vec3<T>(x: T, y: T, z: T) -> Vec3<T>
 {
 	Vec3 { x: x, y: y, z: z }
