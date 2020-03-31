@@ -1,6 +1,7 @@
 use crate::prelude::*;
 
 use crate::vec4::*;
+use crate::vec2::*;
 
 #[repr(C)]
 #[derive(Debug,Copy,Clone,PartialEq,PartialOrd,Eq,Ord,Hash,Serialize,Deserialize)]
@@ -111,6 +112,10 @@ impl<T> Vec3<T> {
 	{
 		let Vec3{x,y,z} = self;
 		x*y*z
+	}
+	
+	pub fn downsize(self) -> Vec2<T> {
+		vec2(self.x, self.y)
 	}
 	
 	pub fn extend(self, w: T) -> Vec4<T> {

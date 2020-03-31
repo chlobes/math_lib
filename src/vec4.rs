@@ -117,6 +117,10 @@ impl<T> Vec4<T> {
 		let Vec4{x,y,z,w} = self;
 		x*y*z*w
 	}
+	
+	pub fn downsize(self) -> Vec3<T> {
+		vec3(self.x, self.y, self.z)
+	}
 }
 
 impl<T: Mul<Output=T> + One> Product<Vec4<T>> for Vec4<T> {
