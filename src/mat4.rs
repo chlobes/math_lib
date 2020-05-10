@@ -13,56 +13,117 @@ pub struct Mat4<T> {
 
 impl<T> Mat4<T> {
 	pub fn convert<U>(self) -> Mat4<U>
-		where T: Into<U>
-	{
+		where T: Into<U> {
 		mat4(self.x.convert(), self.y.convert(), self.z.convert(), self.w.convert())
 	}
 	
 	pub fn det(self) -> T
-		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T>
-	{
-			self.x.x * self.y.y * self.z.z * self.w.w
-		+ 	self.x.x * self.y.z * self.z.w * self.w.y
-		+ 	self.x.x * self.y.w * self.z.y * self.w.z
+		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> {
+		let Mat4{ x,y,z,w } = self;
+		  x.x * y.y * z.z * w.w
+		+ x.x * y.z * z.w * w.y
+		+ x.x * y.w * z.y * w.z
 		
-		+ 	self.x.y * self.y.x * self.z.w * self.w.z
-		+ 	self.x.y * self.y.z * self.z.x * self.w.w
-		+ 	self.x.y * self.y.w * self.z.z * self.w.x
+		+ x.y * y.x * z.w * w.z
+		+ x.y * y.z * z.x * w.w
+		+ x.y * y.w * z.z * w.x
 		
-		+ 	self.x.z * self.y.x * self.z.y * self.w.w
-		+ 	self.x.z * self.y.y * self.z.w * self.w.x
-		+ 	self.x.z * self.y.w * self.z.x * self.w.y
+		+ x.z * y.x * z.y * w.w
+		+ x.z * y.y * z.w * w.x
+		+ x.z * y.w * z.x * w.y
 		
-		+ 	self.x.w * self.y.x * self.z.z * self.w.y
-		+ 	self.x.w * self.y.y * self.z.x * self.w.z
-		+ 	self.x.w * self.y.z * self.z.y * self.w.x
+		+ x.w * y.x * z.z * w.y
+		+ x.w * y.y * z.x * w.z
+		+ x.w * y.z * z.y * w.x
 		
-		- 	self.x.x * self.y.y * self.z.w * self.w.z
-		- 	self.x.x * self.y.z * self.z.y * self.w.w
-		-	self.x.x * self.y.w * self.z.z * self.w.y
+		- x.x * y.y * z.w * w.z
+		- x.x * y.z * z.y * w.w
+		-	x.x * y.w * z.z * w.y
 		
-		- 	self.x.y * self.y.x * self.z.z * self.w.w
-		- 	self.x.y * self.y.z * self.z.w * self.w.x
-		- 	self.x.y * self.y.w * self.z.x * self.w.z
+		- x.y * y.x * z.z * w.w
+		- x.y * y.z * z.w * w.x
+		- x.y * y.w * z.x * w.z
 		
-		- 	self.x.z * self.y.x * self.z.w * self.w.y
-		- 	self.x.z * self.y.y * self.z.x * self.w.w
-		- 	self.x.z * self.y.w * self.z.y * self.w.x
+		- x.z * y.x * z.w * w.y
+		- x.z * y.y * z.x * w.w
+		- x.z * y.w * z.y * w.x
 		
-		- 	self.x.w * self.y.x * self.z.y * self.w.z
-		- 	self.x.w * self.y.y * self.z.z * self.w.x
-		- 	self.x.w * self.y.z * self.z.x * self.w.y
+		- x.w * y.x * z.y * w.z
+		- x.w * y.y * z.z * w.x
+		- x.w * y.z * z.x * w.y
 	}
 	
-	pub fn inv(self) -> Self
-		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Div<Output=T>
-	{
+	pub fn cofactor(self) -> Self
+		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Div<Output=T> + Neg<Output=T> {
 		unimplemented!()
 	}
 	
+	pub fn adjoint(self) -> Self
+		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Div<Output=T> + Neg<Output=T> {
+		self.cofactor().transpose()
+	}
+	
+	pub fn inv(self) -> Self
+		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Div<Output=T> + Neg<Output=T> {
+		let Mat4{ x,y,z,w } = self;
+		mat4(
+			vec4(
+					y.y * z.z * w.w + y.z * z.w * w.y + y.w * z.y * w.z
+				- y.y * z.w * w.z - y.z * z.y * w.w - y.w * z.z * w.y,
+				
+					x.y * z.w * w.z + x.z * z.y * w.w + x.w * z.z * w.y
+				- x.y * z.z * w.w - x.z * z.w * w.y - x.w * z.y * w.z,
+				
+					x.y * y.z * w.w + x.z * y.w * w.y + x.w * y.y * w.z
+				- x.y * y.w * w.z - x.z * y.y * w.w - x.w * y.z * w.y,
+				
+					x.y * y.w * z.z + x.z * y.y * z.w + x.w * y.z * z.y
+				- x.y * y.z * z.w - x.z * y.w * z.y - x.w * y.y * z.z,
+			) / self.det(),
+			vec4(
+					y.x * z.w * w.z + y.z * z.x * w.w + y.w * z.z * w.x
+				- y.x * z.z * w.w - y.z * z.w * w.x - y.w * z.x * w.z,
+				
+					x.x * z.z * w.w + x.z * z.w * w.x + x.w * z.x * w.z
+				- x.x * z.w * w.z - x.z * z.x * w.w - x.w * z.z * w.x,
+				
+					x.x * y.w * w.z + x.z * y.x * w.w + x.w * y.z * w.x
+				- x.x * y.z * w.w - x.z * y.w * w.x - x.w * y.x * w.z,
+				
+					x.x * y.z * z.w + x.z * y.w * z.x + x.w * y.x * z.z
+				- x.x * y.w * z.z - x.z * y.x * z.w - x.w * y.z * z.x,
+			) / self.det(),
+			vec4(
+					y.x * z.y * w.w + y.y * z.w * w.x + y.w * z.x * w.y
+				- y.x * z.w * w.y - y.y * z.x * w.w - y.w * z.y * w.x,
+				
+					x.x * z.w * w.y + x.y * z.x * w.w + x.w * z.y * w.x
+				- x.x * z.y * w.w - x.y * z.w * w.x - x.w * z.x * w.y,
+				
+					x.x * y.y * w.w + x.y * y.w * w.x + x.w * y.x * w.y
+				- x.x * y.w * w.y - x.y * y.x * w.w - x.w * y.y * w.x,
+				
+					x.x * y.w * z.y + x.y * y.x * z.w + x.w * y.y * z.x
+				- x.x * y.y * z.w - x.y * y.w * z.x - x.w * y.x * z.y,
+			) / self.det(),
+			vec4(
+					y.x * z.z * w.y + y.y * z.x * w.z + y.z * z.y * w.x
+				- y.x * z.y * w.z - y.y * z.z * w.x - y.z * z.x * w.y,
+				
+					x.x * z.y * w.z + x.y * z.z * w.x + x.z * z.x * w.y
+				- x.x * z.z * w.y - x.y * z.x * w.z - x.z * z.y * w.x,
+				
+					x.x * y.z * w.y + x.y * y.x * w.z + x.z * y.y * w.x
+				- x.x * y.y * w.z - x.y * y.z * w.x - x.z * y.x * w.y,
+				
+					x.x * y.y * z.z + x.y * y.z * z.x + x.z * y.x * z.y
+				- x.x * y.z * z.y - x.y * y.x * z.z - x.z * y.y * z.x,
+			) / self.det(),
+		)
+	}
+	
 	pub fn ident() -> Self
-		where T: Zero + One
-	{
+		where T: Zero + One {
 		mat4(
 			vec4(T::one(), T::zero(), T::zero(), T::zero()),
 			vec4(T::zero(), T::one(), T::zero(), T::zero()),
@@ -72,8 +133,7 @@ impl<T> Mat4<T> {
 	}
 	
 	pub fn apply_to(self, v: Vec4<T>) -> Vec4<T>
-		where T: Copy + Mul<Output=T> + Add<Output=T>
-	{
+		where T: Copy + Mul<Output=T> + Add<Output=T> {
 		vec4(
 			dot(self.x, v),
 			dot(self.y, v),
@@ -99,25 +159,15 @@ pub fn mat4<T>(x: Vec4<T>, y: Vec4<T>, z: Vec4<T>, w: Vec4<T>) -> Mat4<T> {
 	Mat4 { x: x, y: y, z: z, w: w }
 }
 
-/*impl<T, U> Into<Vec3<U>> for Vec3<T>
-	where T: Into<U>
-{
-	fn from(v: Vec3<T>) -> Vec3<U> {
-		vec3(v.x.into(), v.y.into(), v.z.into())
-	}
-}*/
-
 impl<T> Default for Mat4<T>
-	where T: Zero + One
-{
+	where T: Zero + One {
 	fn default() -> Self {
 		Mat4::ident()
 	}
 }
 
 impl<T> Mul<Mat4<T>> for Mat4<T>
-	where T: Copy + Mul<Output=T> + Add<Output=T>
-{
+	where T: Copy + Mul<Output=T> + Add<Output=T> {
 	type Output = Self;
 	
 	fn mul(self, other: Self) -> Self {
@@ -133,8 +183,7 @@ impl<T> Mul<Mat4<T>> for Mat4<T>
 }
 
 impl<T> Mul<Vec4<T>> for Mat4<T>
-	where T: Copy + Mul<Output=T> + Add<Output=T>
-{
+	where T: Copy + Mul<Output=T> + Add<Output=T> {
 	type Output = Vec4<T>;
 	
 	fn mul(self, v: Vec4<T>) -> Vec4<T> {

@@ -15,8 +15,7 @@ pub struct Mat3<T> {
 
 impl<T> Mat3<T> {
 	pub fn det(self) -> T
-		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T>
-	{
+		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> {
 		let Self{ x,y,z } = self;
 		  x.x * y.y * z.z
 		+ x.y * y.z * z.x
@@ -27,8 +26,7 @@ impl<T> Mat3<T> {
 	}
 	
 	pub fn cofactor(self) -> Self
-		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Div<Output=T> + Neg<Output=T>
-	{
+		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Div<Output=T> + Neg<Output=T> {
 		let Mat3{ x,y,z } = self;
 		mat3(
 			vec3(
@@ -47,21 +45,18 @@ impl<T> Mat3<T> {
 	}
 	
 	pub fn adjoint(self) -> Self
-		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Div<Output=T> + Neg<Output=T>
-	{
+		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Div<Output=T> + Neg<Output=T> {
 		self.cofactor().transpose()
 	}
 	
 	pub fn inv(self) -> Self
-		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Div<Output=T> + Neg<Output=T>
-	{
+		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Div<Output=T> + Neg<Output=T> {
 		let Mat3{ x,y,z } = self.adjoint();
 		mat3(x/self.det(),y/self.det(),z/self.det())
 	}
 	
 	pub fn ident() -> Self
-		where T: Zero + One
-	{
+		where T: Zero + One {
 		mat3(
 			vec3(T::one(), T::zero(), T::zero()),
 			vec3(T::zero(), T::one(), T::zero()),
@@ -70,8 +65,7 @@ impl<T> Mat3<T> {
 	}
 	
 	pub fn apply_to(self, v: Vec3<T>) -> Vec3<T>
-		where T: Copy + Mul<Output=T> + Add<Output=T>
-	{
+		where T: Copy + Mul<Output=T> + Add<Output=T> {
 		vec3(
 			dot(self.x, v),
 			dot(self.y, v),
@@ -154,16 +148,14 @@ pub fn mat3<T>(x: Vec3<T>, y: Vec3<T>, z: Vec3<T>) -> Mat3<T> {
 }
 
 impl<T> Default for Mat3<T>
-	where T: Zero + One
-{
+	where T: Zero + One {
 	fn default() -> Self {
 		Mat3::ident()
 	}
 }
 
 impl<T> Mul<Mat3<T>> for Mat3<T>
-	where T: Copy + Mul<Output=T> + Add<Output=T>
-{
+	where T: Copy + Mul<Output=T> + Add<Output=T> {
 	type Output = Self;
 	
 	fn mul(self, other: Self) -> Self {
@@ -177,8 +169,7 @@ impl<T> Mul<Mat3<T>> for Mat3<T>
 }
 
 impl<T> Mul<Vec3<T>> for Mat3<T>
-	where T: Copy + Mul<Output=T> + Add<Output=T>
-{
+	where T: Copy + Mul<Output=T> + Add<Output=T> {
 	type Output = Vec3<T>;
 	
 	fn mul(self, v: Vec3<T>) -> Vec3<T> {
