@@ -51,19 +51,9 @@ impl<T> Mat2<T> {
 			vec2(self.x.y, self.y.y),
 		)
 	}
-}
-
-impl Mat2<f32> {
-	pub fn rotate(angle: f32) -> Self {
-		mat2(
-			vec2(angle.cos(), -angle.sin()),
-			vec2(angle.sin(), angle.cos()),
-		)
-	}
-}
-
-impl Mat2<f64> {
-	pub fn rotate(angle: f64) -> Self {
+	
+	pub fn rotate(angle: T) -> Self
+		where T: Copy + Trig + Neg<Output=T> {
 		mat2(
 			vec2(angle.cos(), -angle.sin()),
 			vec2(angle.sin(), angle.cos()),

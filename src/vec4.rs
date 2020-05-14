@@ -13,38 +13,32 @@ pub struct Vec4<T> {
 
 impl<T> Vec4<T> {
 	pub fn magnitude(self) -> T
-		where T: Copy + Sqrt<T> + Mul<Output=T> + Add<Output=T>
-	{
+		where T: Copy + Sqrt<T> + Mul<Output=T> + Add<Output=T> {
 		(self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w).sqrt()
 	}
 	
 	pub fn normalise(self) -> Self
-		where T: Copy + Sqrt<T> + Div<Output=T> + Mul<Output=T> + Add<Output=T>
-	{
+		where T: Copy + Sqrt<T> + Div<Output=T> + Mul<Output=T> + Add<Output=T> {
 		vec4(self.x / self.magnitude(), self.y / self.magnitude(), self.z / self.magnitude(), self.w / self.magnitude())
 	}
 	
 	pub fn convert<U>(self) -> Vec4<U>
-		where T: Into<U>
-	{
+		where T: Into<U> {
 		vec4(self.x.into(), self.y.into(), self.z.into(), self.w.into())
 	}
 	
 	pub fn zero() -> Self
-		where T: Zero
-	{
+		where T: Zero {
 		vec4(T::zero(), T::zero(), T::zero(), T::zero())
 	}
 	
 	pub fn one() -> Self
-		where T: One
-	{
+		where T: One {
 		vec4(T::one(), T::one(), T::one(), T::one())
 	}
 	
 	pub fn max(self, other: Self) -> Self
-		where T: PartialOrd
-	{
+		where T: PartialOrd {
 		vec4(
 			if self.x < other.x { other.x } else { self.x },
 			if self.y < other.y { other.y } else { self.y },
@@ -54,8 +48,7 @@ impl<T> Vec4<T> {
 	}
 	
 	pub fn min(self, other: Self) -> Self
-		where T: PartialOrd
-	{
+		where T: PartialOrd {
 		vec4(
 			if self.x > other.x { other.x } else { self.x },
 			if self.y > other.y { other.y } else { self.y },
@@ -65,48 +58,41 @@ impl<T> Vec4<T> {
 	}
 	
 	pub fn clamp(self, min: Self, max: Self) -> Self
-		where T: PartialOrd
-	{
+		where T: PartialOrd {
 		self.min(max).max(min)
 	}
 	
 	pub fn elem_max(self, m: T) -> Self
-		where T: PartialOrd + Copy
-	{
+		where T: PartialOrd + Copy {
 		self.max(vec4(m,m,m,m))
 	}
 	
 	pub fn elem_min(self, m: T) -> Self
-		where T: PartialOrd + Copy
-	{
+		where T: PartialOrd + Copy {
 		self.min(vec4(m,m,m,m))
 	}
 	
 	pub fn elem_clamp(self, min: T, max: T) -> Self
-		where T: PartialOrd + Copy
-	{
+		where T: PartialOrd + Copy {
 		self.min(vec4(max,max,max,max)).max(vec4(min,min,min,min))
 	}
 	
 	pub fn max_elem(self) -> T
-		where T: PartialOrd
-	{
+		where T: PartialOrd {
 		let Vec4{x,y,z,w} = self;
 		let (a,b) = (if x > y { x } else { y }, if z > w { z } else { w });
 		if a > b { a } else { b }
 	}
 	
 	pub fn min_elem(self) -> T
-		where T: PartialOrd
-	{
+		where T: PartialOrd {
 		let Vec4{x,y,z,w} = self;
 		let (a,b) = (if x < y { x } else { y }, if z < w { z } else { w });
 		if a < b { a } else { b }
 	}
 	
 	pub fn sum_elem(self) -> T
-		where T: Add<Output=T>
-	{
+		where T: Add<Output=T> {
 		let Vec4{x,y,z,w} = self;
 		x+y+z+w
 	}

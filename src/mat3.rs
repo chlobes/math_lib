@@ -58,9 +58,9 @@ impl<T> Mat3<T> {
 	pub fn ident() -> Self
 		where T: Zero + One {
 		mat3(
-			vec3(T::one(), T::zero(), T::zero()),
-			vec3(T::zero(), T::one(), T::zero()),
-			vec3(T::zero(), T::zero(), T::one()),
+			vec3(T::one() , T::zero(), T::zero()),
+			vec3(T::zero(), T::one() , T::zero()),
+			vec3(T::zero(), T::zero(), T::one() ),
 		)
 	}
 	
@@ -89,56 +89,31 @@ impl<T> Mat3<T> {
 			vec3(self.x.z, self.y.z, self.z.z),
 		)
 	}
-}
-
-impl Mat3<f32> {
-	pub fn rotate_x(angle: f32) -> Self {
+	
+	pub fn rotate_x(angle: T) -> Self
+		where T: Copy + Trig + Neg<Output=T> + Zero + One {
 		mat3(
-			vec3(1.0, 0.0, 0.0),
-			vec3(0.0, angle.cos(), -angle.sin()),
-			vec3(0.0, angle.sin(), angle.cos()),
+			vec3(T::one(), T::zero(), T::zero()),
+			vec3(T::zero(), angle.cos(), -angle.sin()),
+			vec3(T::zero(), angle.sin(), angle.cos()),
 		)
 	}
 
-	pub fn rotate_y(angle: f32) -> Self {
+	pub fn rotate_y(angle: T) -> Self
+		where T: Copy + Trig + Neg<Output=T> + Zero + One {
 		mat3(
-			vec3(angle.cos(), 0.0, angle.sin()),
-			vec3(0.0, 1.0, 0.0),
-			vec3(-angle.sin(), 0.0, angle.cos()),
+			vec3(angle.cos(), T::zero(), angle.sin()),
+			vec3(T::zero(), T::one(), T::zero()),
+			vec3(-angle.sin(), T::zero(), angle.cos()),
 		)
 	}
 
-	pub fn rotate_z(angle: f32) -> Self {
+	pub fn rotate_z(angle: T) -> Self
+		where T: Copy + Trig + Neg<Output=T> + Zero + One {
 		mat3(
-			vec3(angle.cos(), -angle.sin(), 0.0),
-			vec3(angle.sin(), angle.cos(), 0.0),
-			vec3(0.0, 0.0, 1.0),
-		)
-	}
-}
-
-impl Mat3<f64> {
-	pub fn rotate_x(angle: f64) -> Self {
-		mat3(
-			vec3(1.0, 0.0, 0.0),
-			vec3(0.0, angle.cos(), -angle.sin()),
-			vec3(0.0, angle.sin(), angle.cos()),
-		)
-	}
-
-	pub fn rotate_y(angle: f64) -> Self {
-		mat3(
-			vec3(angle.cos(), 0.0, angle.sin()),
-			vec3(0.0, 1.0, 0.0),
-			vec3(-angle.sin(), 0.0, angle.cos()),
-		)
-	}
-
-	pub fn rotate_z(angle: f64) -> Self {
-		mat3(
-			vec3(angle.cos(), -angle.sin(), 0.0),
-			vec3(angle.sin(), angle.cos(), 0.0),
-			vec3(0.0, 0.0, 1.0),
+			vec3(angle.cos(), -angle.sin(), T::zero()),
+			vec3(angle.sin(),  angle.cos(), T::zero()),
+			vec3(T::zero()  , T::zero()   , T::one() ),
 		)
 	}
 }
