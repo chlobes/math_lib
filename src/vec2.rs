@@ -11,38 +11,32 @@ pub struct Vec2<T> {
 
 impl<T> Vec2<T> {
 	pub fn magnitude(self) -> T
-		where T: Copy + Sqrt<T> + Mul<Output=T> + Add<Output=T>
-	{
+		where T: Copy + Sqrt<T> + Mul<Output=T> + Add<Output=T> {
 		(self.x * self.x + self.y * self.y).sqrt()
 	}
 	
 	pub fn normalize(self) -> Self
-		where T: Copy + Sqrt<T> + Div<Output=T> + Mul<Output=T> + Add<Output=T>
-	{
+		where T: Copy + Sqrt<T> + Div<Output=T> + Mul<Output=T> + Add<Output=T> {
 		vec2(self.x / self.magnitude(), self.y / self.magnitude())
 	}
 	
 	pub fn convert<U>(self) -> Vec2<U>
-		where T: Into<U>
-	{
+		where T: Into<U> {
 		vec2(self.x.into(), self.y.into())
 	}
 	
 	pub fn zero() -> Self
-		where T: Zero
-	{
+		where T: Zero {
 		vec2(T::zero(), T::zero())
 	}
 	
 	pub fn one() -> Self
-		where T: One
-	{
+		where T: One {
 		vec2(T::one(), T::one())
 	}
 	
 	pub fn max(self, other: Self) -> Self
-		where T: PartialOrd
-	{
+		where T: PartialOrd {
 		vec2(
 			if self.x < other.x { other.x } else { self.x },
 			if self.y < other.y { other.y } else { self.y },
@@ -50,8 +44,7 @@ impl<T> Vec2<T> {
 	}
 	
 	pub fn min(self, other: Self) -> Self
-		where T: PartialOrd
-	{
+		where T: PartialOrd {
 		vec2(
 			if self.x > other.x { other.x } else { self.x },
 			if self.y > other.y { other.y } else { self.y },
@@ -59,53 +52,45 @@ impl<T> Vec2<T> {
 	}
 	
 	pub fn clamp(self, min: Self, max: Self) -> Self
-		where T: PartialOrd
-	{
+		where T: PartialOrd {
 		self.min(max).max(min)
 	}
 	
 	pub fn elem_max(self, m: T) -> Self
-		where T: PartialOrd + Copy
-	{
+		where T: PartialOrd + Copy {
 		self.max(vec2(m,m))
 	}
 	
 	pub fn elem_min(self, m: T) -> Self
-		where T: PartialOrd + Copy
-	{
+		where T: PartialOrd + Copy {
 		self.min(vec2(m,m,))
 	}
 	
 	pub fn elem_clamp(self, min: T, max: T) -> Self
-		where T: PartialOrd + Copy
-	{
+		where T: PartialOrd + Copy {
 		self.min(vec2(max,max)).max(vec2(min,min))
 	}
 	
 	pub fn max_elem(self) -> T
-		where T: PartialOrd
-	{
+		where T: PartialOrd {
 		let Vec2{x,y} = self;
 		if x > y { x } else { y }
 	}
 	
 	pub fn min_elem(self) -> T
-		where T: PartialOrd
-	{
+		where T: PartialOrd {
 		let Vec2{x,y} = self;
 		if x < y { x } else { y }
 	}
 	
 	pub fn sum_elem(self) -> T
-		where T: Add<Output=T>
-	{
+		where T: Add<Output=T> {
 		let Vec2{x,y} = self;
 		x+y
 	}
 	
 	pub fn mul_elem(self) -> T
-		where T: Mul<Output=T>
-	{
+		where T: Mul<Output=T> {
 		let Vec2{x,y} = self;
 		x*y
 	}

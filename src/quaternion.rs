@@ -15,21 +15,18 @@ pub struct Quaternion<T> {
 impl<T> Quaternion<T>
 {
 	pub fn normalise(self) -> Self
-		where T: Copy + Sqrt<T> + Div<Output=T> + Mul<Output=T> + Add<Output=T>
-	{
+		where T: Copy + Sqrt<T> + Div<Output=T> + Mul<Output=T> + Add<Output=T> {
 		let magnitude = (self.i * self.i + self.j * self.j + self.k * self.k + self.r * self.r).sqrt();
 		Self { r: self.r / magnitude, i: self.i / magnitude, j: self.j / magnitude, k: self.k / magnitude }
 	}
 	
 	pub fn inverse(self) -> Self
-		where T: Neg<Output=T>
-	{
+		where T: Neg<Output=T> {
 		Self { r: -self.r, i: self.i, j: self.j, k: self.k }
 	}
 	
 	pub fn from_euler_angles(v: Vec3<T>) -> Self
-		where T: Copy + Sqrt<T> + Trig + Half + Add<Output=T> + Mul<Output=T>
-	{
+		where T: Copy + Sqrt<T> + Trig + Half + Add<Output=T> + Mul<Output=T> {
 		let magnitude = v.magnitude();
 		let (factor, r) = magnitude.half().sin_cos();
 		let (i, j, k) = (factor * v.x, factor * v.y, factor * v.z);
@@ -37,20 +34,17 @@ impl<T> Quaternion<T>
 	}
 	
 	pub fn convert<U>(self) -> Quaternion<U>
-		where T: Into<U>
-	{
+		where T: Into<U> {
 		Quaternion { r: self.r.into(), i: self.i.into(), j: self.j.into(), k: self.k.into() }
 	}
 	
 	pub fn ident() -> Self
-		where T: Zero + One
-	{
+		where T: Zero + One {
 		Self { r: T::one(), i: T::zero(), j: T::zero(), k: T::zero() }
 	}
 	
 	pub fn rot_mat(self) -> Mat3<T>
-		where T: Copy + Two + One + Mul<Output=T> + Add<Output=T> + Sub<Output=T>
-	{
+		where T: Copy + Two + One + Mul<Output=T> + Add<Output=T> + Sub<Output=T> {
 		let (r, i, j, k) = (self.r, self.i, self.j, self.k);
 		mat3(
 			vec3(T::one() - T::two() * (j * j + k * k), T::two() * (i * j - r * k), T::two() * (i * k + r * j)),

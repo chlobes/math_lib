@@ -98,8 +98,7 @@ impl<T> Vec4<T> {
 	}
 	
 	pub fn mul_elem(self) -> T
-		where T: Mul<Output=T>
-	{
+		where T: Mul<Output=T> {
 		let Vec4{x,y,z,w} = self;
 		x*y*z*w
 	}

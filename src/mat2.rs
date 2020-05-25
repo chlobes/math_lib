@@ -11,15 +11,13 @@ pub struct Mat2<T> {
 
 impl<T> Mat2<T> {
 	pub fn det(self) -> T
-		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T>
-	{
+		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> {
 		let Self{ x,y } = self;
 		x.x * y.y - x.y * y.x
 	}
 	
 	pub fn inv(self) -> Self
-	where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Div<Output=T> + Neg<Output=T>
-	{
+	where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Div<Output=T> + Neg<Output=T> {
 		let Self{ x,y } = self;
 		mat2(
 			vec2(y.y, -y.x) / self.det(),
@@ -28,8 +26,7 @@ impl<T> Mat2<T> {
 	}
 	
 	pub fn ident() -> Self
-		where T: Zero + One
-	{
+		where T: Zero + One {
 		mat2(
 			vec2(T::one(), T::zero()),
 			vec2(T::zero(), T::one()),
@@ -37,8 +34,7 @@ impl<T> Mat2<T> {
 	}
 	
 	pub fn apply_to(self, v: Vec2<T>) -> Vec2<T>
-		where T: Copy + Mul<Output=T> + Add<Output=T>
-	{
+		where T: Copy + Mul<Output=T> + Add<Output=T> {
 		vec2(
 			dot(self.x, v),
 			dot(self.y, v),
