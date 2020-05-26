@@ -2,174 +2,57 @@ pub trait Zero {
 	fn zero() -> Self;
 }
 
-impl Zero for f32 {
-	fn zero() -> Self { 0.0 }
-}
-
-impl Zero for f64 {
-	fn zero() -> Self { 0.0 }
-}
-
-impl Zero for i8 {
-	fn zero() -> Self { 0 }
-}
-
-impl Zero for i16 {
-	fn zero() -> Self { 0 }
-}
-
-impl Zero for i32 {
-	fn zero() -> Self { 0 }
-}
-
-impl Zero for i64 {
-	fn zero() -> Self { 0 }
-}
-
-impl Zero for u8 {
-	fn zero() -> Self { 0 }
-}
-
-impl Zero for u16 {
-	fn zero() -> Self { 0 }
-}
-
-impl Zero for u32 {
-	fn zero() -> Self { 0 }
-}
-
-impl Zero for u64 {
-	fn zero() -> Self { 0 }
-}
-
-pub trait Half {
-	fn half(self) -> Self;
-}
-
-impl Half for f32 {
-	fn half(self) -> Self { self * 0.5 }
-}
-
-impl Half for f64 {
-	fn half(self) -> Self { self * 0.5 }
-}
-
-impl Half for i8 {
-	fn half(self) -> Self { self / 2 }
-}
-
-impl Half for i16 {
-	fn half(self) -> Self { self / 2 }
-}
-
-impl Half for i32 {
-	fn half(self) -> Self { self / 2 }
-}
-
-impl Half for i64 {
-	fn half(self) -> Self { self / 2 }
-}
-
-impl Half for u8 {
-	fn half(self) -> Self { self / 2 }
-}
-
-impl Half for u16 {
-	fn half(self) -> Self { self / 2 }
-}
-
-impl Half for u32 {
-	fn half(self) -> Self { self / 2 }
-}
-
-impl Half for u64 {
-	fn half(self) -> Self { self / 2 }
-}
-
 pub trait One {
 	fn one() -> Self;
-}
-
-impl One for f32 {
-	fn one() -> Self { 1.0 }
-}
-
-impl One for f64 {
-	fn one() -> Self { 1.0 }
-}
-
-impl One for i8 {
-	fn one() -> Self { 1 }
-}
-
-impl One for i16 {
-	fn one() -> Self { 1 }
-}
-
-impl One for i32 {
-	fn one() -> Self { 1 }
-}
-
-impl One for i64 {
-	fn one() -> Self { 1 }
-}
-
-impl One for u8 {
-	fn one() -> Self { 1 }
-}
-
-impl One for u16 {
-	fn one() -> Self { 1 }
-}
-
-impl One for u32 {
-	fn one() -> Self { 1 }
-}
-
-impl One for u64 {
-	fn one() -> Self { 1 }
 }
 
 pub trait Two {
 	fn two() -> Self;
 }
 
-impl Two for f32 {
-	fn two() -> Self { 2.0 }
+pub trait Div2 {
+	fn div2(self) -> Self;
 }
 
-impl Two for f64 {
-	fn two() -> Self { 2.0 }
+macro impl_ints($($t: ty),+) {
+	$(
+		impl Zero for $t {
+			fn zero() -> Self { 0 }
+		}
+		
+		impl One for $t {
+			fn one() -> Self { 1 }
+		}
+		
+		impl Two for $t {
+			fn two() -> Self { 2 }
+		}
+		
+		impl Div2 for $t {
+			fn div2(self) -> Self { self / 2 }
+		}
+	)+
 }
 
-impl Two for i8 {
-	fn two() -> Self { 2 }
+macro impl_floats($($t: ident),+) {
+	$(
+		impl Zero for $t {
+			fn zero() -> Self { 0.0 }
+		}
+		
+		impl One for $t {
+			fn one() -> Self { 1.0 }
+		}
+		
+		impl Two for $t {
+			fn two() -> Self { 2.0 }
+		}
+		
+		impl Div2 for $t {
+			fn div2(self) -> Self { self / 2.0 }
+		}
+	)+
 }
 
-impl Two for i16 {
-	fn two() -> Self { 2 }
-}
-
-impl Two for i32 {
-	fn two() -> Self { 2 }
-}
-
-impl Two for i64 {
-	fn two() -> Self { 2 }
-}
-
-impl Two for u8 {
-	fn two() -> Self { 2 }
-}
-
-impl Two for u16 {
-	fn two() -> Self { 2 }
-}
-
-impl Two for u32 {
-	fn two() -> Self { 2 }
-}
-
-impl Two for u64 {
-	fn two() -> Self { 2 }
-}
+impl_ints!(u8,u16,u32,u64,usize,i8,i16,i32,i64,isize);
+impl_floats!(f32,f64);
