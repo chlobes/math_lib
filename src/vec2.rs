@@ -127,8 +127,8 @@ pub fn vec2<T>(x: T, y: T) -> Vec2<T>
 	Vec2 { x: x, y: y }
 }
 
-macro_rules! impl_ints1 {
-	($($U: ident),+) => {$(
+macro impl_ints1($($U: ident),+) {
+	$(
 		impl Vec2<isize> {
 			pub fn $U(self) -> Self {
 				vec2(self.x.$U(), self.y.$U())
@@ -154,11 +154,11 @@ macro_rules! impl_ints1 {
 				vec2(self.x.$U(), self.y.$U())
 			}
 		}
-	)+}
+	)+
 }
 
-macro_rules! impl_ints2 {
-	($($U: ident),+) => {$(
+macro impl_ints2($($U: ident),+){
+	$(
 		impl Vec2<isize> {
 			pub fn $U(self) -> Vec2<bool> {
 				vec2(self.x.$U(), self.y.$U())
@@ -184,11 +184,11 @@ macro_rules! impl_ints2 {
 				vec2(self.x.$U(), self.y.$U())
 			}
 		}
-	)+}
+	)+
 }
 
-macro_rules! impl_floats1 {
-	($($U: ident),+) => {$(
+macro impl_floats1($($U: ident),+) {
+	$(
 		impl Vec2<f64> {
 			pub fn $U(self) -> Self {
 				vec2(self.x.$U(), self.y.$U())
@@ -199,11 +199,11 @@ macro_rules! impl_floats1 {
 				vec2(self.x.$U(), self.y.$U())
 			}
 		}
-	)+}
+	)+
 }
 
-macro_rules! impl_floats2 {
-	($($U: ident),+) => {$(
+macro impl_floats2($($U: ident),+) {
+	$(
 		impl Vec2<f64> {
 			pub fn $U(self) -> Vec2<bool> {
 				vec2(self.x.$U(), self.y.$U())
@@ -214,7 +214,7 @@ macro_rules! impl_floats2 {
 				vec2(self.x.$U(), self.y.$U())
 			}
 		}
-	)+}
+	)+
 }
 
 //component-wise functions
@@ -489,14 +489,14 @@ impl<T: fmt::LowerExp> fmt::LowerExp for Vec2<T> {
 		}
 	}
 }
-macro_rules! convert {
-	($T: ty, $($U: ident),+) => {$(
+macro convert($T: ty, $($U: ident),+) {
+	$(
 		impl Vec2<$T> {
 			pub fn $U(self) -> Vec2<$U> {
 				vec2(self.x as $U, self.y as $U)
 			}
 		}
-	)+}
+	)+
 }
 
 convert!(u8,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);

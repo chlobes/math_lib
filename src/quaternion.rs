@@ -121,14 +121,14 @@ impl<T: fmt::LowerExp> fmt::LowerExp for Quaternion<T> {
 	}
 }
 
-macro_rules! convert {
-	($T: ty, $($U: ident),+) => {$(
+macro convert($T: ty, $($U: ident),+) {
+	$(
 		impl Quaternion<$T> {
 			pub fn $U(self) -> Quaternion<$U> {
 				quaternion(self.r as $U, self.i as $U, self.j as $U, self.k as $U)
 			}
 		}
-	)+}
+	)+
 }
 
 convert!(u8,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);

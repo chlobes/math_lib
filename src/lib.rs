@@ -1,3 +1,5 @@
+#![feature(decl_macro)]
+
 extern crate serde;
 extern crate array_tuple;
 

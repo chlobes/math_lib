@@ -78,78 +78,45 @@ pub trait NiceFmt {
 	fn nice_fmt(&self, limit: usize, pad: bool) -> String;
 }
 
-impl NiceFmt for f32 {
-	fn nice_fmt(&self, limit: usize, pad: bool) -> String {
-		let limit = limit.max(1);
-		if format!("{}",self).len() <= limit {
-			let mut result = format!("{}",self);
-			if pad {
-				while result.len() < limit {
-					result.push(' ');
-				}
-			}
-			result
-		} else if (self.abs() as usize + self.is_sign_negative() as usize) < limit.pow(10) {
-			//TODO: rounding
-			let mut result = format!("{}",self);
-			while result.len() > limit {
-				result.pop().unwrap();
-			}
-			let c = result.pop().unwrap();
-			if c == '.' {
+macro float_impl($typ: ty) {
+	impl NiceFmt for $typ {
+		fn nice_fmt(&self, limit: usize, pad: bool) -> String {
+			let limit = limit.max(1);
+			if format!("{}",self).len() <= limit {
+				let mut result = format!("{}",self);
 				if pad {
-					result.push(' ');
+					while result.len() < limit {
+						result.push(' ');
+					}
 				}
+				result
+			} else if (self.abs() as usize + self.is_sign_negative() as usize) < limit.pow(10) {
+				//TODO: rounding
+				let mut result = format!("{}",self);
+				while result.len() > limit {
+					result.pop().unwrap();
+				}
+				let c = result.pop().unwrap();
+				if c == '.' {
+					if pad {
+						result.push(' ');
+					}
+				} else {
+					result.push(c);
+				}
+				result
 			} else {
-				result.push(c);
-			}
-			result
-		} else {
-			let mut result = format!("{:.*e}",limit-2,self);
-			if pad {
-				while result.len() < limit {
-					result.push(' ');
+				let mut result = format!("{:.*e}",limit-2,self);
+				if pad {
+					while result.len() < limit {
+						result.push(' ');
+					}
 				}
+				result
 			}
-			result
 		}
 	}
 }
 
-impl NiceFmt for f64 {
-	fn nice_fmt(&self, limit: usize, pad: bool) -> String {
-		let limit = limit.max(1);
-		if format!("{}",self).len() <= limit {
-			let mut result = format!("{}",self);
-			if pad {
-				while result.len() < limit {
-					result.push(' ');
-				}
-			}
-			result
-		} else if (self.abs() as usize + self.is_sign_negative() as usize) < limit.pow(10) {
-			//TODO: rounding
-			let mut result = format!("{}",self);
-			while result.len() > limit {
-				result.pop().unwrap();
-			}
-			let c = result.pop().unwrap();
-			if c == '.' {
-				if pad {
-					result.push(' ');
-				}
-			} else {
-				result.push(c);
-			}
-			result
-		} else {
-			let mut result = format!("{:.*e}",limit-2,self);
-			if pad {
-				while result.len() < limit {
-					result.push(' ');
-				}
-			}
-			result
-		}
-	}
-}
+float_impl!(f32);
+float_impl!(f64);

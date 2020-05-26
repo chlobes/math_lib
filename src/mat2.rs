@@ -100,14 +100,14 @@ impl<T> ArrayTuple for Mat2<T> {
 	fn into_tuple(self) -> Self::Tuple { let Self{x,y} = self; (x.into_tuple(),y.into_tuple()) }
 }
 
-macro_rules! convert {
-	($T: ty, $($U: ident),+) => {$(
+macro convert($T: ty, $($U: ident),+) {
+	$(
 		impl Mat2<$T> {
 			pub fn $U(self) -> Mat2<$U> {
 				mat2(self.x.$U(), self.y.$U())
 			}
 		}
-	)+}
+	)+
 }
 
 convert!(u8,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);
