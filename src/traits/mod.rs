@@ -64,7 +64,7 @@ macro float_impl($t: ty) {
 			let mut result = if format!("{}",self).len() <= limit {
 				format!("{}",self)
 			} else if (self.abs() + self.is_sign_negative() as usize as $t).log10() < limit as $t {
-				let l = limit.saturating_sub(self.abs() as usize + self.is_sign_negative() as usize + 1);
+				let l = limit.saturating_sub(self.abs().log10() as usize + self.is_sign_negative() as usize + 1);
 				if l == 0 {
 					format!("{}",self.round()) //this should be safe because we drop the decimal point so even if it rounds up and gains an extra digit we have a spare space to use
 				} else {
