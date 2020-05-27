@@ -73,6 +73,9 @@ macro float_impl($typ: ty) {
 						while result.chars().last() == Some('0') {
 							result.pop();
 						}
+						if result.chars().last() == Some('.') {
+							result.pop();
+						}
 					}
 					result
 				}
