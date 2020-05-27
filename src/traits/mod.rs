@@ -92,6 +92,12 @@ macro float_impl($t: ty) {
 				//proper representation is prioritized over obeying the character limit
 				format!("{:.*e}",limit,self)
 			};
+			let mut i = result.chars();
+			let mut r = String::new(); r.push(i.next().unwrap_or('0')); r.push(i.next().unwrap_or('0'));
+			let p = i.next().unwrap_or('0');
+			if p != '.' && &r == "-0" {
+				result.remove(0);
+			}
 			if pad { while result.len() < limit { result.push(' '); } }
 			result
 		}
