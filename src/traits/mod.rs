@@ -36,12 +36,12 @@ pub trait NiceFmt {
 	fn nice_fmt(&self, limit: usize, pad: bool) -> String;
 }
 
-macro float_impl($typ: ty) {
-	impl Sqrt<$typ> for $typ {
-		fn sqrt(self) -> $typ { self.sqrt() }
+macro float_impl($t: ty) {
+	impl Sqrt<Self> for $t {
+		fn sqrt(self) -> Self { self.sqrt() }
 	}
 	
-	impl Trig for $typ {
+	impl Trig for $t {
 		fn sin(self) -> Self { self.sin() }
 		fn cos(self) -> Self { self.cos() }
 		fn tan(self) -> Self { self.tan() }
@@ -58,12 +58,12 @@ macro float_impl($typ: ty) {
 		fn atanh(self) -> Self { self.atanh() }
 	}
 	
-	impl NiceFmt for $typ {
+	impl NiceFmt for $t {
 		fn nice_fmt(&self, limit: usize, pad: bool) -> String {
 			let limit = limit.max(1);
 			let mut result = if format!("{}",self).len() <= limit {
 				format!("{}",self)
-			} else if (self.abs() as usize + self.is_sign_negative() as usize) < limit.pow(10) {
+			} else if (self.abs() + self.is_sign_negative() as usize as $t).log10() < limit as $t {
 				let l = limit.saturating_sub(self.abs() as usize + self.is_sign_negative() as usize + 1);
 				if l == 0 {
 					format!("{}",self.round()) //this should be safe because we drop the decimal point so even if it rounds up and gains an extra digit we have a spare space to use
