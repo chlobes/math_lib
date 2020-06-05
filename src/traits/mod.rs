@@ -32,6 +32,24 @@ pub trait Trig: Sized {
 	fn atanh(self) -> Self;
 }
 
+pub trait IsNan: PartialOrd {
+	fn is_nan(&self) -> bool;
+	fn non_nan_max(self, other: Self) -> Self;
+	fn non_nan_min(self, other: Self) -> Self;
+}
+
+impl<T: PartialOrd + Sized> IsNan for T {
+	default fn is_nan(&self) -> bool {
+		false
+	}
+	default fn non_nan_max(self, other: Self) -> Self {
+		if other.is_nan() || self > other { self } else { other }
+	}
+	default fn non_nan_min(self, other: Self) -> Self {
+		if other.is_nan() || self < other { self } else { other }
+	}
+}
+
 pub trait NiceFmt {
 	fn nice_fmt(&self, limit: usize, pad: bool) -> String;
 }
@@ -56,6 +74,18 @@ macro float_impl($t: ty) {
 		fn asinh(self) -> Self { self.asinh() }
 		fn acosh(self) -> Self { self.acosh() }
 		fn atanh(self) -> Self { self.atanh() }
+	}
+	
+	impl IsNan for $t {
+		fn is_nan(&self) -> bool {
+			(*self).is_nan()
+		}
+		fn non_nan_max(self, other: Self) -> Self {
+			self.max(other)
+		}
+		fn non_nan_min(self, other: Self) -> Self {
+			self.min(other)
+		}
 	}
 	
 	impl NiceFmt for $t {

@@ -3,7 +3,7 @@ use crate::prelude::*;
 use crate::vec2::*;
 
 #[repr(C)]
-#[derive(Debug,Copy,Clone,PartialEq,PartialOrd,Eq,Ord,Hash,Serialize,Deserialize)]
+#[derive(Debug,Copy,Clone,PartialEq,Eq,Hash,Serialize,Deserialize)]
 pub struct Mat2<T> {
 	pub x: Vec2<T>,
 	pub y: Vec2<T>,

@@ -3,7 +3,7 @@ use crate::prelude::*;
 use crate::vec3::*;
 
 #[repr(C)]
-#[derive(Debug,Copy,Clone,PartialEq,PartialOrd,Eq,Ord,Hash,Serialize,Deserialize)]
+#[derive(Debug,Copy,Clone,PartialEq,Eq,Hash,Serialize,Deserialize)]
 pub struct Vec4<T> {
 	pub x: T,
 	pub y: T,
@@ -38,23 +38,33 @@ impl<T> Vec4<T> {
 	}
 	
 	pub fn max(self, other: Self) -> Self
-		where T: PartialOrd {
+		where T: IsNan {
 		vec4(
-			if self.x < other.x { other.x } else { self.x },
-			if self.y < other.y { other.y } else { self.y },
-			if self.z < other.z { other.z } else { self.z },
-			if self.w < other.w { other.w } else { self.w },
+			self.x.non_nan_max(other.x),
+			self.y.non_nan_max(other.y),
+			self.z.non_nan_max(other.z),
+			self.w.non_nan_max(other.w),
 		)
 	}
 	
 	pub fn min(self, other: Self) -> Self
-		where T: PartialOrd {
+		where T: IsNan {
 		vec4(
-			if self.x > other.x { other.x } else { self.x },
-			if self.y > other.y { other.y } else { self.y },
-			if self.z > other.z { other.z } else { self.z },
-			if self.w > other.w { other.w } else { self.w },
+			self.x.non_nan_min(other.x),
+			self.y.non_nan_min(other.y),
+			self.z.non_nan_min(other.z),
+			self.w.non_nan_min(other.w),
 		)
+	}
+	
+	pub fn max_elem(self) -> T
+		where T: IsNan {
+		self.x.non_nan_max(self.y).non_nan_max(self.z).non_nan_max(self.w)
+	}
+	
+	pub fn min_elem(self) -> T
+		where T: IsNan {
+		self.x.non_nan_min(self.y).non_nan_min(self.z).non_nan_min(self.w)
 	}
 	
 	pub fn clamp(self, min: Self, max: Self) -> Self
@@ -75,20 +85,6 @@ impl<T> Vec4<T> {
 	pub fn elem_clamp(self, min: T, max: T) -> Self
 		where T: PartialOrd + Copy {
 		self.min(vec4(max,max,max,max)).max(vec4(min,min,min,min))
-	}
-	
-	pub fn max_elem(self) -> T
-		where T: PartialOrd {
-		let Vec4{x,y,z,w} = self;
-		let (a,b) = (if x > y { x } else { y }, if z > w { z } else { w });
-		if a > b { a } else { b }
-	}
-	
-	pub fn min_elem(self) -> T
-		where T: PartialOrd {
-		let Vec4{x,y,z,w} = self;
-		let (a,b) = (if x < y { x } else { y }, if z < w { z } else { w });
-		if a < b { a } else { b }
 	}
 	
 	pub fn sum_elem(self) -> T

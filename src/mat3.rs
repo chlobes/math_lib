@@ -6,7 +6,7 @@ use crate::mat4::*;
 use crate::mat2::*;
 
 #[repr(C)]
-#[derive(Debug,Copy,Clone,PartialEq,PartialOrd,Eq,Ord,Hash,Serialize,Deserialize)]
+#[derive(Debug,Copy,Clone,PartialEq,Eq,Hash,Serialize,Deserialize)]
 pub struct Mat3<T> {
 	pub x: Vec3<T>,
 	pub y: Vec3<T>,

@@ -4,7 +4,7 @@ use crate::vec4::*;
 use crate::vec2::*;
 
 #[repr(C)]
-#[derive(Debug,Copy,Clone,PartialEq,PartialOrd,Eq,Ord,Hash,Serialize,Deserialize)]
+#[derive(Debug,Copy,Clone,PartialEq,Eq,Hash,Serialize,Deserialize)]
 pub struct Vec3<T> {
 	pub x: T,
 	pub y: T,
@@ -38,21 +38,41 @@ impl<T> Vec3<T> {
 	}
 	
 	pub fn max(self, other: Self) -> Self
-		where T: PartialOrd {
+		where T: IsNan {
 		vec3(
-			if self.x < other.x { other.x } else { self.x },
-			if self.y < other.y { other.y } else { self.y },
-			if self.z < other.z { other.z } else { self.z },
+			self.x.non_nan_max(other.x),
+			self.y.non_nan_max(other.y),
+			self.z.non_nan_max(other.z),
 		)
 	}
 	
 	pub fn min(self, other: Self) -> Self
-		where T: PartialOrd {
+		where T: IsNan {
 		vec3(
-			if self.x > other.x { other.x } else { self.x },
-			if self.y > other.y { other.y } else { self.y },
-			if self.z > other.z { other.z } else { self.z },
+			self.x.non_nan_min(other.x),
+			self.y.non_nan_min(other.y),
+			self.z.non_nan_min(other.z),
 		)
+	}
+	
+	pub fn max_elem(self) -> T
+		where T: IsNan {
+		self.x.non_nan_max(self.y).non_nan_max(self.z)
+	}
+	
+	pub fn min_elem(self) -> T
+		where T: IsNan {
+		self.x.non_nan_min(self.y).non_nan_min(self.z)
+	}
+	
+	pub fn elem_max(self, max: T) -> Self
+		where T: PartialOrd + Copy {
+		self.max(vec3(max,max,max))
+	}
+	
+	pub fn elem_min(self, min: T) -> Self
+		where T: PartialOrd + Copy {
+		self.min(vec3(min,min,min))
 	}
 	
 	pub fn clamp(self, min: Self, max: Self) -> Self
@@ -60,31 +80,9 @@ impl<T> Vec3<T> {
 		self.min(max).max(min)
 	}
 	
-	pub fn elem_max(self, m: T) -> Self
-		where T: PartialOrd + Copy {
-		self.max(vec3(m,m,m))
-	}
-	
-	pub fn elem_min(self, m: T) -> Self
-		where T: PartialOrd + Copy {
-		self.min(vec3(m,m,m))
-	}
-	
 	pub fn elem_clamp(self, min: T, max: T) -> Self
 		where T: PartialOrd + Copy {
 		self.min(vec3(max,max,max)).max(vec3(min,min,min))
-	}
-	
-	pub fn max_elem(self) -> T
-		where T: PartialOrd {
-		let Vec3{x,y,z} = self;
-		if x > y { if x > z { x } else { z } } else if y > z { y } else { z }
-	}
-	
-	pub fn min_elem(self) -> T
-		where T: PartialOrd {
-		let Vec3{x,y,z} = self;
-		if x < y { if x < z { x } else { z } } else if y < z { y } else { z }
 	}
 	
 	pub fn sum_elem(self) -> T

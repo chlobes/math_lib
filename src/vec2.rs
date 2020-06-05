@@ -3,7 +3,7 @@ use crate::prelude::*;
 use crate::vec3::*;
 
 #[repr(C)]
-#[derive(Debug,Copy,Clone,PartialEq,PartialOrd,Eq,Ord,Hash,Serialize,Deserialize)]
+#[derive(Debug,Copy,Clone,PartialEq,Eq,Hash,Serialize,Deserialize)]
 pub struct Vec2<T> {
 	pub x: T,
 	pub y: T,
@@ -36,19 +36,29 @@ impl<T> Vec2<T> {
 	}
 	
 	pub fn max(self, other: Self) -> Self
-		where T: PartialOrd {
+		where T: IsNan {
 		vec2(
-			if self.x < other.x { other.x } else { self.x },
-			if self.y < other.y { other.y } else { self.y },
+			self.x.non_nan_max(other.x),
+			self.y.non_nan_max(other.y),
 		)
 	}
 	
 	pub fn min(self, other: Self) -> Self
-		where T: PartialOrd {
+		where T: IsNan {
 		vec2(
-			if self.x > other.x { other.x } else { self.x },
-			if self.y > other.y { other.y } else { self.y },
+			self.x.non_nan_min(other.x),
+			self.y.non_nan_min(other.y),
 		)
+	}
+	
+	pub fn max_elem(self) -> T
+		where T: IsNan {
+		self.x.non_nan_max(self.y)
+	}
+	
+	pub fn min_elem(self) -> T
+		where T: IsNan {
+		self.x.non_nan_min(self.y)
 	}
 	
 	pub fn clamp(self, min: Self, max: Self) -> Self
@@ -69,18 +79,6 @@ impl<T> Vec2<T> {
 	pub fn elem_clamp(self, min: T, max: T) -> Self
 		where T: PartialOrd + Copy {
 		self.min(vec2(max,max)).max(vec2(min,min))
-	}
-	
-	pub fn max_elem(self) -> T
-		where T: PartialOrd {
-		let Vec2{x,y} = self;
-		if x > y { x } else { y }
-	}
-	
-	pub fn min_elem(self) -> T
-		where T: PartialOrd {
-		let Vec2{x,y} = self;
-		if x < y { x } else { y }
 	}
 	
 	pub fn sum_elem(self) -> T
