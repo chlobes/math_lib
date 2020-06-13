@@ -90,10 +90,10 @@ macro float_impl($t: ty) {
 	
 	impl NiceFmt for $t {
 		fn nice_fmt(&self, limit: usize, pad: bool) -> String {
-			let limit = limit.max(1);
+			let limit = limit.max(1) - 1;
 			let mut result = if format!("{}",self).len() <= limit {
 				format!("{}",self)
-			} else if (self.abs() + self.is_sign_negative() as usize as $t).log10() < limit as $t {
+			} else if self.abs().log10() + self.is_sign_negative() as usize as $t < limit as $t {
 				let l = limit.saturating_sub(self.abs().log10() as usize + self.is_sign_negative() as usize + 1);
 				if l == 0 {
 					format!("{}",self.round()) //this should be safe because we drop the decimal point so even if it rounds up and gains an extra digit we have a spare space to use
