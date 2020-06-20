@@ -515,7 +515,7 @@ impl<T: FromStr> FromStr for Vec2<T> {
 	type Err = <T as FromStr>::Err;
 	
 	fn from_str(s: &str) -> Result<Self, Self::Err> {
-		let mut n: Vec<&str> = s.trim_matches(|p| p == '(' || p == ')').split(',').collect();
+		let mut n: Vec<&str> = s.trim_matches(|p| p == '(' || p == ')' || p == ' ').split(',').collect();
 		while n.len() < 2 { n.push(""); }
 		let x = n[0].parse()?;
 		let y = n[1].parse()?;
