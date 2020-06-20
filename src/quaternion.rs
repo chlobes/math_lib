@@ -149,7 +149,8 @@ impl<T: FromStr> FromStr for Quaternion<T> {
 	type Err = <T as FromStr>::Err;
 	
 	fn from_str(s: &str) -> Result<Self, Self::Err> {
-		let mut n: Vec<&str> = s.trim_matches(|p| p == '(' || p == ')' || p == ' ').split(',').collect();
+		let mut n: Vec<&str> = s.split(|c: char| c.is_whitespace() || c == ',')
+			.map(|s| s.trim_matches(BRACKETS)).filter(|s| !s.is_empty()).collect();
 		while n.len() < 4 { n.push(""); }
 		let r = n[0].parse()?;
 		let i = n[1].parse()?;
