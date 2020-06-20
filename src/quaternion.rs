@@ -144,3 +144,17 @@ convert!(isize,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);
 convert!(f32,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);
 convert!(f64,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);
 convert!(bool,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize);
+
+impl<T: FromStr> FromStr for Quaternion<T> {
+	type Err = <T as FromStr>::Err;
+	
+	fn from_str(s: &str) -> Result<Self, Self::Err> {
+		let mut n: Vec<&str> = s.trim_matches(|p| p == '(' || p == ')').split(',').collect();
+		while n.len() < 4 { n.push(""); }
+		let r = n[0].parse()?;
+		let i = n[1].parse()?;
+		let j = n[2].parse()?;
+		let k = n[3].parse()?;
+		Ok(quaternion(r, i, j, k))
+	}
+}

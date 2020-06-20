@@ -7,3 +7,4 @@ pub use std::fmt;
 pub use serde::{Serialize,Deserialize};
 pub use crate::traits::{Dot,NiceFmt};
 pub use std::iter::{Product,Sum};
+pub use std::str::FromStr;
