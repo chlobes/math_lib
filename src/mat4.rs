@@ -133,7 +133,7 @@ impl<T> Mat4<T> {
 	}
 	
 	pub fn apply_to(self, v: Vec4<T>) -> Vec4<T>
-		where T: Copy + Mul<Output=T> + Add<Output=T> {
+		where Vec4<T>: Vector<T> + Copy {
 		vec4(
 			dot(self.x, v),
 			dot(self.y, v),
@@ -167,7 +167,7 @@ impl<T> Default for Mat4<T>
 }
 
 impl<T> Mul<Mat4<T>> for Mat4<T>
-	where T: Copy + Mul<Output=T> + Add<Output=T> {
+	where Vec4<T>: Vector<T> + Copy {
 	type Output = Self;
 	
 	fn mul(self, other: Self) -> Self {
@@ -183,7 +183,7 @@ impl<T> Mul<Mat4<T>> for Mat4<T>
 }
 
 impl<T> Mul<Vec4<T>> for Mat4<T>
-	where T: Copy + Mul<Output=T> + Add<Output=T> {
+	where Vec4<T>: Vector<T> + Copy {
 	type Output = Vec4<T>;
 	
 	fn mul(self, v: Vec4<T>) -> Vec4<T> {

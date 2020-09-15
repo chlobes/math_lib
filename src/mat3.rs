@@ -1,9 +1,9 @@
 use crate::prelude::*;
 
-use crate::vec2::vec2;
+use crate::vec2::*;
 use crate::vec3::*;
-use crate::mat4::*;
 use crate::mat2::*;
+use crate::mat4::*;
 
 #[repr(C)]
 #[derive(Debug,Copy,Clone,PartialEq,Eq,Hash,Serialize,Deserialize)]
@@ -65,7 +65,7 @@ impl<T> Mat3<T> {
 	}
 	
 	pub fn apply_to(self, v: Vec3<T>) -> Vec3<T>
-		where T: Copy + Mul<Output=T> + Add<Output=T> {
+		where Vec3<T>: Vector<T> + Copy {
 		vec3(
 			dot(self.x, v),
 			dot(self.y, v),
@@ -130,7 +130,7 @@ impl<T> Default for Mat3<T>
 }
 
 impl<T> Mul<Mat3<T>> for Mat3<T>
-	where T: Copy + Mul<Output=T> + Add<Output=T> {
+	where Vec3<T>: Vector<T> + Copy {
 	type Output = Self;
 	
 	fn mul(self, other: Self) -> Self {
@@ -144,7 +144,7 @@ impl<T> Mul<Mat3<T>> for Mat3<T>
 }
 
 impl<T> Mul<Vec3<T>> for Mat3<T>
-	where T: Copy + Mul<Output=T> + Add<Output=T> {
+	where Vec3<T>: Vector<T> + Copy {
 	type Output = Vec3<T>;
 	
 	fn mul(self, v: Vec3<T>) -> Vec3<T> {

@@ -98,6 +98,18 @@ impl<T> Vec2<T> {
 	}
 }
 
+pub use crate::prelude::{dot,distance};
+impl<T> Vector<T> for Vec2<T>
+	where T: Copy + Sqrt<T> + Mul<Output=T> + Add<Output=T> + Sub<Output=T> {
+	fn dot(self, other: Self) -> T {
+		(self*other).sum_elem()
+	}
+	
+	fn distance(self, other: Self) -> T {
+		(self - other).magnitude()
+	}
+}
+
 impl<T: Mul<Output=T> + One> Product<Vec2<T>> for Vec2<T> {
 	fn product<I: Iterator<Item=Self>>(iter: I) -> Self {
 		iter.fold(Self::one(), |a, b| a * b)
@@ -120,8 +132,7 @@ impl Vec2<bool> {
 	}
 }
 
-pub fn vec2<T>(x: T, y: T) -> Vec2<T>
-{
+pub fn vec2<T>(x: T, y: T) -> Vec2<T> {
 	Vec2 { x: x, y: y }
 }
 
@@ -222,24 +233,8 @@ impl_ints2!(is_positive,is_negative);
 impl_floats1!(floor,ceil,round,trunc,fract,abs,signum,sqrt,exp,exp2,ln,log2,log10,cbrt,exp_m1,ln_1p);
 impl_floats2!(is_nan,is_infinite,is_finite,is_normal,is_sign_positive,is_sign_negative);
 
-pub use crate::traits::dot;
-impl<T: Add<Output=T> + Mul<Output=T>> Dot for Vec2<T> {
-	type Output = T;
-	
-	fn dot(self, other: Self) -> T {
-		(self*other).sum_elem()
-	}
-}
-
-pub fn distance<T>(v: Vec2<T>, u: Vec2<T>) -> T
-	where T: Copy + Sqrt<T> + Mul<Output=T> + Add<Output=T> + Sub<Output=T>
-{
-	(v - u).magnitude()
-}
-
 impl<T> Div<T> for Vec2<T>
-	where T: Copy + Div<Output=T>
-{
+	where T: Copy + Div<Output=T> {
 	type Output = Vec2<T>;
 	
 	fn div(self, scalar: T) -> Vec2<T> {
@@ -248,16 +243,14 @@ impl<T> Div<T> for Vec2<T>
 }
 
 impl<T> DivAssign<T> for Vec2<T>
-	where T: Copy + Div<Output=T>
-{
+	where T: Copy + Div<Output=T> {
 	fn div_assign(&mut self, scalar: T) {
 		*self = *self / scalar;
 	}
 }
 
 impl<T> Div<Vec2<T>> for Vec2<T>
-	where T: Div<Output=T>
-{
+	where T: Div<Output=T> {
 	type Output = Vec2<T>;
 	
 	fn div(self, other: Vec2<T>) -> Vec2<T> {
@@ -266,16 +259,14 @@ impl<T> Div<Vec2<T>> for Vec2<T>
 }
 
 impl<T> DivAssign<Vec2<T>> for Vec2<T>
-	where T: Copy + Div<Output=T>
-{
+	where T: Copy + Div<Output=T> {
 	fn div_assign(&mut self, other: Vec2<T>) {
 		*self = *self / other;
 	}
 }
 
 impl<T> Mul<T> for Vec2<T>
-	where T: Copy + Mul<Output=T>
-{
+	where T: Copy + Mul<Output=T> {
 	type Output = Vec2<T>;
 	
 	fn mul(self, scalar: T) -> Vec2<T> {
@@ -284,16 +275,14 @@ impl<T> Mul<T> for Vec2<T>
 }
 
 impl<T> MulAssign<T> for Vec2<T>
-	where T: Copy + Mul<Output=T>
-{
+	where T: Copy + Mul<Output=T> {
 	fn mul_assign(&mut self, scalar: T) {
 		*self = *self * scalar;
 	}
 }
 
 impl<T> Mul<Vec2<T>> for Vec2<T>
-	where T: Mul<Output=T>
-{
+	where T: Mul<Output=T> {
 	type Output = Vec2<T>;
 	
 	fn mul(self, other: Vec2<T>) -> Vec2<T> {
@@ -302,16 +291,14 @@ impl<T> Mul<Vec2<T>> for Vec2<T>
 }
 
 impl<T> MulAssign<Vec2<T>> for Vec2<T>
-	where T: Copy + Mul<Output=T>
-{
+	where T: Copy + Mul<Output=T> {
 	fn mul_assign(&mut self, other: Vec2<T>) {
 		*self = *self * other;
 	}
 }
 
 impl<T> Add<T> for Vec2<T>
-	where T: Copy + Add<Output=T>
-{
+	where T: Copy + Add<Output=T> {
 	type Output = Vec2<T>;
 	
 	fn add(self, scalar: T) -> Vec2<T> {
@@ -320,16 +307,14 @@ impl<T> Add<T> for Vec2<T>
 }
 
 impl<T> AddAssign<T> for Vec2<T>
-	where T: Copy + Add<Output=T>
-{
+	where T: Copy + Add<Output=T> {
 	fn add_assign(&mut self, scalar: T) {
 		*self = *self + scalar;
 	}
 }
 
 impl<T> Add<Vec2<T>> for Vec2<T>
-	where T: Add<Output=T>
-{
+	where T: Add<Output=T> {
 	type Output = Vec2<T>;
 	
 	fn add(self, other: Vec2<T>) -> Vec2<T> {
@@ -338,16 +323,14 @@ impl<T> Add<Vec2<T>> for Vec2<T>
 }
 
 impl<T> AddAssign<Vec2<T>> for Vec2<T>
-	where T: Copy + Add<Output=T>
-{
+	where T: Copy + Add<Output=T> {
 	fn add_assign(&mut self, other: Vec2<T>) {
 		*self = *self + other;
 	}
 }
 
 impl<T> Sub<T> for Vec2<T>
-	where T: Copy + Sub<Output=T>
-{
+	where T: Copy + Sub<Output=T> {
 	type Output = Vec2<T>;
 	
 	fn sub(self, scalar: T) -> Vec2<T> {
@@ -356,16 +339,14 @@ impl<T> Sub<T> for Vec2<T>
 }
 
 impl<T> SubAssign<T> for Vec2<T>
-	where T: Copy + Sub<Output=T>
-{
+	where T: Copy + Sub<Output=T> {
 	fn sub_assign(&mut self, scalar: T) {
 		*self = *self - scalar;
 	}
 }
 
 impl<T> Sub<Vec2<T>> for Vec2<T>
-	where T: Sub<Output=T>
-{
+	where T: Sub<Output=T> {
 	type Output = Vec2<T>;
 	
 	fn sub(self, other: Vec2<T>) -> Vec2<T> {
@@ -374,16 +355,14 @@ impl<T> Sub<Vec2<T>> for Vec2<T>
 }
 
 impl<T> SubAssign<Vec2<T>> for Vec2<T>
-	where T: Copy + Sub<Output=T>
-{
+	where T: Copy + Sub<Output=T> {
 	fn sub_assign(&mut self, other: Vec2<T>) {
 		*self = *self - other;
 	}
 }
 
 impl<T> Rem<T> for Vec2<T>
-	where T: Copy + Rem<Output=T>
-{
+	where T: Copy + Rem<Output=T> {
 	type Output = Vec2<T>;
 	
 	fn rem(self, scalar: T) -> Vec2<T> {
@@ -392,16 +371,14 @@ impl<T> Rem<T> for Vec2<T>
 }
 
 impl<T> RemAssign<T> for Vec2<T>
-	where T: Copy + Rem<Output=T>
-{
+	where T: Copy + Rem<Output=T> {
 	fn rem_assign(&mut self, scalar: T) {
 		*self = *self % scalar;
 	}
 }
 
 /*impl<T, U> Into<Vec2<U>> for Vec2<T>
-	where T: Into<U>
-{
+	where T: Into<U> {
 	fn from(v: Vec2<T>) -> Vec2<U> {
 		vec2(v.x.into(), v.y.into(), v.z.into())
 	}

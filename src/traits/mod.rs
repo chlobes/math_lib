@@ -2,15 +2,6 @@ pub mod numbers;
 
 use std::marker::Sized;
 
-pub fn dot<T: Dot<Output=O>, O>(a: T, b: T) -> O {
-	a.dot(b)
-}
-
-pub trait Dot {
-	type Output;
-	fn dot(self, other: Self) -> Self::Output;
-} //intentionally not implemented for numeric types to prevent confusion, if I want to multiply I'll type a '*', if I type dot(float_a, float_b) that's a mistake it should not compile
-
 pub trait Sqrt<T> {
 	fn sqrt(self) -> T;
 }
@@ -136,3 +127,8 @@ macro float_impl($t: ty) {
 
 float_impl!(f32);
 float_impl!(f64);
+
+pub trait Vector<T> {
+	fn dot(self, other: Self) -> T;
+	fn distance(self, other: Self) -> T;
+}
