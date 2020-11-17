@@ -25,9 +25,9 @@ impl<T> Quaternion<T> {
 	}
 	
 	pub fn from_euler_angles(v: Vec3<T>) -> Self
-		where T: Copy + Sqrt<T> + Trig + Div2 + Add<Output=T> + Mul<Output=T> {
+		where T: Copy + Sqrt<T> + Trig + Two + Add<Output=T> + Mul<Output=T> + Div<Output=T> {
 		let magnitude = v.magnitude();
-		let (factor, r) = magnitude.div2().sin_cos();
+		let (factor, r) = (magnitude / T::two()).sin_cos();
 		let (i, j, k) = (factor * v.x, factor * v.y, factor * v.z);
 		Self { r: r, i: i, j: j, k: k }
 	}

@@ -10,10 +10,6 @@ pub trait Two {
 	fn two() -> Self;
 }
 
-pub trait Div2 {
-	fn div2(self) -> Self;
-}
-
 macro impl_ints($($t: ty),+) {
 	$(
 		impl Zero for $t {
@@ -26,10 +22,6 @@ macro impl_ints($($t: ty),+) {
 		
 		impl Two for $t {
 			fn two() -> Self { 2 }
-		}
-		
-		impl Div2 for $t {
-			fn div2(self) -> Self { self / 2 }
 		}
 	)+
 }
@@ -46,10 +38,6 @@ macro impl_floats($($t: ident),+) {
 		
 		impl Two for $t {
 			fn two() -> Self { 2.0 }
-		}
-		
-		impl Div2 for $t {
-			fn div2(self) -> Self { self / 2.0 }
 		}
 	)+
 }
