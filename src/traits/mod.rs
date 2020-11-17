@@ -1,4 +1,5 @@
-pub mod numbers;
+mod numbers;
+pub use numbers::*;
 
 use std::marker::Sized;
 
