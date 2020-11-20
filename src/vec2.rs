@@ -98,6 +98,11 @@ impl<T> Vec2<T> {
 	}
 }
 
+pub fn angle_between<T: Copy + Trig + Sqrt<T> + Mul<Output=T> + Div<Output=T> + Add<Output=T> + Sub<Output=T>>(a: Vec2<T>, b: Vec2<T>) -> T {
+	let (a, b) = (a.normalize(), b.normalize());
+	dot(a, b).acos()
+}
+
 pub use crate::prelude::{dot,distance};
 impl<T> Vector<T> for Vec2<T>
 	where T: Copy + Sqrt<T> + Mul<Output=T> + Add<Output=T> + Sub<Output=T> {
@@ -136,7 +141,7 @@ pub fn vec2<T>(x: T, y: T) -> Vec2<T> {
 	Vec2 { x: x, y: y }
 }
 
-macro impl_ints1($($U: ident),+) {
+macro impl_ints1($($U: ident),*) {
 	$(
 		impl Vec2<isize> {
 			pub fn $U(self) -> Self {
@@ -163,10 +168,10 @@ macro impl_ints1($($U: ident),+) {
 				vec2(self.x.$U(), self.y.$U())
 			}
 		}
-	)+
+	)*
 }
 
-macro impl_ints2($($U: ident),+){
+macro impl_ints2($($U: ident),*){
 	$(
 		impl Vec2<isize> {
 			pub fn $U(self) -> Vec2<bool> {
@@ -193,10 +198,10 @@ macro impl_ints2($($U: ident),+){
 				vec2(self.x.$U(), self.y.$U())
 			}
 		}
-	)+
+	)*
 }
 
-macro impl_floats1($($U: ident),+) {
+macro impl_floats1($($U: ident),*) {
 	$(
 		impl Vec2<f64> {
 			pub fn $U(self) -> Self {
@@ -208,10 +213,10 @@ macro impl_floats1($($U: ident),+) {
 				vec2(self.x.$U(), self.y.$U())
 			}
 		}
-	)+
+	)*
 }
 
-macro impl_floats2($($U: ident),+) {
+macro impl_floats2($($U: ident),*) {
 	$(
 		impl Vec2<f64> {
 			pub fn $U(self) -> Vec2<bool> {
@@ -223,7 +228,7 @@ macro impl_floats2($($U: ident),+) {
 				vec2(self.x.$U(), self.y.$U())
 			}
 		}
-	)+
+	)*
 }
 
 //component-wise functions
@@ -464,14 +469,14 @@ impl<T: fmt::LowerExp> fmt::LowerExp for Vec2<T> {
 		}
 	}
 }
-macro convert($T: ty, $($U: ident),+) {
+macro convert($T: ty, $($U: ident),*) {
 	$(
 		impl Vec2<$T> {
 			pub fn $U(self) -> Vec2<$U> {
 				vec2(self.x as $U, self.y as $U)
 			}
 		}
-	)+
+	)*
 }
 
 convert!(u8,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);

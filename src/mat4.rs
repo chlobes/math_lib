@@ -198,14 +198,14 @@ impl<T> ArrayTuple for Mat4<T> {
 	fn into_tuple(self) -> Self::Tuple { let Mat4{x,y,z,w} = self; (x.into_tuple(),y.into_tuple(),z.into_tuple(),w.into_tuple()) }
 }
 
-macro convert($T: ty, $($U: ident),+) {
+macro convert($T: ty, $($U: ident),*) {
 	$(
 		impl Mat4<$T> {
 			pub fn $U(self) -> Mat4<$U> {
 				mat4(self.x.$U(), self.y.$U(), self.z.$U(), self.w.$U())
 			}
 		}
-	)+
+	)*
 }
 
 convert!(u8,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);
