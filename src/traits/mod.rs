@@ -31,15 +31,9 @@ pub trait IsNan: PartialOrd {
 }
 
 impl<T: PartialOrd + Sized> IsNan for T {
-	default fn is_nan(&self) -> bool {
-		false
-	}
-	default fn non_nan_max(self, other: Self) -> Self {
-		if other.is_nan() || self > other { self } else { other }
-	}
-	default fn non_nan_min(self, other: Self) -> Self {
-		if other.is_nan() || self < other { self } else { other }
-	}
+	default fn is_nan(&self) -> bool { false }
+	default fn non_nan_max(self, other: Self) -> Self { if other.is_nan() || self > other { self } else { other } }
+	default fn non_nan_min(self, other: Self) -> Self { if other.is_nan() || self < other { self } else { other } }
 }
 
 pub trait NiceFmt {
@@ -69,15 +63,9 @@ macro float_impl($t: ty) {
 	}
 	
 	impl IsNan for $t {
-		fn is_nan(&self) -> bool {
-			(*self).is_nan()
-		}
-		fn non_nan_max(self, other: Self) -> Self {
-			self.max(other)
-		}
-		fn non_nan_min(self, other: Self) -> Self {
-			self.min(other)
-		}
+		fn is_nan(&self) -> bool { <$t>::is_nan(*self) }
+		fn non_nan_max(self, other: Self) -> Self { self.max(other) }
+		fn non_nan_min(self, other: Self) -> Self { self.min(other) }
 	}
 	
 	impl NiceFmt for $t {

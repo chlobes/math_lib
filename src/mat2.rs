@@ -69,6 +69,38 @@ impl<T> Default for Mat2<T>
 	}
 }
 
+impl<T> Add<Self> for Mat2<T>
+	where T: Add<Output=T> {
+	type Output = Self;
+	
+	fn add(self, other: Self) -> Self {
+		mat2(self.x + other.x, self.y + other.y)
+	}
+}
+
+impl<T> AddAssign<Self> for Mat2<T>
+	where T: Copy + Add<Output=T> {
+	fn add_assign(&mut self, other: Self) {
+		*self = *self + other;
+	}
+}
+
+impl<T> Sub<Self> for Mat2<T>
+	where T: Sub<Output=T> {
+	type Output = Self;
+	
+	fn sub(self, other: Self) -> Self {
+		mat2(self.x - other.x, self.y - other.y)
+	}
+}
+
+impl<T> SubAssign<Self> for Mat2<T>
+	where T: Copy + Sub<Output=T> {
+	fn sub_assign(&mut self, other: Self) {
+		*self = *self - other;
+	}
+}
+
 impl<T> Mul<Mat2<T>> for Mat2<T>
 	where Vec2<T>: Vector<T> + Copy {
 	type Output = Self;
@@ -89,6 +121,11 @@ impl<T> Mul<Vec2<T>> for Mat2<T>
 	fn mul(self, v: Vec2<T>) -> Vec2<T> {
 		self.apply_to(v)
 	}
+}
+
+impl<T: Neg> Neg for Mat2<T> {
+	type Output = Mat2<<T as Neg>::Output>;
+	fn neg(self) -> Mat2<<T as Neg>::Output> { mat2(-self.x,-self.y) }
 }
 
 impl<T> ArrayTuple for Mat2<T> {

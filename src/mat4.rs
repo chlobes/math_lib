@@ -166,6 +166,38 @@ impl<T> Default for Mat4<T>
 	}
 }
 
+impl<T> Add<Self> for Mat4<T>
+	where T: Add<Output=T> {
+	type Output = Self;
+	
+	fn add(self, other: Self) -> Self {
+		mat4(self.x + other.x, self.y + other.y, self.z + other.z, self.w + other.w)
+	}
+}
+
+impl<T> AddAssign<Self> for Mat4<T>
+	where T: Copy + Add<Output=T> {
+	fn add_assign(&mut self, other: Self) {
+		*self = *self + other;
+	}
+}
+
+impl<T> Sub<Self> for Mat4<T>
+	where T: Sub<Output=T> {
+	type Output = Self;
+	
+	fn sub(self, other: Self) -> Self {
+		mat4(self.x - other.x, self.y - other.y, self.z - other.z, self.w - other.w)
+	}
+}
+
+impl<T> SubAssign<Self> for Mat4<T>
+	where T: Copy + Sub<Output=T> {
+	fn sub_assign(&mut self, other: Self) {
+		*self = *self - other;
+	}
+}
+
 impl<T> Mul<Mat4<T>> for Mat4<T>
 	where Vec4<T>: Vector<T> + Copy {
 	type Output = Self;
@@ -189,6 +221,11 @@ impl<T> Mul<Vec4<T>> for Mat4<T>
 	fn mul(self, v: Vec4<T>) -> Vec4<T> {
 		self.apply_to(v)
 	}
+}
+
+impl<T: Neg> Neg for Mat4<T> {
+	type Output = Mat4<<T as Neg>::Output>;
+	fn neg(self) -> Mat4<<T as Neg>::Output> { mat4(-self.x,-self.y,-self.z,-self.w) }
 }
 
 impl<T> ArrayTuple for Mat4<T> {

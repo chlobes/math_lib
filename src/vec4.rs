@@ -369,27 +369,27 @@ impl<T> SubAssign<T> for Vec4<T>
 	}
 }
 
-impl<T> Sub<Vec4<T>> for Vec4<T>
+impl<T> Sub<Self> for Vec4<T>
 	where T: Sub<Output=T> {
-	type Output = Vec4<T>;
+	type Output = Self;
 	
-	fn sub(self, other: Vec4<T>) -> Vec4<T> {
+	fn sub(self, other: Self) -> Self {
 		vec4(self.x - other.x, self.y - other.y, self.z - other.z, self.w - other.w)
 	}
 }
 
-impl<T> SubAssign<Vec4<T>> for Vec4<T>
+impl<T> SubAssign<Self> for Vec4<T>
 	where T: Copy + Sub<Output=T> {
-	fn sub_assign(&mut self, other: Vec4<T>) {
+	fn sub_assign(&mut self, other: Self) {
 		*self = *self - other;
 	}
 }
 
 impl<T> Rem<T> for Vec4<T>
 	where T: Copy + Rem<Output=T> {
-	type Output = Vec4<T>;
+	type Output = Self;
 	
-	fn rem(self, scalar: T) -> Vec4<T> {
+	fn rem(self, scalar: T) -> Self {
 		vec4(self.x % scalar, self.y % scalar, self.z % scalar, self.w % scalar)
 	}
 }

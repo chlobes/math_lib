@@ -129,6 +129,38 @@ impl<T> Default for Mat3<T>
 	}
 }
 
+impl<T> Add<Self> for Mat3<T>
+	where T: Add<Output=T> {
+	type Output = Self;
+	
+	fn add(self, other: Self) -> Self {
+		mat3(self.x + other.x, self.y + other.y, self.z + other.z)
+	}
+}
+
+impl<T> AddAssign<Self> for Mat3<T>
+	where T: Copy + Add<Output=T> {
+	fn add_assign(&mut self, other: Self) {
+		*self = *self + other;
+	}
+}
+
+impl<T> Sub<Self> for Mat3<T>
+	where T: Sub<Output=T> {
+	type Output = Self;
+	
+	fn sub(self, other: Self) -> Self {
+		mat3(self.x - other.x, self.y - other.y, self.z - other.z)
+	}
+}
+
+impl<T> SubAssign<Self> for Mat3<T>
+	where T: Copy + Sub<Output=T> {
+	fn sub_assign(&mut self, other: Self) {
+		*self = *self - other;
+	}
+}
+
 impl<T> Mul<Mat3<T>> for Mat3<T>
 	where Vec3<T>: Vector<T> + Copy {
 	type Output = Self;
@@ -150,6 +182,11 @@ impl<T> Mul<Vec3<T>> for Mat3<T>
 	fn mul(self, v: Vec3<T>) -> Vec3<T> {
 		self.apply_to(v)
 	}
+}
+
+impl<T: Neg> Neg for Mat3<T> {
+	type Output = Mat3<<T as Neg>::Output>;
+	fn neg(self) -> Mat3<<T as Neg>::Output> { mat3(-self.x,-self.y,-self.z) }
 }
 
 impl<T> ArrayTuple for Mat3<T> {
