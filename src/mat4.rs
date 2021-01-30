@@ -12,11 +12,6 @@ pub struct Mat4<T> {
 }
 
 impl<T> Mat4<T> {
-	pub fn convert<U>(self) -> Mat4<U>
-		where T: Into<U> {
-		mat4(self.x.convert(), self.y.convert(), self.z.convert(), self.w.convert())
-	}
-	
 	pub fn det(self) -> T
 		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> {
 		let Mat4{ x,y,z,w } = self;

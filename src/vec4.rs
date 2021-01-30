@@ -14,17 +14,12 @@ pub struct Vec4<T> {
 impl<T> Vec4<T> {
 	pub fn magnitude(self) -> T
 		where T: Copy + Sqrt<T> + Mul<Output=T> + Add<Output=T> {
-		(self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w).sqrt()
+		(self * self).sum_elem().sqrt()
 	}
 	
 	pub fn normalise(self) -> Self
 		where T: Copy + Sqrt<T> + Div<Output=T> + Mul<Output=T> + Add<Output=T> {
 		vec4(self.x / self.magnitude(), self.y / self.magnitude(), self.z / self.magnitude(), self.w / self.magnitude())
-	}
-	
-	pub fn convert<U>(self) -> Vec4<U>
-		where T: Into<U> {
-		vec4(self.x.into(), self.y.into(), self.z.into(), self.w.into())
 	}
 	
 	pub fn zero() -> Self
