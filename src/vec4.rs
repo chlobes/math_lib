@@ -17,9 +17,15 @@ impl<T> Vec4<T> {
 		(self * self).sum_elem().sqrt()
 	}
 	
-	pub fn normalise(self) -> Self
+	pub fn normalize(self) -> Self
 		where T: Copy + Sqrt<T> + Div<Output=T> + Mul<Output=T> + Add<Output=T> {
 		vec4(self.x / self.magnitude(), self.y / self.magnitude(), self.z / self.magnitude(), self.w / self.magnitude())
+	}
+	
+	pub fn normalize_or_zero(self) -> Self
+		where T: Copy + Sqrt<T> + Div<Output=T> + Mul<Output=T> + Add<Output=T> + IsNan + Zero {
+		let r = self.normalize();
+		if r.is_nan().or() { Self::zero() } else { r }
 	}
 	
 	pub fn zero() -> Self
@@ -96,6 +102,11 @@ impl<T> Vec4<T> {
 	
 	pub fn downsize(self) -> Vec3<T> {
 		vec3(self.x, self.y, self.z)
+	}
+	
+	pub fn is_nan(&self) -> Vec4<bool>
+		where T: IsNan {
+		vec4(self.x.is_nan(), self.y.is_nan(), self.z.is_nan(), self.w.is_nan())
 	}
 }
 
@@ -238,7 +249,7 @@ macro impl_floats2($($U: ident),*) {
 impl_ints1!(abs,signum,swap_bytes/*,reverse_bits*/,to_be,to_le,wrapping_neg,wrapping_abs);
 impl_ints2!(is_positive,is_negative);
 impl_floats1!(floor,ceil,round,trunc,fract,abs,signum,sqrt,exp,exp2,ln,log2,log10,cbrt,exp_m1,ln_1p);
-impl_floats2!(is_nan,is_infinite,is_finite,is_normal,is_sign_positive,is_sign_negative);
+impl_floats2!(is_infinite,is_finite,is_normal,is_sign_positive,is_sign_negative);
 
 impl Vec4<u16> {
 	pub fn into_workaround(self) -> Vec4<f64> {

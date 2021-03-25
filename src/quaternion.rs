@@ -13,7 +13,7 @@ pub struct Quaternion<T> {
 }
 
 impl<T> Quaternion<T> {
-	pub fn normalise(self) -> Self
+	pub fn normalize(self) -> Self
 		where T: Copy + Sqrt<T> + Div<Output=T> + Mul<Output=T> + Add<Output=T> {
 		let magnitude = (self.i * self.i + self.j * self.j + self.k * self.k + self.r * self.r).sqrt();
 		Self { r: self.r / magnitude, i: self.i / magnitude, j: self.j / magnitude, k: self.k / magnitude }

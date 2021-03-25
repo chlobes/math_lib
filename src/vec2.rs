@@ -20,6 +20,12 @@ impl<T> Vec2<T> {
 		self / self.magnitude()
 	}
 	
+	pub fn normalize_or_zero(self) -> Self
+		where T: Copy + Sqrt<T> + Div<Output=T> + Mul<Output=T> + Add<Output=T> + IsNan + Zero {
+		let r = self.normalize();
+		if r.is_nan().or() { Self::zero() } else { r }
+	}
+	
 	pub fn zero() -> Self
 		where T: Zero {
 		vec2(T::zero(), T::zero())
@@ -90,6 +96,11 @@ impl<T> Vec2<T> {
 	
 	pub fn extend(self, z: T) -> Vec3<T> {
 		vec3(self.x, self.y, z)
+	}
+	
+	pub fn is_nan(&self) -> Vec2<bool>
+		where T: IsNan {
+		vec2(self.x.is_nan(), self.y.is_nan())
 	}
 }
 
@@ -232,7 +243,7 @@ macro impl_floats2($($U: ident),*) {
 impl_ints1!(abs,signum,swap_bytes/*,reverse_bits*/,to_be,to_le,wrapping_neg,wrapping_abs);
 impl_ints2!(is_positive,is_negative);
 impl_floats1!(floor,ceil,round,trunc,fract,abs,signum,sqrt,exp,exp2,ln,log2,log10,cbrt,exp_m1,ln_1p);
-impl_floats2!(is_nan,is_infinite,is_finite,is_normal,is_sign_positive,is_sign_negative);
+impl_floats2!(is_infinite,is_finite,is_normal,is_sign_positive,is_sign_negative);
 
 impl<T> Div<T> for Vec2<T>
 	where T: Copy + Div<Output=T> {
