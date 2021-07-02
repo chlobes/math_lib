@@ -70,7 +70,7 @@ macro float_impl($t: ty) {
 	
 	impl NiceFmt for $t {
 		fn nice_fmt(&self, limit: usize, pad: bool) -> String {
-			let limit = limit.max(1) - 1;
+			let limit = limit.saturating_sub(1);
 			let mut result = if format!("{}",self).len() <= limit {
 				format!("{}",self)
 			} else if self.abs().log10() + self.is_sign_negative() as usize as $t < limit as $t {
@@ -108,7 +108,7 @@ macro float_impl($t: ty) {
 			if p != '.' && &r == "-0" {
 				result.remove(0);
 			}
-			if pad { while result.len() < limit { result.push(' '); } }
+			if pad { while result.len() <= limit { result.push(' '); } }
 			result
 		}
 	}
