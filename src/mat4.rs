@@ -151,7 +151,7 @@ impl<T> Mat4<T> {
 }
 
 pub fn mat4<T>(x: Vec4<T>, y: Vec4<T>, z: Vec4<T>, w: Vec4<T>) -> Mat4<T> {
-	Mat4 { x: x, y: y, z: z, w: w }
+	Mat4 { x, y, z, w, }
 }
 
 impl<T> Default for Mat4<T>

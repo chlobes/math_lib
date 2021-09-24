@@ -256,7 +256,7 @@ impl Vec3<f32> {
 }
 
 pub fn vec3<T>(x: T, y: T, z: T) -> Vec3<T> {
-	Vec3 { x: x, y: y, z: z }
+	Vec3 { x, y, z, }
 }
 
 pub fn cross<T>(v: Vec3<T>, u: Vec3<T>) -> Vec3<T>
@@ -517,13 +517,13 @@ convert!(bool,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize);
 impl<T: FromStr> FromStr for Vec3<T> {
 	type Err = <T as FromStr>::Err;
 	
-	fn from_str(s: &str) -> Result<Self, Self::Err> {
-		let mut n: Vec<&str> = s.split(|c: char| c.is_whitespace() || c == ',')
+	fn from_str(input: &str) -> Result<Self, Self::Err> { //TODO: use a collect-like method?
+		let mut words: Vec<&str> = input.split(|c: char| c.is_whitespace() || c == ',')
 			.map(|s| s.trim_matches(BRACKETS)).filter(|s| !s.is_empty()).collect();
-		while n.len() < 3 { n.push(""); }
-		let x = n[0].parse()?;
-		let y = n[1].parse()?;
-		let z = n[2].parse()?;
+		while words.len() < 3 { words.push(""); }
+		let x = words[0].parse()?;
+		let y = words[1].parse()?;
+		let z = words[2].parse()?;
 		Ok(vec3(x, y, z))
 	}
 }

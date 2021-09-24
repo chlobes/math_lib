@@ -141,7 +141,7 @@ impl<T: One> From<Vec3<T>> for Vec4<T> {
 }
 
 pub fn vec4<T>(x: T, y: T, z: T, w: T) -> Vec4<T> {
-	Vec4 { x: x, y: y, z: z, w: w }
+	Vec4 { x, y, z, w, }
 }
 
 impl Vec4<bool> {
@@ -462,14 +462,14 @@ impl<T> ArrayTuple for Vec4<T> {
 }
 
 impl<T> From<(T, T, T, T)> for Vec4<T> {
-	fn from(t: (T, T, T, T)) -> Self {
-		let (a,b,c,d) = t;
+	fn from(input: (T, T, T, T)) -> Self {
+		let (a,b,c,d) = input;
 		vec4(a,b,c,d)
 	}
 }
 impl<T> From<[T; 4]> for Vec4<T> {
-	fn from(t: [T; 4]) -> Self {
-		t.into_tuple().into()
+	fn from(input: [T; 4]) -> Self {
+		input.into_tuple().into()
 	}
 }
 
@@ -526,14 +526,14 @@ convert!(bool,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize);
 impl<T: FromStr> FromStr for Vec4<T> {
 	type Err = <T as FromStr>::Err;
 	
-	fn from_str(s: &str) -> Result<Self, Self::Err> {
-		let mut n: Vec<&str> = s.split(|c: char| c.is_whitespace() || c == ',')
+	fn from_str(input: &str) -> Result<Self, Self::Err> { //TODO: use a collect-like method?
+		let mut words: Vec<&str> = input.split(|c: char| c.is_whitespace() || c == ',')
 			.map(|s| s.trim_matches(BRACKETS)).filter(|s| !s.is_empty()).collect();
-		while n.len() < 4 { n.push(""); }
-		let x = n[0].parse()?;
-		let y = n[1].parse()?;
-		let z = n[2].parse()?;
-		let w = n[3].parse()?;
+		while words.len() < 4 { words.push(""); }
+		let x = words[0].parse()?;
+		let y = words[1].parse()?;
+		let z = words[2].parse()?;
+		let w = words[3].parse()?;
 		Ok(vec4(x, y, z, w))
 	}
 }

@@ -24,12 +24,12 @@ impl<T> Quaternion<T> {
 		Self { r: -self.r, i: self.i, j: self.j, k: self.k }
 	}
 	
-	pub fn from_euler_angles(v: Vec3<T>) -> Self
+	pub fn from_euler_angles(input: Vec3<T>) -> Self
 		where T: Copy + Sqrt<T> + Trig + Two + Add<Output=T> + Mul<Output=T> + Div<Output=T> {
-		let magnitude = v.magnitude();
+		let magnitude = input.magnitude();
 		let (factor, r) = (magnitude / T::two()).sin_cos();
-		let (i, j, k) = (factor * v.x, factor * v.y, factor * v.z);
-		Self { r: r, i: i, j: j, k: k }
+		let (i, j, k) = (factor * input.x, factor * input.y, factor * input.z);
+		quaternion(r, i, j, k)
 	}
 	
 	pub fn convert<U>(self) -> Quaternion<U>
@@ -39,7 +39,7 @@ impl<T> Quaternion<T> {
 	
 	pub fn ident() -> Self
 		where T: Zero + One {
-		Self { r: T::one(), i: T::zero(), j: T::zero(), k: T::zero() }
+		quaternion(T::one(), T::zero(), T::zero(), T::zero())
 	}
 	
 	pub fn rot_mat(self) -> Mat3<T>
@@ -147,14 +147,14 @@ convert!(bool,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize);
 impl<T: FromStr> FromStr for Quaternion<T> {
 	type Err = <T as FromStr>::Err;
 	
-	fn from_str(s: &str) -> Result<Self, Self::Err> {
-		let mut n: Vec<&str> = s.split(|c: char| c.is_whitespace() || c == ',')
+	fn from_str(input: &str) -> Result<Self, Self::Err> { //TODO: use a collect-like method?
+		let mut words: Vec<&str> = input.split(|c: char| c.is_whitespace() || c == ',')
 			.map(|s| s.trim_matches(BRACKETS)).filter(|s| !s.is_empty()).collect();
-		while n.len() < 4 { n.push(""); }
-		let r = n[0].parse()?;
-		let i = n[1].parse()?;
-		let j = n[2].parse()?;
-		let k = n[3].parse()?;
+		while words.len() < 4 { words.push(""); }
+		let r = words[0].parse()?;
+		let i = words[1].parse()?;
+		let j = words[2].parse()?;
+		let k = words[3].parse()?;
 		Ok(quaternion(r, i, j, k))
 	}
 }

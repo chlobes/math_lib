@@ -58,7 +58,7 @@ impl<T> Mat2<T> {
 }
 
 pub fn mat2<T>(x: Vec2<T>, y: Vec2<T>) -> Mat2<T> {
-	Mat2 { x: x, y: y }
+	Mat2 { x, y, }
 }
 
 impl<T> Default for Mat2<T>

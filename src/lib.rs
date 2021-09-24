@@ -1,5 +1,6 @@
 #![allow(incomplete_features)]
 #![feature(decl_macro,specialization)]
+#![allow(clippy::type_complexity)]
 
 extern crate serde;
 extern crate array_tuple;

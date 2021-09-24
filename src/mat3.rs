@@ -119,7 +119,7 @@ impl<T> Mat3<T> {
 }
 
 pub fn mat3<T>(x: Vec3<T>, y: Vec3<T>, z: Vec3<T>) -> Mat3<T> {
-	Mat3 { x: x, y: y, z: z }
+	Mat3 { x, y, z, }
 }
 
 impl<T> Default for Mat3<T>
