@@ -110,15 +110,14 @@ impl<T> Vec4<T> {
 	}
 }
 
-pub use crate::prelude::{dot,distance};
+pub use crate::prelude::{dot,distance,distance_squared};
 impl<T> Vector<T> for Vec4<T>
 	where T: Copy + Sqrt<T> + Mul<Output=T> + Add<Output=T> + Sub<Output=T> {
-	fn dot(self, other: Self) -> T {
-		(self*other).sum_elem()
+	fn dot(&self, other: &Self) -> T {
+		(*self * *other).sum_elem()
 	}
-	
-	fn distance(self, other: Self) -> T {
-		(self - other).magnitude()
+	fn distance(&self, other: &Self) -> T {
+		(*self - *other).magnitude()
 	}
 }
 

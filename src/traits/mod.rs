@@ -1,7 +1,8 @@
+use crate::prelude::*;
+use std::marker::Sized;
+
 mod numbers;
 pub use numbers::*;
-
-use std::marker::Sized;
 
 pub trait Sqrt<T> {
 	fn sqrt(self) -> T;
@@ -117,7 +118,7 @@ macro float_impl($t: ty) {
 float_impl!(f32);
 float_impl!(f64);
 
-pub trait Vector<T> {
-	fn dot(self, other: Self) -> T;
-	fn distance(self, other: Self) -> T;
+pub trait Vector<T>: Sub<Output=Self> + Sized {
+	fn dot(&self, other: &Self) -> T;
+	fn distance(&self, other: &Self) -> T;
 }
