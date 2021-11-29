@@ -121,4 +121,8 @@ float_impl!(f64);
 pub trait Vector<T>: Sub<Output=Self> + Sized {
 	fn dot(&self, other: &Self) -> T;
 	fn distance(&self, other: &Self) -> T;
+	fn distance_squared(self, other: Self) -> T {
+		let x = self - other;
+		x.dot(&x)
+	}
 }

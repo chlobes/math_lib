@@ -145,9 +145,6 @@ impl<T> Mat4<T> {
 			vec4(self.x.w, self.y.w, self.z.w, self.w.w),
 		)
 	}
-	
-	pub fn into_array(self) -> [[T; 4]; 4] {	let Mat4{x,y,z,w} = self; [x.into_array(),y.into_array(),z.into_array(),w.into_array()] }
-	pub fn into_tuple(self) -> ((T,T,T,T),(T,T,T,T),(T,T,T,T),(T,T,T,T)) { let Mat4{x,y,z,w} = self; (x.into_tuple(),y.into_tuple(),z.into_tuple(),w.into_tuple()) }
 }
 
 pub fn mat4<T>(x: Vec4<T>, y: Vec4<T>, z: Vec4<T>, w: Vec4<T>) -> Mat4<T> {
@@ -223,11 +220,18 @@ impl<T: Neg> Neg for Mat4<T> {
 	fn neg(self) -> Mat4<<T as Neg>::Output> { mat4(-self.x,-self.y,-self.z,-self.w) }
 }
 
+type CT<T> = (T,T,T,T); //clippy complaints
 impl<T> ArrayTuple for Mat4<T> {
 	type Array = [[T; 4]; 4];
-	type Tuple = ((T,T,T,T),(T,T,T,T),(T,T,T,T),(T,T,T,T));
-	fn into_array(self) -> Self::Array {	let Mat4{x,y,z,w} = self; [x.into_array(),y.into_array(),z.into_array(),w.into_array()] }
-	fn into_tuple(self) -> Self::Tuple { let Mat4{x,y,z,w} = self; (x.into_tuple(),y.into_tuple(),z.into_tuple(),w.into_tuple()) }
+	type Tuple = (CT<T>,CT<T>,CT<T>,CT<T>);
+	fn into_array(self) -> Self::Array {
+		let Mat4{x,y,z,w} = self;
+		[x.into_array(),y.into_array(),z.into_array(),w.into_array()]
+	}
+	fn into_tuple(self) -> Self::Tuple {
+		let Mat4{x,y,z,w} = self;
+		(x.into_tuple(),y.into_tuple(),z.into_tuple(),w.into_tuple())
+	}
 }
 
 macro convert($T: ty, $($U: ident),*) {

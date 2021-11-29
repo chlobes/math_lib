@@ -11,4 +11,4 @@ pub const BRACKETS: &[char] = &['(', ')', '[', ']', '{', '}'];
 
 pub fn dot<T, V: Vector<T>>(a: V, b: V) -> T { a.dot(&b) }
 pub fn distance<T, V: Vector<T>>(a: V, b: V) -> T { a.distance(&b) }
-pub fn distance_squared<T, V: Vector<T>>(a: V, b: V) -> T { let x = a - b; x.dot(&x) }
+pub fn distance_squared<T, V: Vector<T>>(a: V, b: V) -> T { a.distance_squared(b) }

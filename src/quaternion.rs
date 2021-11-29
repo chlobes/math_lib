@@ -81,8 +81,8 @@ impl<T> Mul<Quaternion<T>> for Quaternion<T>
 impl<T> ArrayTuple for Quaternion<T> {
 	type Array = [T; 4];
 	type Tuple = (T,T,T,T);
-	fn into_array(self) -> [T; 4] { let Quaternion{r,i,j,k}=self; [r,i,j,k] }
-	fn into_tuple(self) -> (T,T,T,T) { let Quaternion{r,i,j,k}=self; (r,i,j,k) }
+	fn into_array(self) -> [T; 4] { let Quaternion{r,i,j,k} = self; [r,i,j,k] }
+	fn into_tuple(self) -> (T,T,T,T) { self.into_array().into_tuple() }
 }
 
 impl<T> Default for Quaternion<T>

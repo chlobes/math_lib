@@ -1,11 +1,9 @@
 pub trait Zero {
 	fn zero() -> Self;
 }
-
 pub trait One {
 	fn one() -> Self;
 }
-
 pub trait Two {
 	fn two() -> Self;
 }
@@ -15,11 +13,9 @@ macro impl_ints($($t: ty),*) {
 		impl Zero for $t {
 			fn zero() -> Self { 0 }
 		}
-		
 		impl One for $t {
 			fn one() -> Self { 1 }
 		}
-		
 		impl Two for $t {
 			fn two() -> Self { 2 }
 		}
@@ -31,11 +27,9 @@ macro impl_floats($($t: ident),*) {
 		impl Zero for $t {
 			fn zero() -> Self { 0.0 }
 		}
-		
 		impl One for $t {
 			fn one() -> Self { 1.0 }
 		}
-		
 		impl Two for $t {
 			fn two() -> Self { 2.0 }
 		}
