@@ -504,6 +504,18 @@ impl Into<Vector4> for Vec4<f32> {
 	}
 }
 
+impl Into<Color> for Vec4<u8> {
+	fn into(self) -> Color {
+		Color { r: self.x, g: self.y, b: self.z, a: self.w }
+	}
+}
+
+impl Into<Color> for Vec4<f32> {
+	fn into(self) -> Color {
+		(self * 255.0 % 256.0).u8().into()
+	}
+}
+
 macro convert($T: ty, $($U: ident),*) {
 	$(
 		impl Vec4<$T> {

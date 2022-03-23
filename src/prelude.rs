@@ -13,4 +13,4 @@ pub fn dot<T, V: Vector<T>>(a: V, b: V) -> T { a.dot(&b) }
 pub fn distance<T, V: Vector<T>>(a: V, b: V) -> T { a.distance(&b) }
 pub fn distance_squared<T, V: Vector<T>>(a: V, b: V) -> T { a.distance_squared(b) }
 
-pub use raylib::ffi::{Vector2,Vector3,Vector4,Quaternion as RaylibQuaternion,Matrix};
+pub use raylib::ffi::{Vector2,Vector3,Vector4,Color,Quaternion as RaylibQuaternion,Matrix};
