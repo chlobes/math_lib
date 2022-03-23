@@ -6,6 +6,7 @@ edition = "2018"
 
 [dependencies]
 serde = { version = "1.0.89", features = ["derive"] }
+raylib = "*"
 
 [dependencies.array_tuple]
 git = "https://github.com/pypypypypypypypypyp/array_tuple"

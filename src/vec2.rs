@@ -475,6 +475,13 @@ impl<T: fmt::LowerExp> fmt::LowerExp for Vec2<T> {
 		}
 	}
 }
+
+impl Into<Vector2> for Vec2<f32> {
+	fn into(self) -> Vector2 {
+		Vector2 { x: self.x, y: self.y }
+	}
+}
+
 macro convert($T: ty, $($U: ident),*) {
 	$(
 		impl Vec2<$T> {

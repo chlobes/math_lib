@@ -234,6 +234,18 @@ impl<T> ArrayTuple for Mat4<T> {
 	}
 }
 
+impl Into<Matrix> for Mat4<f32> {
+	fn into(self) -> Matrix {
+		let a = self.transpose(); //since we use row major while they use column major
+		Matrix {
+			m0: a.x.x, m1: a.x.y, m2: a.x.z, m3: a.x.w,
+			m4: a.y.x, m5: a.y.y, m6: a.y.z, m7: a.y.w,
+			m8: a.z.x, m9: a.z.y, m10: a.z.z,m11: a.z.w,
+			m12: a.w.x,m13: a.w.y,m14: a.w.z,m15: a.w.w,
+		}
+	}
+}
+
 macro convert($T: ty, $($U: ident),*) {
 	$(
 		impl Mat4<$T> {

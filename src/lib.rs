@@ -1,6 +1,5 @@
 #![allow(incomplete_features)]
 #![feature(decl_macro,specialization)]
-//#![allow(clippy::type_complexity)]
 
 pub mod vec2;
 pub mod vec3;
