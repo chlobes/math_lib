@@ -481,6 +481,11 @@ impl Into<Vector2> for Vec2<f32> {
 		Vector2 { x: self.x, y: self.y }
 	}
 }
+impl Into<Vector2_> for Vec2<f32> {
+	fn into(self) -> Vector2_ {
+		Vector2_ { x: self.x, y: self.y }
+	}
+}
 
 macro convert($T: ty, $($U: ident),*) {
 	$(

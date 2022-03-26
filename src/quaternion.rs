@@ -125,6 +125,11 @@ impl Into<RaylibQuaternion> for Quaternion<f32> {
 		RaylibQuaternion { x: self.i, y: self.j, z: self.k, w: self.r }
 	}
 }
+impl Into<RaylibQuaternion_> for Quaternion<f32> {
+	fn into(self) -> RaylibQuaternion_ {
+		RaylibQuaternion_ { x: self.i, y: self.j, z: self.k, w: self.r }
+	}
+}
 
 macro convert($T: ty, $($U: ident),*) {
 	$(
