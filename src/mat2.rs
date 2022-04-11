@@ -34,7 +34,7 @@ impl<T> Mat2<T> {
 	}
 	
 	pub fn apply_to(self, v: Vec2<T>) -> Vec2<T>
-		where Vec2<T>: Vector<T> + Copy {
+		where Vec2<T>: Dot<T> + Copy {
 		vec2(
 			dot(self.x, v),
 			dot(self.y, v),
@@ -102,7 +102,7 @@ impl<T> SubAssign<Self> for Mat2<T>
 }
 
 impl<T> Mul<Mat2<T>> for Mat2<T>
-	where Vec2<T>: Vector<T> + Copy {
+	where Vec2<T>: Dot<T> + Copy {
 	type Output = Self;
 	
 	fn mul(self, other: Self) -> Self {
@@ -115,7 +115,7 @@ impl<T> Mul<Mat2<T>> for Mat2<T>
 }
 
 impl<T> Mul<Vec2<T>> for Mat2<T>
-	where Vec2<T>: Vector<T> + Copy {
+	where Vec2<T>: Dot<T> + Copy {
 	type Output = Vec2<T>;
 	
 	fn mul(self, v: Vec2<T>) -> Vec2<T> {

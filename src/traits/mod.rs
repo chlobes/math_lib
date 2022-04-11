@@ -118,11 +118,20 @@ macro float_impl($t: ty) {
 float_impl!(f32);
 float_impl!(f64);
 
-pub trait Vector<T>: Sub<Output=Self> + Sized {
+pub trait Dot<T>: Copy + Sub<Output=Self> + Sized {
 	fn dot(&self, other: &Self) -> T;
-	fn distance(&self, other: &Self) -> T;
-	fn distance_squared(self, other: Self) -> T {
-		let x = self - other;
+	fn distance_squared(&self, other: &Self) -> T {
+		let x = *self - *other;
 		x.dot(&x)
+	}
+}
+
+pub trait Distance<T> {
+	fn distance(&self, other: &Self) -> T;
+}
+
+impl<T: Sqrt<T>, V: Dot<T>> Distance<T> for V {
+	fn distance(&self, other: &Self) -> T {
+		self.distance_squared(other).sqrt()
 	}
 }

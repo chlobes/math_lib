@@ -113,13 +113,9 @@ impl<T> Vec3<T> {
 }
 
 pub use crate::prelude::{dot,distance,distance_squared};
-impl<T> Vector<T> for Vec3<T>
-	where T: Copy + Sqrt<T> + Mul<Output=T> + Add<Output=T> + Sub<Output=T> {
+impl<T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T>> Dot<T> for Vec3<T> {
 	fn dot(&self, other: &Self) -> T {
 		(*self * *other).sum_elem()
-	}
-	fn distance(&self, other: &Self) -> T {
-		(*self - *other).magnitude()
 	}
 }
 

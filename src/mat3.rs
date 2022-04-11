@@ -65,7 +65,7 @@ impl<T> Mat3<T> {
 	}
 	
 	pub fn apply_to(self, v: Vec3<T>) -> Vec3<T>
-		where Vec3<T>: Vector<T> + Copy {
+		where Vec3<T>: Dot<T> + Copy {
 		vec3(
 			dot(self.x, v),
 			dot(self.y, v),
@@ -162,7 +162,7 @@ impl<T> SubAssign<Self> for Mat3<T>
 }
 
 impl<T> Mul<Mat3<T>> for Mat3<T>
-	where Vec3<T>: Vector<T> + Copy {
+	where Vec3<T>: Dot<T> + Copy {
 	type Output = Self;
 	
 	fn mul(self, other: Self) -> Self {
@@ -176,7 +176,7 @@ impl<T> Mul<Mat3<T>> for Mat3<T>
 }
 
 impl<T> Mul<Vec3<T>> for Mat3<T>
-	where Vec3<T>: Vector<T> + Copy {
+	where Vec3<T>: Dot<T> + Copy {
 	type Output = Vec3<T>;
 	
 	fn mul(self, v: Vec3<T>) -> Vec3<T> {
