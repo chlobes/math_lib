@@ -7,6 +7,9 @@ pub trait One {
 pub trait Two {
 	fn two() -> Self;
 }
+pub trait Abs {
+	fn abs(self) -> Self;
+}
 
 macro impl_ints($($t: ty),*) {
 	$(
@@ -18,6 +21,9 @@ macro impl_ints($($t: ty),*) {
 		}
 		impl Two for $t {
 			fn two() -> Self { 2 }
+		}
+		impl Abs for $t {
+			fn abs(self) -> Self { self.abs_diff(0) as $t }
 		}
 	)*
 }
@@ -32,6 +38,9 @@ macro impl_floats($($t: ident),*) {
 		}
 		impl Two for $t {
 			fn two() -> Self { 2.0 }
+		}
+		impl Abs for $t {
+			fn abs(self) -> Self { self.abs() }
 		}
 	)*
 }

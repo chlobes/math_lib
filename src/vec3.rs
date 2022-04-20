@@ -38,6 +38,11 @@ impl<T> Vec3<T> {
 		vec3(T::one(), T::one(), T::one())
 	}
 	
+	pub fn abs(self) -> Self
+		where T: Abs {
+		vec3(self.x.abs(), self.y.abs(), self.z.abs())
+	}
+	
 	pub fn max(self, other: Self) -> Self
 		where T: IsNan {
 		vec3(
@@ -112,10 +117,13 @@ impl<T> Vec3<T> {
 	}
 }
 
-pub use crate::prelude::{dot,distance,distance_squared};
-impl<T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T>> Dot<T> for Vec3<T> {
+pub use crate::prelude::{dot,distance,distance_squared,orthog_dist};
+impl<T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Abs> Dot<T> for Vec3<T> {
 	fn dot(&self, other: &Self) -> T {
 		(*self * *other).sum_elem()
+	}
+	fn orthog_dist(&self, other: &Self) -> T {
+		(*self - *other).abs().sum_elem()
 	}
 }
 
@@ -233,9 +241,9 @@ macro impl_floats2($($U: ident),*) {
 
 //component-wise functions
 //certain conversion and trig functions not implemented to avoid confusion
-impl_ints1!(abs,signum,swap_bytes/*,reverse_bits*/,to_be,to_le,wrapping_neg,wrapping_abs);
+impl_ints1!(signum,swap_bytes/*,reverse_bits*/,to_be,to_le,wrapping_neg,wrapping_abs);
 impl_ints2!(is_positive,is_negative);
-impl_floats1!(floor,ceil,round,trunc,fract,abs,signum,sqrt,exp,exp2,ln,log2,log10,cbrt,exp_m1,ln_1p);
+impl_floats1!(floor,ceil,round,trunc,fract,signum,sqrt,exp,exp2,ln,log2,log10,cbrt,exp_m1,ln_1p);
 impl_floats2!(is_infinite,is_finite,is_normal,is_sign_positive,is_sign_negative);
 
 impl Vec3<f64> {

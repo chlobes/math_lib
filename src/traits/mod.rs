@@ -124,6 +124,7 @@ pub trait Dot<T>: Copy + Sub<Output=Self> + Sized {
 		let x = *self - *other;
 		x.dot(&x)
 	}
+	fn orthog_dist(&self, other: &Self) -> T;
 }
 
 pub trait Distance<T> {

@@ -11,6 +11,7 @@ pub const BRACKETS: &[char] = &['(', ')', '[', ']', '{', '}'];
 
 pub fn dot<T, V: Dot<T>>(a: V, b: V) -> T { a.dot(&b) }
 pub fn distance_squared<T, V: Dot<T>>(a: V, b: V) -> T { a.distance_squared(&b) }
+pub fn orthog_dist<T, V: Dot<T>>(a: V, b: V) -> T { a.orthog_dist(&b) }
 pub fn distance<T, V: Distance<T>>(a: V, b: V) -> T { a.distance(&b) }
 
 pub use raylib::ffi::{Vector2,Vector3,Vector4,Color,Quaternion as RaylibQuaternion,Matrix};
