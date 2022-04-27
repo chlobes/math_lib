@@ -254,18 +254,6 @@ impl_ints2!(is_positive,is_negative);
 impl_floats1!(floor,ceil,round,trunc,fract,signum,sqrt,exp,exp2,ln,log2,log10,cbrt,exp_m1,ln_1p);
 impl_floats2!(is_infinite,is_finite,is_normal,is_sign_positive,is_sign_negative);
 
-impl Vec4<u16> {
-	pub fn into_workaround(self) -> Vec4<f64> {
-		vec4(self.x as f64, self.y as f64, self.z as f64, self.w as f64)
-	}
-}
-
-impl Vec4<f64> {
-	pub fn into_workaround(self) -> Vec4<u16> {
-		vec4(self.x as u16, self.y as u16, self.z as u16, self.w as u16)
-	}
-}
-
 impl<T> Div<T> for Vec4<T>
 	where T: Copy + Div<Output=T> {
 	type Output = Vec4<T>;
@@ -526,12 +514,12 @@ impl Into<Color_> for Vec4<u8> {
 
 impl Into<Color> for Vec4<f32> {
 	fn into(self) -> Color {
-		(self * 255.0 % 256.0).u8().into()
+		(self * 255.0).min(Vec4::one() * 255.0).u8().into()
 	}
 }
 impl Into<Color_> for Vec4<f32> {
 	fn into(self) -> Color_ {
-		(self * 255.0 % 256.0).u8().into()
+		(self * 255.0).min(Vec4::one() * 255.0).u8().into()
 	}
 }
 
