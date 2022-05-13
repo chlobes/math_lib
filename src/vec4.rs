@@ -1,159 +1,35 @@
 use crate::prelude::*;
-
 use crate::vec3::*;
 
+pub use crate::prelude::{dot,distance,distance_squared,orthog_dist,angle_between,Zero,One,Abs,VecOps};
+
 #[repr(C)]
-#[derive(Debug,Copy,Clone,PartialEq,Eq,Hash,Serialize,Deserialize)]
-pub struct Vec4<T> {
-	pub x: T,
-	pub y: T,
-	pub z: T,
-	pub w: T,
+#[derive(Debug,Default,Copy,Clone,PartialEq,Eq,Hash,Serialize,Deserialize)]
+pub struct Vec4<T> { pub x: T, pub y: T, pub z: T, pub w: T }
+
+impl<T> ArrayTuple for Vec4<T> {
+	type Array = [T; 4];
+	type Tuple = (T, T, T, T);
+	fn into_array(self) -> [T; 4] {	[self.x,self.y,self.z,self.w] }
+	fn into_tuple(self) -> (T, T, T, T) { self.into_array().into_tuple() }
 }
+impl<T> From<(T, T, T, T)> for Vec4<T> {
+	fn from(input: (T, T, T, T)) -> Self {
+		let (x,y,z,w) = input;
+		vec4(x,y,z,w)
+	}
+}
+impl<T> From<[T; 4]> for Vec4<T> {
+	fn from(input: [T; 4]) -> Self {
+		input.into_tuple().into()
+	}
+}
+
+impl_vec!(Vec4, vec4, (x, y, z, w));
 
 impl<T> Vec4<T> {
-	pub fn magnitude(self) -> T
-		where T: Copy + Sqrt<T> + Mul<Output=T> + Add<Output=T> {
-		(self * self).sum_elem().sqrt()
-	}
-	
-	pub fn normalize(self) -> Self
-		where T: Copy + Sqrt<T> + Div<Output=T> + Mul<Output=T> + Add<Output=T> {
-		vec4(self.x / self.magnitude(), self.y / self.magnitude(), self.z / self.magnitude(), self.w / self.magnitude())
-	}
-	
-	pub fn normalize_or_zero(self) -> Self
-		where T: Copy + Sqrt<T> + Div<Output=T> + Mul<Output=T> + Add<Output=T> + IsNan + Zero {
-		let r = self.normalize();
-		if r.is_nan().or() { Self::zero() } else { r }
-	}
-	
-	pub fn zero() -> Self
-		where T: Zero {
-		vec4(T::zero(), T::zero(), T::zero(), T::zero())
-	}
-	
-	pub fn one() -> Self
-		where T: One {
-		vec4(T::one(), T::one(), T::one(), T::one())
-	}
-	
-	pub fn abs(self) -> Self
-		where T: Abs {
-		vec4(self.x.abs(), self.y.abs(), self.z.abs(), self.w.abs())
-	}
-	
-	pub fn max(self, other: Self) -> Self
-		where T: IsNan {
-		vec4(
-			self.x.non_nan_max(other.x),
-			self.y.non_nan_max(other.y),
-			self.z.non_nan_max(other.z),
-			self.w.non_nan_max(other.w),
-		)
-	}
-	
-	pub fn min(self, other: Self) -> Self
-		where T: IsNan {
-		vec4(
-			self.x.non_nan_min(other.x),
-			self.y.non_nan_min(other.y),
-			self.z.non_nan_min(other.z),
-			self.w.non_nan_min(other.w),
-		)
-	}
-	
-	pub fn max_elem(self) -> T
-		where T: IsNan {
-		self.x.non_nan_max(self.y).non_nan_max(self.z).non_nan_max(self.w)
-	}
-	
-	pub fn min_elem(self) -> T
-		where T: IsNan {
-		self.x.non_nan_min(self.y).non_nan_min(self.z).non_nan_min(self.w)
-	}
-	
-	pub fn clamp(self, min: Self, max: Self) -> Self
-		where T: PartialOrd {
-		self.min(max).max(min)
-	}
-	
-	pub fn elem_max(self, m: T) -> Self
-		where T: PartialOrd + Copy {
-		self.max(vec4(m,m,m,m))
-	}
-	
-	pub fn elem_min(self, m: T) -> Self
-		where T: PartialOrd + Copy {
-		self.min(vec4(m,m,m,m))
-	}
-	
-	pub fn elem_clamp(self, min: T, max: T) -> Self
-		where T: PartialOrd + Copy {
-		self.min(vec4(max,max,max,max)).max(vec4(min,min,min,min))
-	}
-	
-	pub fn sum_elem(self) -> T
-		where T: Add<Output=T> {
-		let Vec4{x,y,z,w} = self;
-		x+y+z+w
-	}
-	
-	pub fn mul_elem(self) -> T
-		where T: Mul<Output=T> {
-		let Vec4{x,y,z,w} = self;
-		x*y*z*w
-	}
-	
 	pub fn downsize(self) -> Vec3<T> {
-		vec3(self.x, self.y, self.z)
-	}
-	
-	pub fn is_nan(&self) -> Vec4<bool>
-		where T: IsNan {
-		vec4(self.x.is_nan(), self.y.is_nan(), self.z.is_nan(), self.w.is_nan())
-	}
-}
-
-pub use crate::prelude::{dot,distance,distance_squared,orthog_dist};
-impl<T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Abs> Dot<T> for Vec4<T> {
-	fn dot(&self, other: &Self) -> T {
-		(*self * *other).sum_elem()
-	}
-	fn orthog_dist(&self, other: &Self) -> T {
-		(*self - *other).abs().sum_elem()
-	}
-}
-
-impl<T: Mul<Output=T> + One> Product<Vec4<T>> for Vec4<T> {
-	fn product<I: Iterator<Item=Self>>(iter: I) -> Self {
-		iter.fold(Self::one(), |a, b| a * b)
-	}
-}
-
-impl<T: Add<Output=T> + Zero> Sum<Vec4<T>> for Vec4<T> {
-	fn sum<I: Iterator<Item=Self>>(iter: I) -> Self {
-		iter.fold(Self::zero(), |a, b| a + b)
-	}
-}
-
-impl<T: One> From<Vec3<T>> for Vec4<T> {
-	fn from(v: Vec3<T>) -> Self {
-		vec4(v.x,v.y,v.z,T::one())
-	}
-}
-
-pub fn vec4<T>(x: T, y: T, z: T, w: T) -> Vec4<T> {
-	Vec4 { x, y, z, w, }
-}
-
-impl Vec4<bool> {
-	pub fn and(self) -> bool {
-		self.x && self.y && self.z && self.w
-	}
-	
-	pub fn or(self) -> bool {
-		self.x || self.y || self.z || self.w
+		vec3(self.x,self.y,self.z)
 	}
 }
 
@@ -254,216 +130,6 @@ impl_ints2!(is_positive,is_negative);
 impl_floats1!(floor,ceil,round,trunc,fract,signum,sqrt,exp,exp2,ln,log2,log10,cbrt,exp_m1,ln_1p);
 impl_floats2!(is_infinite,is_finite,is_normal,is_sign_positive,is_sign_negative);
 
-impl<T> Div<T> for Vec4<T>
-	where T: Copy + Div<Output=T> {
-	type Output = Vec4<T>;
-	
-	fn div(self, scalar: T) -> Vec4<T> {
-		vec4(self.x / scalar, self.y / scalar, self.z / scalar, self.w / scalar)
-	}
-}
-
-impl<T> DivAssign<T> for Vec4<T>
-	where T: Copy + Div<Output=T> {
-	fn div_assign(&mut self, scalar: T) {
-		*self = *self / scalar;
-	}
-}
-
-impl<T> Div<Vec4<T>> for Vec4<T>
-	where T: Div<Output=T> {
-	type Output = Vec4<T>;
-	
-	fn div(self, other: Vec4<T>) -> Vec4<T> {
-		vec4(self.x / other.x, self.y / other.y, self.z / other.z, self.w / other.w)
-	}
-}
-
-impl<T> DivAssign<Vec4<T>> for Vec4<T>
-	where T: Copy + Div<Output=T> {
-	fn div_assign(&mut self, other: Vec4<T>) {
-		*self = *self / other;
-	}
-}
-
-impl<T> Mul<T> for Vec4<T>
-	where T: Copy + Mul<Output=T> {
-	type Output = Vec4<T>;
-	
-	fn mul(self, scalar: T) -> Vec4<T> {
-		vec4(self.x * scalar, self.y * scalar, self.z * scalar, self.w * scalar)
-	}
-}
-
-impl<T> MulAssign<T> for Vec4<T>
-	where T: Copy + Mul<Output=T> {
-	fn mul_assign(&mut self, scalar: T) {
-		*self = *self * scalar;
-	}
-}
-
-impl<T> Mul<Vec4<T>> for Vec4<T>
-	where T: Mul<Output=T> {
-	type Output = Vec4<T>;
-	
-	fn mul(self, other: Vec4<T>) -> Vec4<T> {
-		vec4(self.x * other.x, self.y * other.y, self.z * other.z, self.w * other.w)
-	}
-}
-
-impl<T> MulAssign<Vec4<T>> for Vec4<T>
-	where T: Copy + Mul<Output=T> {
-	fn mul_assign(&mut self, other: Vec4<T>) {
-		*self = *self * other;
-	}
-}
-
-impl<T> Add<T> for Vec4<T>
-	where T: Copy + Add<Output=T> {
-	type Output = Vec4<T>;
-	
-	fn add(self, scalar: T) -> Vec4<T> {
-		vec4(self.x + scalar, self.y + scalar, self.z + scalar, self.w + scalar)
-	}
-}
-
-impl<T> AddAssign<T> for Vec4<T>
-	where T: Copy + Add<Output=T> {
-	fn add_assign(&mut self, scalar: T) {
-		*self = *self + scalar;
-	}
-}
-
-impl<T> Add<Vec4<T>> for Vec4<T>
-	where T: Add<Output=T> {
-	type Output = Vec4<T>;
-	
-	fn add(self, other: Vec4<T>) -> Vec4<T> {
-		vec4(self.x + other.x, self.y + other.y, self.z + other.z, self.w + other.w)
-	}
-}
-
-impl<T> AddAssign<Vec4<T>> for Vec4<T>
-	where T: Copy + Add<Output=T> {
-	fn add_assign(&mut self, other: Vec4<T>) {
-		*self = *self + other;
-	}
-}
-
-impl<T> Sub<T> for Vec4<T>
-	where T: Copy + Sub<Output=T> {
-	type Output = Vec4<T>;
-	
-	fn sub(self, scalar: T) -> Vec4<T> {
-		vec4(self.x - scalar, self.y - scalar, self.z - scalar, self.w - scalar)
-	}
-}
-
-impl<T> SubAssign<T> for Vec4<T>
-	where T: Copy + Sub<Output=T> {
-	fn sub_assign(&mut self, scalar: T) {
-		*self = *self - scalar;
-	}
-}
-
-impl<T> Sub<Self> for Vec4<T>
-	where T: Sub<Output=T> {
-	type Output = Self;
-	
-	fn sub(self, other: Self) -> Self {
-		vec4(self.x - other.x, self.y - other.y, self.z - other.z, self.w - other.w)
-	}
-}
-
-impl<T> SubAssign<Self> for Vec4<T>
-	where T: Copy + Sub<Output=T> {
-	fn sub_assign(&mut self, other: Self) {
-		*self = *self - other;
-	}
-}
-
-impl<T> Rem<T> for Vec4<T>
-	where T: Copy + Rem<Output=T> {
-	type Output = Self;
-	
-	fn rem(self, scalar: T) -> Self {
-		vec4(self.x % scalar, self.y % scalar, self.z % scalar, self.w % scalar)
-	}
-}
-
-impl<T> RemAssign<T> for Vec4<T>
-	where T: Copy + Rem<Output=T> {
-	fn rem_assign(&mut self, scalar: T) {
-		*self = *self % scalar;
-	}
-}
-
-/*impl<T, U> Into<Vec4<U>> for Vec4<T>
-	where T: Into<U> {
-	fn from(v: Vec4<T>) -> Vec4<U> {
-		vec4(v.x.into(), v.y.into(), v.z.into())
-	}
-}*/
-
-impl<T> Default for Vec4<T>
-	where T: Default
-{
-	fn default() -> Self {
-		vec4(T::default(), T::default(), T::default(), T::default())
-	}
-}
-
-impl<T> Index<usize> for Vec4<T> {
-	type Output = T;
-	
-	fn index(&self, index: usize) -> &T {
-		match index {
-			0 => &self.x,
-			1 => &self.y,
-			2 => &self.z,
-			3 => &self.w,
-			_ => panic!("index out of bounds, index is {} but the len is 4",index),
-		}
-	}
-}
-
-
-impl<T> IndexMut<usize> for Vec4<T> {
-	fn index_mut(&mut self, index: usize) -> &mut T {
-		match index {
-			0 => &mut self.x,
-			1 => &mut self.y,
-			2 => &mut self.z,
-			3 => &mut self.w,
-			_ => panic!("index out of bounds, index is {} but the len is 4",index),
-		}
-	}
-}
-
-impl<T: Neg> Neg for Vec4<T> {
-	type Output = Vec4<<T as Neg>::Output>;
-	fn neg(self) -> Vec4<<T as Neg>::Output> { vec4(-self.x,-self.y,-self.z,-self.w) }
-}
-
-impl<T> ArrayTuple for Vec4<T> {
-	type Array = [T; 4];
-	type Tuple = (T, T, T, T);
-	fn into_array(self) -> [T; 4] {	let Vec4{x,y,z,w} = self; [x,y,z,w] }
-	fn into_tuple(self) -> (T, T, T, T) { self.into_array().into_tuple() }
-}
-
-impl<T> From<(T, T, T, T)> for Vec4<T> {
-	fn from(input: (T, T, T, T)) -> Self {
-		let (a,b,c,d) = input;
-		vec4(a,b,c,d)
-	}
-}
-impl<T> From<[T; 4]> for Vec4<T> {
-	fn from(input: [T; 4]) -> Self {
-		input.into_tuple().into()
-	}
-}
-
 impl<T: fmt::Display> fmt::Display for Vec4<T> {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		if let Some(p) = f.precision() {
@@ -490,39 +156,53 @@ impl<T: fmt::LowerExp> fmt::LowerExp for Vec4<T> {
 	}
 }
 
-impl Into<Vector4> for Vec4<f32> {
-	fn into(self) -> Vector4 {
-		Vector4 { x: self.x, y: self.y, z: self.z, w: self.w }
-	}
-}
-impl Into<Vector4_> for Vec4<f32> {
-	fn into(self) -> Vector4_ {
-		Vector4_ { x: self.x, y: self.y, z: self.z, w: self.w }
-	}
-}
-
-impl Into<Color> for Vec4<u8> {
-	fn into(self) -> Color {
-		Color { r: self.x, g: self.y, b: self.z, a: self.w }
-	}
-}
-impl Into<Color_> for Vec4<u8> {
-	fn into(self) -> Color_ {
-		Color_ { r: self.x, g: self.y, b: self.z, a: self.w }
+impl<T: FromStr> FromStr for Vec4<T> {
+	type Err = <T as FromStr>::Err;
+	
+	fn from_str(input: &str) -> Result<Self, Self::Err> { //TODO: use a collect-like method?
+		let mut words: Vec<&str> = input.split(|c: char| c.is_whitespace() || c == ',')
+			.map(|s| s.trim_matches(BRACKETS)).filter(|s| !s.is_empty()).collect();
+		while words.len() < 4 { words.push(""); }
+		let x = words[0].parse()?;
+		let y = words[1].parse()?;
+		let z = words[2].parse()?;
+		let w = words[3].parse()?;
+		Ok(vec4(x, y, z, w))
 	}
 }
 
-impl Into<Color> for Vec4<f32> {
-	fn into(self) -> Color {
-		(self * 255.0).min(Vec4::one() * 255.0).u8().into()
+impl From<Vec4<f32>> for Vector4 {
+	fn from(a: Vec4<f32>) -> Self {
+		Self { x: a.x, y: a.y, z: a.z, w: a.w }
 	}
 }
-impl Into<Color_> for Vec4<f32> {
-	fn into(self) -> Color_ {
-		(self * 255.0).min(Vec4::one() * 255.0).u8().into()
+impl From<Vec4<f32>> for Vector4_ {
+	fn from(a: Vec4<f32>) -> Self {
+		Self { x: a.x, y: a.y, z: a.z, w: a.w }
 	}
 }
 
+impl From<Vec4<u8>> for Color {
+	fn from(a: Vec4<u8>) -> Self {
+		Self { r: a.x, g: a.y, b: a.z, a: a.w }
+	}
+}
+impl From<Vec4<u8>> for Color_ {
+	fn from(a: Vec4<u8>) -> Self {
+		Color_ { r: a.x, g: a.y, b: a.z, a: a.w }
+	}
+}
+
+impl From<Vec4<f32>> for Color {
+	fn from(a: Vec4<f32>) -> Self {
+		(a * 255.0).min(Vec4::one() * 255.0).u8().into()
+	}
+}
+impl From<Vec4<f32>> for Color_ {
+	fn from(a: Vec4<f32>) -> Self {
+		(a * 255.0).min(Vec4::one() * 255.0).u8().into()
+	}
+}
 
 macro convert($T: ty, $($U: ident),*) {
 	$(
@@ -548,17 +228,13 @@ convert!(f32,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);
 convert!(f64,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);
 convert!(bool,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize);
 
-impl<T: FromStr> FromStr for Vec4<T> {
-	type Err = <T as FromStr>::Err;
-	
-	fn from_str(input: &str) -> Result<Self, Self::Err> { //TODO: use a collect-like method?
-		let mut words: Vec<&str> = input.split(|c: char| c.is_whitespace() || c == ',')
-			.map(|s| s.trim_matches(BRACKETS)).filter(|s| !s.is_empty()).collect();
-		while words.len() < 4 { words.push(""); }
-		let x = words[0].parse()?;
-		let y = words[1].parse()?;
-		let z = words[2].parse()?;
-		let w = words[3].parse()?;
-		Ok(vec4(x, y, z, w))
+/*impl<T: ValConsts + Serialize> Serialize for Vec4<T> {
+	fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+		let mut state = serializer.serialize_struct("Vec4", 4)?;
+		state.serialize_field("x", &self.x)?;
+		state.serialize_field("y", &self.y)?;
+		state.serialize_field("z", &self.z)?;
+		state.serialize_field("w", &self.w)?;
+		state.end()
 	}
-}
+}*/

@@ -9,5 +9,7 @@ pub mod mat3;
 pub mod mat4;
 pub mod quaternion;
 pub mod traits;
+#[macro_use]
+mod vector;
 
 mod prelude;

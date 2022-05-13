@@ -1,4 +1,3 @@
-use crate::prelude::*;
 use std::marker::Sized;
 
 mod numbers;
@@ -99,7 +98,9 @@ macro float_impl($t: ty) {
 				} else {
 					1
 				} + exp.is_negative() as usize;
-				let limit = limit.saturating_sub(exp_len + self.is_sign_negative() as usize + 2); //we cannot properly represent the number *and* guarentee that it won't have too many characters if limit < 7, because we need up to 4 for exponent, 2 for mantissa, and 1 for the letter e
+				let limit = limit.saturating_sub(exp_len + self.is_sign_negative() as usize + 2);
+				//we cannot properly represent the number *and* guarentee that it won't have too many characters if limit < 7,
+				//because we need up to 4 for exponent, 2 for mantissa, and 1 for the letter e
 				//proper representation is prioritized over obeying the character limit
 				format!("{:.*e}",limit,self)
 			};
@@ -117,22 +118,3 @@ macro float_impl($t: ty) {
 
 float_impl!(f32);
 float_impl!(f64);
-
-pub trait Dot<T>: Copy + Sub<Output=Self> + Sized {
-	fn dot(&self, other: &Self) -> T;
-	fn distance_squared(&self, other: &Self) -> T {
-		let x = *self - *other;
-		x.dot(&x)
-	}
-	fn orthog_dist(&self, other: &Self) -> T;
-}
-
-pub trait Distance<T> {
-	fn distance(&self, other: &Self) -> T;
-}
-
-impl<T: Sqrt<T>, V: Dot<T>> Distance<T> for V {
-	fn distance(&self, other: &Self) -> T {
-		self.distance_squared(other).sqrt()
-	}
-}

@@ -47,3 +47,10 @@ macro impl_floats($($t: ident),*) {
 
 impl_ints!(u8,u16,u32,u64,usize,i8,i16,i32,i64,isize);
 impl_floats!(f32,f64);
+
+impl Zero for bool {
+	fn zero() -> Self { false }
+}
+impl One for bool {
+	fn one() -> Self { true }
+}

@@ -1,5 +1,4 @@
 use crate::prelude::*;
-
 use crate::vec4::*;
 
 #[repr(C)]
@@ -10,10 +9,40 @@ pub struct Mat4<T> {
 	pub z: Vec4<T>,
 	pub w: Vec4<T>,
 }
+pub fn mat4<T>(x: Vec4<T>, y: Vec4<T>, z: Vec4<T>, w: Vec4<T>) -> Mat4<T> {
+	Mat4 { x, y, z, w, }
+}
 
-impl<T> Mat4<T> {
-	pub fn det(self) -> T
-		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> {
+impl<T: Copy + Zero + One + Mul<Output=T> + Add<Output=T> + Div<Output=T> + Sub<Output=T> + Neg<Output=T>> Mat4<T>
+	where Vec4<T>: VecOps<T> {
+	pub fn ident() -> Self {
+		mat4(
+			vec4(T::one(), T::zero(), T::zero(), T::zero()),
+			vec4(T::zero(), T::one(), T::zero(), T::zero()),
+			vec4(T::zero(), T::zero(), T::one(), T::zero()),
+			vec4(T::zero(), T::zero(), T::zero(), T::one()),
+		)
+	}
+	
+	pub fn transpose(self) -> Self {
+		mat4(
+			vec4(self.x.x, self.y.x, self.z.x, self.w.x),
+			vec4(self.x.y, self.y.y, self.z.y, self.w.y),
+			vec4(self.x.z, self.y.z, self.z.z, self.w.z),
+			vec4(self.x.w, self.y.w, self.z.w, self.w.w),
+		)
+	}
+	
+	pub fn apply_to(self, v: Vec4<T>) -> Vec4<T> {
+		vec4(
+			dot(self.x, v),
+			dot(self.y, v),
+			dot(self.z, v),
+			dot(self.w, v),
+		)
+	}
+	
+	pub fn det(self) -> T {
 		let Mat4{ x,y,z,w } = self;
 		  x.x * y.y * z.z * w.w
 		+ x.x * y.z * z.w * w.y
@@ -48,18 +77,7 @@ impl<T> Mat4<T> {
 		- x.w * y.z * z.x * w.y
 	}
 	
-	pub fn cofactor(self) -> Self
-		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Div<Output=T> + Neg<Output=T> {
-		unimplemented!()
-	}
-	
-	pub fn adjoint(self) -> Self
-		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Div<Output=T> + Neg<Output=T> {
-		self.cofactor().transpose()
-	}
-	
-	pub fn inv(self) -> Self
-		where T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Div<Output=T> + Neg<Output=T> {
+	pub fn inv(self) -> Self {
 		let Mat4{ x,y,z,w } = self;
 		mat4(
 			vec4(
@@ -117,83 +135,25 @@ impl<T> Mat4<T> {
 		)
 	}
 	
-	pub fn ident() -> Self
-		where T: Zero + One {
-		mat4(
-			vec4(T::one(), T::zero(), T::zero(), T::zero()),
-			vec4(T::zero(), T::one(), T::zero(), T::zero()),
-			vec4(T::zero(), T::zero(), T::one(), T::zero()),
-			vec4(T::zero(), T::zero(), T::zero(), T::one()),
-		)
+	pub fn cofactor(self) -> Self {
+		todo!()
 	}
 	
-	pub fn apply_to(self, v: Vec4<T>) -> Vec4<T>
-		where Vec4<T>: Dot<T> + Copy {
-		vec4(
-			dot(self.x, v),
-			dot(self.y, v),
-			dot(self.z, v),
-			dot(self.w, v),
-		)
-	}
-	
-	pub fn transpose(self) -> Self {
-		mat4(
-			vec4(self.x.x, self.y.x, self.z.x, self.w.x),
-			vec4(self.x.y, self.y.y, self.z.y, self.w.y),
-			vec4(self.x.z, self.y.z, self.z.z, self.w.z),
-			vec4(self.x.w, self.y.w, self.z.w, self.w.w),
-		)
+	pub fn adjoint(self) -> Self {
+		self.cofactor().transpose()
 	}
 }
 
-pub fn mat4<T>(x: Vec4<T>, y: Vec4<T>, z: Vec4<T>, w: Vec4<T>) -> Mat4<T> {
-	Mat4 { x, y, z, w, }
-}
-
-impl<T> Default for Mat4<T>
-	where T: Zero + One {
+impl<T: Copy + Zero + One + Mul<Output=T> + Add<Output=T> + Div<Output=T> + Sub<Output=T> + Neg<Output=T>> Default for Mat4<T>
+	where Vec4<T>: VecOps<T> {
 	fn default() -> Self {
 		Mat4::ident()
 	}
 }
 
-impl<T> Add<Self> for Mat4<T>
-	where T: Add<Output=T> {
+impl<T: Copy + Zero + One + Mul<Output=T> + Add<Output=T> + Div<Output=T> + Sub<Output=T> + Neg<Output=T>> Mul<Mat4<T>> for Mat4<T>
+	where Vec4<T>: VecOps<T> {
 	type Output = Self;
-	
-	fn add(self, other: Self) -> Self {
-		mat4(self.x + other.x, self.y + other.y, self.z + other.z, self.w + other.w)
-	}
-}
-
-impl<T> AddAssign<Self> for Mat4<T>
-	where T: Copy + Add<Output=T> {
-	fn add_assign(&mut self, other: Self) {
-		*self = *self + other;
-	}
-}
-
-impl<T> Sub<Self> for Mat4<T>
-	where T: Sub<Output=T> {
-	type Output = Self;
-	
-	fn sub(self, other: Self) -> Self {
-		mat4(self.x - other.x, self.y - other.y, self.z - other.z, self.w - other.w)
-	}
-}
-
-impl<T> SubAssign<Self> for Mat4<T>
-	where T: Copy + Sub<Output=T> {
-	fn sub_assign(&mut self, other: Self) {
-		*self = *self - other;
-	}
-}
-
-impl<T> Mul<Mat4<T>> for Mat4<T>
-	where Vec4<T>: Dot<T> + Copy {
-	type Output = Self;
-	
 	fn mul(self, other: Self) -> Self {
 		let s = self;
 		let t = other.transpose();
@@ -206,16 +166,41 @@ impl<T> Mul<Mat4<T>> for Mat4<T>
 	}
 }
 
-impl<T> Mul<Vec4<T>> for Mat4<T>
-	where Vec4<T>: Dot<T> + Copy {
+impl<T: Copy + Zero + One + Mul<Output=T> + Add<Output=T> + Div<Output=T> + Sub<Output=T> + Neg<Output=T>> Mul<Vec4<T>> for Mat4<T>
+	where Vec4<T>: VecOps<T> {
 	type Output = Vec4<T>;
-	
 	fn mul(self, v: Vec4<T>) -> Vec4<T> {
 		self.apply_to(v)
 	}
 }
 
-impl<T: Neg> Neg for Mat4<T> {
+impl<T: Copy + Zero + One + Mul<Output=T> + Add<Output=T> + Div<Output=T> + Sub<Output=T> + Neg<Output=T>> Add<Self> for Mat4<T> {
+	type Output = Self;
+	fn add(self, other: Self) -> Self {
+		mat4(self.x + other.x, self.y + other.y, self.z + other.z, self.w + other.w)
+	}
+}
+
+impl<T: Copy + Zero + One + Mul<Output=T> + Add<Output=T> + Div<Output=T> + Sub<Output=T> + Neg<Output=T>> AddAssign<Self> for Mat4<T> {
+	fn add_assign(&mut self, other: Self) {
+		*self = *self + other;
+	}
+}
+
+impl<T: Copy + Zero + One + Mul<Output=T> + Add<Output=T> + Div<Output=T> + Sub<Output=T> + Neg<Output=T>> Sub<Self> for Mat4<T> {
+	type Output = Self;
+	fn sub(self, other: Self) -> Self {
+		mat4(self.x - other.x, self.y - other.y, self.z - other.z, self.w - other.w)
+	}
+}
+
+impl<T: Copy + Zero + One + Mul<Output=T> + Add<Output=T> + Div<Output=T> + Sub<Output=T> + Neg<Output=T>> SubAssign<Self> for Mat4<T> {
+	fn sub_assign(&mut self, other: Self) {
+		*self = *self - other;
+	}
+}
+
+impl<T: Copy + Zero + One + Mul<Output=T> + Add<Output=T> + Div<Output=T> + Sub<Output=T> + Neg<Output=T>> Neg for Mat4<T> {
 	type Output = Mat4<<T as Neg>::Output>;
 	fn neg(self) -> Mat4<<T as Neg>::Output> { mat4(-self.x,-self.y,-self.z,-self.w) }
 }
@@ -234,9 +219,9 @@ impl<T> ArrayTuple for Mat4<T> {
 	}
 }
 
-impl Into<Matrix> for Mat4<f32> {
-	fn into(self) -> Matrix {
-		let a = self.transpose(); //since we use row major while they use column major
+impl From<Mat4<f32>> for Matrix {
+	fn from(a: Mat4<f32>) -> Self {
+		let a = a.transpose(); //since we use row major while they use column major
 		Matrix {
 			m0: a.x.x, m1: a.x.y, m2: a.x.z, m3: a.x.w,
 			m4: a.y.x, m5: a.y.y, m6: a.y.z, m7: a.y.w,

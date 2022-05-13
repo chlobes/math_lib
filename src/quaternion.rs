@@ -11,39 +11,35 @@ pub struct Quaternion<T> {
 	pub j: T,
 	pub k: T,
 }
-
-impl<T> Quaternion<T> {
-	pub fn normalize(self) -> Self
-		where T: Copy + Sqrt<T> + Div<Output=T> + Mul<Output=T> + Add<Output=T> {
-		let magnitude = (self.i * self.i + self.j * self.j + self.k * self.k + self.r * self.r).sqrt();
-		Self { r: self.r / magnitude, i: self.i / magnitude, j: self.j / magnitude, k: self.k / magnitude }
+pub fn quaternion<T>(r: T, i: T, j: T, k: T) -> Quaternion<T> {
+	Quaternion { r, i, j, k }
+}
+//TODO: integer quaternions?
+impl<T: Copy + Zero + One + Two + Mul<Output=T> + Add<Output=T> + Div<Output=T> + Sub<Output=T> + Trig + Sqrt<T> + Neg<Output=T> + Abs> Quaternion<T> {
+	pub fn ident() -> Self {
+		quaternion(T::one(), T::zero(), T::zero(), T::zero())
 	}
 	
-	pub fn inverse(self) -> Self
-		where T: Neg<Output=T> {
+	pub fn magnitude(self) -> T {
+		(self.i * self.i + self.j * self.j + self.k * self.k + self.r * self.r).sqrt()
+	}
+	
+	pub fn normalize(self) -> Self {
+		let mag = self.magnitude();
+		Self { r: self.r / mag, i: self.i / mag, j: self.j / mag, k: self.k / mag }
+	}
+	
+	pub fn inv(self) -> Self {
 		Self { r: -self.r, i: self.i, j: self.j, k: self.k }
 	}
 	
-	pub fn from_euler_angles(input: Vec3<T>) -> Self
-		where T: Copy + Sqrt<T> + Trig + Two + Add<Output=T> + Mul<Output=T> + Div<Output=T> {
-		let magnitude = input.magnitude();
-		let (factor, r) = (magnitude / T::two()).sin_cos();
+	pub fn from_euler_angles(input: Vec3<T>) -> Self {
+		let (factor, r) = (input.magnitude() / T::two()).sin_cos();
 		let (i, j, k) = (factor * input.x, factor * input.y, factor * input.z);
 		quaternion(r, i, j, k)
 	}
 	
-	pub fn convert<U>(self) -> Quaternion<U>
-		where T: Into<U> {
-		Quaternion { r: self.r.into(), i: self.i.into(), j: self.j.into(), k: self.k.into() }
-	}
-	
-	pub fn ident() -> Self
-		where T: Zero + One {
-		quaternion(T::one(), T::zero(), T::zero(), T::zero())
-	}
-	
-	pub fn rot_mat(self) -> Mat3<T>
-		where T: Copy + Two + One + Mul<Output=T> + Add<Output=T> + Sub<Output=T> {
+	pub fn rot_mat(self) -> Mat3<T> {
 		let (r, i, j, k) = (self.r, self.i, self.j, self.k);
 		mat3(
 			vec3(T::one() - T::two() * (j * j + k * k), T::two() * (i * j - r * k), T::two() * (i * k + r * j)),
@@ -53,27 +49,51 @@ impl<T> Quaternion<T> {
 	}
 }
 
-impl<T: Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Copy + Zero + One> Product<Quaternion<T>> for Quaternion<T> {
+impl<T: Copy + Zero + One + Two + Mul<Output=T> + Add<Output=T> + Div<Output=T> + Sub<Output=T> + Trig + Sqrt<T> + Neg<Output=T> + Abs> Default for Quaternion<T> {
+	fn default() -> Self {
+		Quaternion::ident()
+	}
+}
+
+impl<T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T>> Mul<Quaternion<T>> for Quaternion<T> {
+	type Output = Self;
+	fn mul(self, other: Self) -> Self {
+		Self {
+			r: self.r * other.r - self.i * other.i - self.j * other.j - self.k * other.k,
+			i: self.r * other.i + self.i * other.r + self.j * other.k - self.k * other.j,
+			j: self.r * other.j - self.i * other.k + self.j * other.r + self.k * other.i,
+			k: self.r * other.k + self.i * other.j - self.j * other.i + self.k * other.r,
+		}
+	}
+}
+
+impl<T: Copy + Zero + One + Two + Mul<Output=T> + Add<Output=T> + Div<Output=T> + Sub<Output=T> + Trig + Sqrt<T> + Neg<Output=T> + Abs> Product<Quaternion<T>> for Quaternion<T> {
 	fn product<I: Iterator<Item=Self>>(iter: I) -> Self {
 		iter.fold(Self::ident(), |a, b| a * b)
 	}
 }
 
-pub fn quaternion<T>(r: T, i: T, j: T, k: T) -> Quaternion<T> {
-	Quaternion { r, i, j, k }
+impl<T> Index<usize> for Quaternion<T> {
+	type Output = T;
+	fn index(&self, index: usize) -> &T {
+		match index {
+			0 => &self.r,
+			1 => &self.i,
+			2 => &self.j,
+			3 => &self.k,
+			_ => panic!("index out of bounds, index is {} but the len is 4",index),
+		}
+	}
 }
 
-impl<T> Mul<Quaternion<T>> for Quaternion<T>
-	where T: Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Copy
-{
-	type Output = Self;
-	
-	fn mul(self, other: Self) -> Self {
-		Quaternion {
-			r: self.r * other.r - self.i * other.i - self.j * other.j - self.k * other.k,
-			i: self.r * other.i + self.i * other.r + self.j * other.k - self.k * other.j,
-			j: self.r * other.j - self.i * other.k + self.j * other.r + self.k * other.i,
-			k: self.r * other.k + self.i * other.j - self.j * other.i + self.k * other.r,
+impl<T> IndexMut<usize> for Quaternion<T> {
+	fn index_mut(&mut self, index: usize) -> &mut T {
+		match index {
+			0 => &mut self.r,
+			1 => &mut self.i,
+			2 => &mut self.j,
+			3 => &mut self.k,
+			_ => panic!("index out of bounds, index is {} but the len is 4",index),
 		}
 	}
 }
@@ -83,14 +103,6 @@ impl<T> ArrayTuple for Quaternion<T> {
 	type Tuple = (T,T,T,T);
 	fn into_array(self) -> [T; 4] { let Quaternion{r,i,j,k} = self; [r,i,j,k] }
 	fn into_tuple(self) -> (T,T,T,T) { self.into_array().into_tuple() }
-}
-
-impl<T> Default for Quaternion<T>
-	where T: Zero + One
-{
-	fn default() -> Self {
-		Self::ident()
-	}
 }
 
 impl<T: fmt::Display> fmt::Display for Quaternion<T> {
@@ -109,7 +121,6 @@ impl<T: NiceFmt> NiceFmt for Quaternion<T> {
 	}
 }
 
-
 impl<T: fmt::LowerExp> fmt::LowerExp for Quaternion<T> {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		if let Some(p) = f.precision() {
@@ -120,14 +131,25 @@ impl<T: fmt::LowerExp> fmt::LowerExp for Quaternion<T> {
 	}
 }
 
-impl Into<RaylibQuaternion> for Quaternion<f32> {
-	fn into(self) -> RaylibQuaternion {
-		RaylibQuaternion { x: self.i, y: self.j, z: self.k, w: self.r }
+impl<T: FromStr> FromStr for Quaternion<T> {
+	type Err = <T as FromStr>::Err;
+	
+	fn from_str(input: &str) -> Result<Self, Self::Err> { //TODO: use a collect-like method?
+		let mut words: Vec<&str> = input.split(|c: char| c.is_whitespace() || c == ',')
+			.map(|s| s.trim_matches(BRACKETS)).filter(|s| !s.is_empty()).collect();
+		while words.len() < 4 { words.push(""); }
+		Ok(quaternion(words[0].parse()?, words[1].parse()?, words[2].parse()?, words[3].parse()?))
 	}
 }
-impl Into<RaylibQuaternion_> for Quaternion<f32> {
-	fn into(self) -> RaylibQuaternion_ {
-		RaylibQuaternion_ { x: self.i, y: self.j, z: self.k, w: self.r }
+
+impl From<Quaternion<f32>> for RaylibQuaternion {
+	fn from(a: Quaternion<f32>) -> Self {
+		Self { x: a.i, y: a.j, z: a.k, w: a.r }
+	}
+}
+impl From<Quaternion<f32>> for RaylibQuaternion_ {
+	fn from(a: Quaternion<f32>) -> Self {
+		Self { x: a.i, y: a.j, z: a.k, w: a.r }
 	}
 }
 
@@ -154,18 +176,3 @@ convert!(isize,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);
 convert!(f32,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);
 convert!(f64,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);
 convert!(bool,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize);
-
-impl<T: FromStr> FromStr for Quaternion<T> {
-	type Err = <T as FromStr>::Err;
-	
-	fn from_str(input: &str) -> Result<Self, Self::Err> { //TODO: use a collect-like method?
-		let mut words: Vec<&str> = input.split(|c: char| c.is_whitespace() || c == ',')
-			.map(|s| s.trim_matches(BRACKETS)).filter(|s| !s.is_empty()).collect();
-		while words.len() < 4 { words.push(""); }
-		let r = words[0].parse()?;
-		let i = words[1].parse()?;
-		let j = words[2].parse()?;
-		let k = words[3].parse()?;
-		Ok(quaternion(r, i, j, k))
-	}
-}
