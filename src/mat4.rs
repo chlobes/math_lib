@@ -205,20 +205,6 @@ impl<T: Copy + Zero + One + Mul<Output=T> + Add<Output=T> + Div<Output=T> + Sub<
 	fn neg(self) -> Mat4<<T as Neg>::Output> { mat4(-self.x,-self.y,-self.z,-self.w) }
 }
 
-type CT<T> = (T,T,T,T); //clippy complaints
-impl<T> ArrayTuple for Mat4<T> {
-	type Array = [[T; 4]; 4];
-	type Tuple = (CT<T>,CT<T>,CT<T>,CT<T>);
-	fn into_array(self) -> Self::Array {
-		let Mat4{x,y,z,w} = self;
-		[x.into_array(),y.into_array(),z.into_array(),w.into_array()]
-	}
-	fn into_tuple(self) -> Self::Tuple {
-		let Mat4{x,y,z,w} = self;
-		(x.into_tuple(),y.into_tuple(),z.into_tuple(),w.into_tuple())
-	}
-}
-
 impl From<Mat4<f32>> for Matrix {
 	fn from(a: Mat4<f32>) -> Self {
 		let a = a.transpose(); //since we use row major while they use column major

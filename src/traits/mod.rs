@@ -30,7 +30,7 @@ pub trait IsNan: PartialOrd {
 	fn non_nan_min(self, other: Self) -> Self;
 }
 
-impl<T: PartialOrd + Sized> IsNan for T {
+impl<T: PartialOrd> IsNan for T {
 	default fn is_nan(&self) -> bool { false }
 	default fn non_nan_max(self, other: Self) -> Self { if other.is_nan() || self > other { self } else { other } }
 	default fn non_nan_min(self, other: Self) -> Self { if other.is_nan() || self < other { self } else { other } }

@@ -1,4 +1,3 @@
-pub use array_tuple::ArrayTuple;
 pub use std::ops::*;
 pub use std::marker::Copy;
 pub use crate::traits::*;

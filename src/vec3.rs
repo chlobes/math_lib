@@ -8,21 +8,24 @@ pub use crate::prelude::{dot,distance,distance_squared,orthog_dist,angle_between
 #[derive(Debug,Default,Copy,Clone,PartialEq,Eq,Hash,Serialize,Deserialize)]
 pub struct Vec3<T> { pub x: T, pub y: T, pub z: T, }
 
-impl<T> ArrayTuple for Vec3<T> {
-	type Array = [T; 3];
-	type Tuple = (T, T, T);
-	fn into_array(self) -> [T; 3] {	[self.x,self.y,self.z] }
-	fn into_tuple(self) -> (T, T, T) { self.into_array().into_tuple() }
-}
 impl<T> From<(T, T, T)> for Vec3<T> {
-	fn from(t: (T, T, T)) -> Self {
-		let (x,y,z) = t;
+	fn from((x,y,z): (T, T, T)) -> Self {
 		vec3(x,y,z)
 	}
 }
 impl<T> From<[T; 3]> for Vec3<T> {
-	fn from(t: [T; 3]) -> Self {
-		t.into_tuple().into()
+	fn from([x,y,z]: [T; 3]) -> Self {
+		vec3(x,y,z)
+	}
+}
+impl<T> From<Vec3<T>> for (T, T, T) {
+	fn from(v: Vec3<T>) -> Self {
+		(v.x,v.y,v.z)
+	}
+}
+impl<T> From<Vec3<T>> for [T; 3] {
+	fn from(v: Vec3<T>) -> Self {
+		[v.x,v.y,v.z]
 	}
 }
 

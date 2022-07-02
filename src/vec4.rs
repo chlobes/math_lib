@@ -7,21 +7,24 @@ pub use crate::prelude::{dot,distance,distance_squared,orthog_dist,angle_between
 #[derive(Debug,Default,Copy,Clone,PartialEq,Eq,Hash,Serialize,Deserialize)]
 pub struct Vec4<T> { pub x: T, pub y: T, pub z: T, pub w: T }
 
-impl<T> ArrayTuple for Vec4<T> {
-	type Array = [T; 4];
-	type Tuple = (T, T, T, T);
-	fn into_array(self) -> [T; 4] {	[self.x,self.y,self.z,self.w] }
-	fn into_tuple(self) -> (T, T, T, T) { self.into_array().into_tuple() }
-}
 impl<T> From<(T, T, T, T)> for Vec4<T> {
-	fn from(input: (T, T, T, T)) -> Self {
-		let (x,y,z,w) = input;
+	fn from((x,y,z,w): (T, T, T, T)) -> Self {
 		vec4(x,y,z,w)
 	}
 }
 impl<T> From<[T; 4]> for Vec4<T> {
-	fn from(input: [T; 4]) -> Self {
-		input.into_tuple().into()
+	fn from([x,y,z,w]: [T; 4]) -> Self {
+		vec4(x,y,z,w)
+	}
+}
+impl<T> From<Vec4<T>> for (T, T, T, T) {
+	fn from(v: Vec4<T>) -> Self {
+		(v.x,v.y,v.z,v.w)
+	}
+}
+impl<T> From<Vec4<T>> for [T; 4] {
+	fn from(v: Vec4<T>) -> Self {
+		[v.x,v.y,v.z,v.w]
 	}
 }
 

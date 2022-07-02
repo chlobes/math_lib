@@ -7,21 +7,24 @@ pub use crate::prelude::{dot,distance,distance_squared,orthog_dist,angle_between
 #[derive(Debug,Default,Copy,Clone,PartialEq,Eq,Hash,Serialize,Deserialize)]
 pub struct Vec2<T> { pub x: T, pub y: T }
 
-impl<T> ArrayTuple for Vec2<T> {
-	type Array = [T; 2];
-	type Tuple = (T, T);
-	fn into_array(self) -> [T; 2] {	[self.x,self.y] }
-	fn into_tuple(self) -> (T, T) { self.into_array().into_tuple() }
-}
 impl<T> From<(T, T)> for Vec2<T> {
-	fn from(t: (T, T)) -> Self {
-		let (x,y) = t;
+	fn from((x, y): (T, T)) -> Self {
 		vec2(x,y)
 	}
 }
 impl<T> From<[T; 2]> for Vec2<T> {
-	fn from(t: [T; 2]) -> Self {
-		t.into_tuple().into()
+	fn from([x,y]: [T; 2]) -> Self {
+		vec2(x,y)
+	}
+}
+impl<T> From<Vec2<T>> for (T, T) {
+	fn from(v: Vec2<T>) -> Self {
+		(v.x,v.y)
+	}
+}
+impl<T> From<Vec2<T>> for [T; 2] {
+	fn from(v: Vec2<T>) -> Self {
+		[v.x,v.y]
 	}
 }
 

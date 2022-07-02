@@ -43,7 +43,7 @@ macro_rules! impl_vec {
 	
 	impl<T: Copy + Mul<Output=T> + Add<Output=T> + Sub<Output=T> + Abs> VecOps<T> for $type<T> {
 		fn sum_elem(self) -> T {
-			let arr = self.into_array();
+			let arr: [T; _] = self.into();
 			let mut iter = arr.iter();
 			let mut r = *iter.next().unwrap();
 			while let Some(&x) = iter.next() {
@@ -83,7 +83,7 @@ macro_rules! impl_vec {
 		
 		pub fn min_elem(self) -> T
 			where T: IsNan {
-			let arr = self.into_array();
+			let arr: [T; _] = self.into();
 			let mut iter = arr.iter();
 			let mut r = *iter.next().unwrap();
 			while let Some(&x) = iter.next() {
@@ -94,7 +94,7 @@ macro_rules! impl_vec {
 		
 		pub fn max_elem(self) -> T
 			where T: IsNan {
-			let arr = self.into_array();
+			let arr: [T; _] = self.into();
 			let mut iter = arr.iter();
 			let mut r = *iter.next().unwrap();
 			while let Some(&x) = iter.next() {

@@ -117,19 +117,6 @@ impl<T: Neg> Neg for Mat2<T> {
 	fn neg(self) -> Self::Output { mat2(-self.x,-self.y) }
 }
 
-impl<T> ArrayTuple for Mat2<T> {
-	type Array = [[T; 2]; 2];
-	type Tuple = ((T,T),(T,T));
-	fn into_array(self) -> Self::Array {
-		let Self{x,y} = self;
-		[x.into_array(),y.into_array()]
-	}
-	fn into_tuple(self) -> Self::Tuple {
-		let Self{x,y} = self;
-		(x.into_tuple(),y.into_tuple())
-	}
-}
-
 macro convert($T: ty, $($U: ident),*) {
 	$(
 		impl Mat2<$T> {

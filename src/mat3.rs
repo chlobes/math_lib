@@ -174,20 +174,6 @@ impl<T: Copy + Zero + One + Mul<Output=T> + Add<Output=T> + Div<Output=T> + Sub<
 	fn neg(self) -> Mat3<<T as Neg>::Output> { mat3(-self.x,-self.y,-self.z) }
 }
 
-type CT<T> = (T,T,T); //clippy complaints
-impl<T> ArrayTuple for Mat3<T> {
-	type Array = [[T; 3]; 3];
-	type Tuple = (CT<T>,CT<T>,CT<T>);
-	fn into_array(self) -> Self::Array {
-		let Mat3{x,y,z} = self;
-		[x.into_array(),y.into_array(),z.into_array()]
-	}
-	fn into_tuple(self) -> Self::Tuple {
-		let Mat3{x,y,z} = self;
-		(x.into_tuple(),y.into_tuple(),z.into_tuple())
-	}
-}
-
 macro convert($T: ty, $($U: ident),*) {
 	$(
 		impl Mat3<$T> {
