@@ -1,5 +1,5 @@
 #![allow(incomplete_features)]
-#![feature(decl_macro,specialization,int_abs_diff)]
+#![feature(decl_macro,specialization)]
 
 pub mod vec2;
 pub mod vec3;
