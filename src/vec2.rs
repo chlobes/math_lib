@@ -8,122 +8,122 @@ pub use crate::prelude::{dot,distance,distance_squared,orthog_dist,angle_between
 pub struct Vec2<T> { pub x: T, pub y: T }
 
 impl<T> From<(T, T)> for Vec2<T> {
-	fn from((x, y): (T, T)) -> Self {
-		vec2(x,y)
-	}
+    fn from((x, y): (T, T)) -> Self {
+        vec2(x,y)
+    }
 }
 impl<T> From<[T; 2]> for Vec2<T> {
-	fn from([x,y]: [T; 2]) -> Self {
-		vec2(x,y)
-	}
+    fn from([x,y]: [T; 2]) -> Self {
+        vec2(x,y)
+    }
 }
 impl<T> From<Vec2<T>> for (T, T) {
-	fn from(v: Vec2<T>) -> Self {
-		(v.x,v.y)
-	}
+    fn from(v: Vec2<T>) -> Self {
+        (v.x,v.y)
+    }
 }
 impl<T> From<Vec2<T>> for [T; 2] {
-	fn from(v: Vec2<T>) -> Self {
-		[v.x,v.y]
-	}
+    fn from(v: Vec2<T>) -> Self {
+        [v.x,v.y]
+    }
 }
 
 impl_vec!(Vec2, vec2, (x, y));
 
 impl<T> Vec2<T> {
-	pub fn extend(self, z: T) -> Vec3<T> {
-		vec3(self.x, self.y, z)
-	}
+    pub fn extend(self, z: T) -> Vec3<T> {
+        vec3(self.x, self.y, z)
+    }
 }
 
 macro impl_ints1($($U: ident),*) {
-	$(
-		impl Vec2<isize> {
-			pub fn $U(self) -> Self {
-				vec2(self.x.$U(), self.y.$U())
-			}
-		}
-		impl Vec2<i64> {
-			pub fn $U(self) -> Self {
-				vec2(self.x.$U(), self.y.$U())
-			}
-		}
-		impl Vec2<i32> {
-			pub fn $U(self) -> Self {
-				vec2(self.x.$U(), self.y.$U())
-			}
-		}
-		impl Vec2<i16> {
-			pub fn $U(self) -> Self {
-				vec2(self.x.$U(), self.y.$U())
-			}
-		}
-		impl Vec2<i8> {
-			pub fn $U(self) -> Self {
-				vec2(self.x.$U(), self.y.$U())
-			}
-		}
-	)*
+    $(
+        impl Vec2<isize> {
+            pub fn $U(self) -> Self {
+                vec2(self.x.$U(), self.y.$U())
+            }
+        }
+        impl Vec2<i64> {
+            pub fn $U(self) -> Self {
+                vec2(self.x.$U(), self.y.$U())
+            }
+        }
+        impl Vec2<i32> {
+            pub fn $U(self) -> Self {
+                vec2(self.x.$U(), self.y.$U())
+            }
+        }
+        impl Vec2<i16> {
+            pub fn $U(self) -> Self {
+                vec2(self.x.$U(), self.y.$U())
+            }
+        }
+        impl Vec2<i8> {
+            pub fn $U(self) -> Self {
+                vec2(self.x.$U(), self.y.$U())
+            }
+        }
+    )*
 }
 
 macro impl_ints2($($U: ident),*) {
-	$(
-		impl Vec2<isize> {
-			pub fn $U(self) -> Vec2<bool> {
-				vec2(self.x.$U(), self.y.$U())
-			}
-		}
-		impl Vec2<i64> {
-			pub fn $U(self) -> Vec2<bool> {
-				vec2(self.x.$U(), self.y.$U())
-			}
-		}
-		impl Vec2<i32> {
-			pub fn $U(self) -> Vec2<bool> {
-				vec2(self.x.$U(), self.y.$U())
-			}
-		}
-		impl Vec2<i16> {
-			pub fn $U(self) -> Vec2<bool> {
-				vec2(self.x.$U(), self.y.$U())
-			}
-		}
-		impl Vec2<i8> {
-			pub fn $U(self) -> Vec2<bool> {
-				vec2(self.x.$U(), self.y.$U())
-			}
-		}
-	)*
+    $(
+        impl Vec2<isize> {
+            pub fn $U(self) -> Vec2<bool> {
+                vec2(self.x.$U(), self.y.$U())
+            }
+        }
+        impl Vec2<i64> {
+            pub fn $U(self) -> Vec2<bool> {
+                vec2(self.x.$U(), self.y.$U())
+            }
+        }
+        impl Vec2<i32> {
+            pub fn $U(self) -> Vec2<bool> {
+                vec2(self.x.$U(), self.y.$U())
+            }
+        }
+        impl Vec2<i16> {
+            pub fn $U(self) -> Vec2<bool> {
+                vec2(self.x.$U(), self.y.$U())
+            }
+        }
+        impl Vec2<i8> {
+            pub fn $U(self) -> Vec2<bool> {
+                vec2(self.x.$U(), self.y.$U())
+            }
+        }
+    )*
 }
 
 macro impl_floats1($($U: ident),*) {
-	$(
-		impl Vec2<f64> {
-			pub fn $U(self) -> Self {
-				vec2(self.x.$U(), self.y.$U())
-			}
-		}
-		impl Vec2<f32> {
-			pub fn $U(self) -> Self {
-				vec2(self.x.$U(), self.y.$U())
-			}
-		}
-	)*
+    $(
+        impl Vec2<f64> {
+            pub fn $U(self) -> Self {
+                vec2(self.x.$U(), self.y.$U())
+            }
+        }
+        impl Vec2<f32> {
+            pub fn $U(self) -> Self {
+                vec2(self.x.$U(), self.y.$U())
+            }
+        }
+    )*
 }
 
 macro impl_floats2($($U: ident),*) {
-	$(
-		impl Vec2<f64> {
-			pub fn $U(self) -> Vec2<bool> {
-				vec2(self.x.$U(), self.y.$U())
-			}
-		}
-		impl Vec2<f32> {
-			pub fn $U(self) -> Vec2<bool> {
-				vec2(self.x.$U(), self.y.$U())
-			}
-		}
-	)*
+    $(
+        impl Vec2<f64> {
+            pub fn $U(self) -> Vec2<bool> {
+                vec2(self.x.$U(), self.y.$U())
+            }
+        }
+        impl Vec2<f32> {
+            pub fn $U(self) -> Vec2<bool> {
+                vec2(self.x.$U(), self.y.$U())
+            }
+        }
+    )*
 }
 
 //component-wise functions
@@ -134,63 +134,65 @@ impl_floats1!(floor,ceil,round,trunc,fract,signum,sqrt,exp,exp2,ln,log2,log10,cb
 impl_floats2!(is_infinite,is_finite,is_normal,is_sign_positive,is_sign_negative);
 
 impl<T: fmt::Display> fmt::Display for Vec2<T> {
-	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		if let Some(p) = f.precision() {
-			write!(f, "({2:.*}, {3:.*})", p, p, self.x, self.y)
-		} else {
-			write!(f, "({}, {})", self.x, self.y)
-		}
-	}
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        if let Some(p) = f.precision() {
+            write!(f, "({2:.*}, {3:.*})", p, p, self.x, self.y)
+        } else {
+            write!(f, "({}, {})", self.x, self.y)
+        }
+    }
 }
 
 impl<T: NiceFmt> NiceFmt for Vec2<T> {
-	fn nice_fmt(&self, limit: usize, pad: bool) -> String {
-		format!("({}, {})", self.x.nice_fmt(limit, pad), self.y.nice_fmt(limit, pad))
-	}
+    fn nice_fmt(&self, limit: usize, pad: bool) -> String {
+        format!("({}, {})", self.x.nice_fmt(limit, pad), self.y.nice_fmt(limit, pad))
+    }
 }
 
 impl<T: fmt::LowerExp> fmt::LowerExp for Vec2<T> {
-	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		if let Some(p) = f.precision() {
-			write!(f, "({2:.*e}, {3:.*e})", p, p, self.x, self.y)
-		} else {
-			write!(f, "({:e}, {:e})", self.x, self.y)
-		}
-	}
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        if let Some(p) = f.precision() {
+            write!(f, "({2:.*e}, {3:.*e})", p, p, self.x, self.y)
+        } else {
+            write!(f, "({:e}, {:e})", self.x, self.y)
+        }
+    }
 }
 
 impl<T: FromStr> FromStr for Vec2<T> {
-	type Err = <T as FromStr>::Err;
-	
-	fn from_str(s: &str) -> Result<Self, Self::Err> {
-		let mut n: Vec<&str> = s.split(|c: char| c.is_whitespace() || c == ',')
-			.map(|s| s.trim_matches(BRACKETS)).filter(|s| !s.is_empty()).collect();
-		while n.len() < 2 { n.push(""); }
-		let x = n[0].parse()?;
-		let y = n[1].parse()?;
-		Ok(vec2(x, y))
-	}
+    type Err = <T as FromStr>::Err;
+    
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let mut n: Vec<&str> = s.split(|c: char| c.is_whitespace() || c == ',')
+            .map(|s| s.trim_matches(BRACKETS)).filter(|s| !s.is_empty()).collect();
+        while n.len() < 2 { n.push(""); }
+        let x = n[0].parse()?;
+        let y = n[1].parse()?;
+        Ok(vec2(x, y))
+    }
 }
 
+#[cfg(feature = "raylib")]
 impl From<Vec2<f32>> for Vector2 {
-	fn from(a: Vec2<f32>) -> Self {
-		Self { x: a.x, y: a.y }
-	}
+    fn from(a: Vec2<f32>) -> Self {
+        Self { x: a.x, y: a.y }
+    }
 }
+#[cfg(feature = "raylib")]
 impl From<Vec2<f32>> for Vector2_ {
-	fn from(a: Vec2<f32>) -> Self {
-		Self { x: a.x, y: a.y }
-	}
+    fn from(a: Vec2<f32>) -> Self {
+        Self { x: a.x, y: a.y }
+    }
 }
 
 macro convert($T: ty, $($U: ident),*) {
-	$(
-		impl Vec2<$T> {
-			pub fn $U(self) -> Vec2<$U> {
-				vec2(self.x as $U, self.y as $U)
-			}
-		}
-	)*
+    $(
+        impl Vec2<$T> {
+            pub fn $U(self) -> Vec2<$U> {
+                vec2(self.x as $U, self.y as $U)
+            }
+        }
+    )*
 }
 
 convert!(u8,u8,u16,u32,u64,usize,i8,i16,i32,i64,isize,f32,f64);
