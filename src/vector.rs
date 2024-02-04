@@ -37,7 +37,7 @@ pub fn angle_between<V: VecOps<T> + Div<T,Output=V>, T: Trig + Sqrt<T>>(a: V, b:
 #[macro_export]
 macro_rules! impl_vec {
 ($type: ident, $vec: ident, ($($field: ident),*)) => {
-    pub fn $vec<T>($($field: T,)*) -> $type<T> {
+    pub const fn $vec<T>($($field: T,)*) -> $type<T> {
         $type { $($field,)* }
     }
     
