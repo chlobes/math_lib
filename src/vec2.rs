@@ -4,7 +4,8 @@ use crate::vec3::*;
 pub use crate::prelude::{dot,distance,distance_squared,orthog_dist,angle_between,Zero,One,Abs,VecOps};
 
 #[repr(C)]
-#[derive(Debug,Default,Copy,Clone,PartialEq,Eq,Hash,Serialize,Deserialize)]
+#[cfg_attr(feature="serde", derive(Serialize,Deserialize))]
+#[derive(Debug,Default,Copy,Clone,PartialEq,Eq,Hash)]
 pub struct Vec2<T> { pub x: T, pub y: T }
 
 impl<T> From<(T, T)> for Vec2<T> {

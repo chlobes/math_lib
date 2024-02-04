@@ -4,7 +4,8 @@ use crate::mat3::*;
 use crate::vec3::*;
 
 #[repr(C)]
-#[derive(Debug,Copy,Clone,PartialEq,Eq,Hash,Serialize,Deserialize)]
+#[cfg_attr(feature="serde", derive(Serialize,Deserialize))]
+#[derive(Debug,Copy,Clone,PartialEq,Eq,Hash)]
 pub struct Quaternion<T> {
     pub r: T,
     pub i: T,
